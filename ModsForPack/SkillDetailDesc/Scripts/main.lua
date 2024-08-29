@@ -240,70 +240,81 @@ local DictionarySpirit={
 	["Rat Archer"]="103.8",
 }
 local DictionarySpiritPassive={
-	--211.8/195.4/170.8/129.7
-	--103.8/92.7
-	["幽魂"]="+24",	["Wandering Wight"]="+24",
-	["广谋"]="+8/+8",	["Guangmou"]="+8/+8",
-	["虫总兵"]="+10",	["Commander Beetle"]="+10",
+	["幽魂"]="根据等级+18/24/30",	["Wandering Wight"]="+18/24/30 by Lv",
+	["广谋"]="根据等级+6/+8/+10",	["Guangmou"]="+6/+8/+10 by Lv",
+	["虫总兵"]="根据等级+10/12/15",	["Commander Beetle"]="+10/12/15 by Lv",
 	["百足虫"]=nil,["Centipede Guai"]=nil,
 	["无量蝠"]=nil,["Apramāṇa Bat"]=nil,
 	["不空"]=nil,["Non-Void"]=nil,
-	["不净"]="10秒内+6%",["Non-Pure"]="+6% in 6s",
-	["不白"]="+6/+6",["Non-White"]="103.8",
-	["不能"]="+2%暴击,+4%爆伤,+5攻击力,-50法力上限",["Non-Able"]="+2%CritRate,+4%CritDamage,+5ATK,-50MaxMP",
-	["疯虎"]="+2攻击,-75生命上限",	["Mad Tiger"]="+2ATK,-75MaxHP",
-	["百目真人"]="+10",	["Gore-Eye Daoist"]="+10",
-	["虎伥"]="+6%",	["Tiger's Acolyte"]="+6%",
-	["地狼"]="+2 per Hit",["Earth Wolf"]="+2 per Hit",
-	["波里个浪"]="-6%",["Baw-Li-Guhh-Lang"]="-6%",
-	["蛇司药"]="回复6%生命上限",["Snake Herbalist"]="6% MaxHP",
-	["青冉冉"]="每5秒回复1.5%生命上限",	["Verdant Glow"]="1.5% MaxHP per 5 seconds",
-	["蛇捕头"]="+5%攻击，-20%防御",	["Snake Sheriff"]="+5% ATK,-20% DEF",
-	["蜻蜓精"]="+10%元气,-40生命,-20法力,-20气力",	["Dragonfly Guai"]="+10% Qi,-40 MaxHP,-20 MaxMP,-20 MaxSt",
-	["虫校尉"]="+10",	["Beetle Captain"]="+10",
-	["蝎太子"]="+10",["Scorpion Prince"]="+10",
-	["泥塑金刚"]="+10",	["Clay Vajra"]="+10",
+	["不净"]="根据等级10秒内+6%/+8%/+10%减伤",["Non-Pure"]="+6%/+8%/+10% DamageRedution in 10s by Lv",
+	["不白"]="根据等级+6/+8/+10",["Non-White"]="+6/+8/+10 by Lv",
+	["不能"]="根据等级+2%/2.5%/3%暴击,+4%/5%/6%爆伤,+5/7/10攻击力,-50/75/100法力上限",["Non-Able"]="+2%/2.5%/3% CritRate,+4%/5%/6% CritDamage,+5/7/10 ATK,-50/75/100 MaxMP by Lv",
+
+	["疯虎"]="根据等级+7/10/15攻击,-75/100/150生命上限",	["Mad Tiger"]="+7/10/15ATK,-75/100/150MaxHP By Lv",
+	["百目真人"]="根据等级+10/12/15",	["Gore-Eye Daoist"]="+10/12/15 by Lv",
+	["虎伥"]="根据等级+6%/8%/10%",	["Tiger's Acolyte"]="+6%/8%/10% by Lv",
+	["地狼"]="根据等级+2/2.4/3 per Hit",["Earth Wolf"]="+2/2.4/3 per Hit by Lv",
+	["波里个浪"]="Lv1时-6%",["Baw-Li-Guhh-Lang"]="-6% at Lv1",
+	["蛇司药"]="Lv1时回复6%生命上限",["Snake Herbalist"]="6% MaxHP at Lv1",
+	["青冉冉"]="Lv1时每5秒回复1.5%生命上限",	["Verdant Glow"]="1.5% MaxHP per 5 seconds at Lv1",
+	["蛇捕头"]="Lv1时+5%攻击，-20%防御",	["Snake Sheriff"]="+5% ATK,-20% DEF at Lv1",
+	["蜻蜓精"]="Lv1时+10%元气,-40生命,-20法力,-20气力",	["Dragonfly Guai"]="+10% Qi,-40 MaxHP,-20 MaxMP,-20 MaxSt at Lv1",
+	["虫校尉"]="根据等级+10/12/15",	["Beetle Captain"]="+10/12/15 by Lv",
+	["蝎太子"]="根据等级+10/12/15",["Scorpion Prince"]="+10/12/15 by Lv",
+	["泥塑金刚"]="根据等级+10/12/15",	["Clay Vajra"]="+10/12/15 by Lv",
 	["赤发鬼"]=nil,	["Red-Haired Yaksha"]=nil,
-	["鸦香客"]="+10",	["Crow Diviner"]="+10",
-	["隼居士"]="+10",	["Falcon Hermit"]="+10",
-	["夜叉奴"]="+10 per Hit",	["Enslaved Yaksha"]="+10 per Hit",
-	["菇男"]="+6%",["Fungiman"]="+6%",
+	["鸦香客"]="根据等级+10/12/15",	["Crow Diviner"]="+10/12/15 by Lv",
+	["隼居士"]="根据等级+10/12/15",	["Falcon Hermit"]="+10/12/15 by Lv",
+	["夜叉奴"]="Lv1时+10 per Hit",	["Enslaved Yaksha"]="+10 per Hit at Lv1",
+	["菇男"]="Lv1时+6%",["Fungiman"]="+6% at Lv1",
 	["巡山鬼"]=nil,	["Mountain Patroller"]=nil,
-	["鼠司空"]="+10",	["Rat Governor"]="+10",
-	["骨悚然"]="+1%",	["Spearbone"]="+1%",
+	["鼠司空"]="根据等级+10/12/15",	["Rat Governor"]="+10/12/15 by Lv",
+	["骨悚然"]="根据等级+1%/2%/3%",	["Spearbone"]="+1%/2%/3% by Lv",
 	["石双双"]=nil,	["Poisestone"]=nil,
-	["鼠禁卫"]="+6",["Rat Imperial Guard"]="+6",
-	["狸侍长"]="+5",["Civet Sergeant"]="+5",
-	["疾蝠"]="+10",["Swift Bat"]="+10",
-	["鼠弩手"]="-18%",["Rat Archer"]="-18%",
+	["鼠禁卫"]="根据等级+6/8/10",["Rat Imperial Guard"]="+6/8/10 by Lv",
+	["狸侍长"]="根据等级+5/7/10",["Civet Sergeant"]="+5/7/10 by Lv",
+	["疾蝠"]="根据等级+10/12/15",["Swift Bat"]="+10/12/15 by Lv",
+	["鼠弩手"]="Lv1时-18%",["Rat Archer"]="-18% at Lv1",
 }
 
 local DictionaryGourd={
-	["妙仙葫芦"]="20秒内+20攻击",	["Wandering Wight"]="+20 ATK in 20s",
-	["湘妃葫芦"]="15秒内+15抗性",	["Guangmou"]="+15 in 15s",
-	["五鬼葫芦"]="20秒内+15攻击",	["Commander Beetle"]="+15 ATK in 20s",
+	["妙仙葫芦"]="20秒内+20攻击",	["Immortal Blessing Gourd"]="+20 ATK in 20s",
+	["湘妃葫芦"]="15秒内+15抗性",	["Xiang River Goddess Gourd"]="+15 in 15s",
+	["五鬼葫芦"]="20秒内+15攻击",	["Plaguebane Gourd"]="+15 ATK in 20s",
+	["椰子酒·十年陈"]="x1.1恢复量",["10-Year-Old Coconut Wine"]="x1.1 recover amount",
 
-	["琼浆"]="+20",	["Commander Beetle"]="+20",
-	["无忧醑"]="低于20%血量时恢复量24%->60%",	["Commander Beetle"]="24%->60% under 20% HP",
-	["九霞清醑"]="+15.0",	["Commander Beetle"]="+15.0",
-	["松醪"]="+75.0",	["Commander Beetle"]="+75.0",
+	["琼浆"]="+20",	["Jade Essence"]="+20",
+	["无忧醑"]="低于20%血量时恢复量24%->60%",	["Worryfree Brew"]="24%->60% under 20% HP",
+	["九霞清醑"]="+15.0",	["Sunset of the Nine Skies"]="+15.0",
+	["松醪"]="+75.0",	["Pinebrew"]="+75.0",
 
-	["龟泪"]="满血时+20法力",	["Commander Beetle"]="+20 when 100% HP",
-	["虎舍利"]="15秒内+5%",	["Commander Beetle"]="+5% in 15s",--92306
-	["瑶池莲子"]="5秒内共回复6%",	["Commander Beetle"]="total 6% in 5s",
-	["梭罗琼芽"]="15秒内+10% ",	["Commander Beetle"]="+10% in 15s",
-	["铁弹"]="30%减伤",	["Commander Beetle"]="30% Damage Redution",
-	["双冠血"]="15秒内+5%暴击",	["Commander Beetle"]="+5% CritRate in 15s",
-	["嫩玉藕"]="15秒内+5%防御",	["Commander Beetle"]="+5% in 15s",
-	["铁骨银参"]="+30",	["Commander Beetle"]="+30",
+	["龟泪"]="满血时+20法力",	["Turtle Tear"]="+20 when 100% HP",
+	["瑶池莲子"]="5秒内共回复6%",	["Celestial Lotus Seeds"]="total 6% in 5s",
+	["虎舍利"]="15秒内+5%",	["Tiger Relic"]="+5% in 15s",--92306
+	["梭罗琼芽"]="15秒内+10% ",	["Laurel Buds"]="+10% in 15s",
+	["铁弹"]="30%减伤",	["Iron Pellet"]="30% Damage Redution",
+	["紫纹缃核"]="低于20%血量时额外回复+12%生命上限",	["Purple-Veined Peach Pit"]="+20% MaxHP when under 20% HP",
+	["双冠血"]="15秒内+5%暴击",	["Double-Combed Rooster Blood"]="+5% CritRate in 15s",
+	["嫩玉藕"]="15秒内+5%防御",	["Tender Jade Lotus"]="+5% in 15s",
+	["铁骨银参"]="+30",	["Steel Ginseng"]="+30",
 
-	["胆中珠"]="15秒内+15",	["Commander Beetle"]="+15 in 15s",
-	["霹雳角"]="15秒内+15",	["Commander Beetle"]="+15 in 15s",
-	["甜雪"]="15秒内+15",	["Commander Beetle"]="+15 in 15s",
+	["胆中珠"]="15秒内+15",	["Gall Gem"]="+15 in 15s",
+	["霹雳角"]="15秒内+15",	["Thunderbolt Horn"]="+15 in 15s",
+	["甜雪"]="15秒内+15",	["Sweet Ice"]="+15 in 15s",
+}
 
+local DictionaryItem={
+	["君子牌"]="0.12/s",	["Virtuous Bamboo Engraving"]="0.12/s",
+	["白狐毫"]="-20%神力消耗速度",	["Snow Fox Brush"]="-20% Energy consume speed",
+	["耐雪枝"]="+12",	["Frostsprout Twig"]="+12",
+	["错金银带钩"]="+12",	["Cuo Jin-Yin Belt Hook"]="+12",
+	["猫睛宝串"]="+3%",	["Cat Eye Beads"]="+3%",
+	["金花玉萼"]="+10%",	["Goldflora Hairpin"]="+10%",
+	["仙箓"]="+10%",	["Celestial Registry Tablet"]="+10%",
+	["金色鲤"]="+2%",	["Golden Carp"]="+2%",
+	["金棕衣"]="+32防御,每次造成10%天命人攻击力的伤害",	["Gold Spikeplate"]="+32 DEF.Deal x0.1 player attack Damage per Hit",
 }
 --根器：每个泡酒物+4%MaxHP
---金棕衣：反伤玩家攻击力的10%
 
 --NotifyOnNewObject没有找到合适的对象
 --[[
@@ -333,7 +344,7 @@ local detailtext=nil
 local detailtextSpirit=nil
 local detailtextSpiritPassive=nil
 local detailtextGourd=nil
-
+local detailtextItem=nil
 
 --目前看来，title一定在text之前设置
 --TODO: optimize
@@ -384,10 +395,10 @@ RegisterHook("/Script/UMG.TextBlock:SetText",function(Context,InText)
 			detailtextGourd=nil
 		end
 
-	--elseif InText:get():ToString():find("蓝桥风月") then
-	--	print(".."..tostring(name))
-	--elseif InText:get():ToString():find("每饮一口") then
-	--	print(".."..tostring(name))
+--	elseif InText:get():ToString():find("君子牌") then
+--		print(".."..tostring(name))
+--	elseif InText:get():ToString():find("些微增加") then
+--		print(".."..tostring(name))
 	end
 end)
 
@@ -429,10 +440,16 @@ RegisterHook("/Script/UMG.RichTextBlock:SetText",function(Context,InText)
 		InText:set(FText(InText:get():ToString().."("..detailtextGourd..")"))
 		detailtextGourd=nil		
 
-	--elseif InText:get():ToString():find("蓝桥风月") then
-	--	print(".."..tostring(name))
-	--elseif InText:get():ToString():find("每饮一口") then
-	--	print(".."..tostring(name))
+	elseif name47=="getTree.BI_JewelryDetail.WidgetTree.TxtNameRuby" then	--珍玩
+		detailtextItem=DictionaryItem[InText:get():ToString()]
+	elseif detailtextItem~=nil and name47=="tTree.BI_JewelryDetail.WidgetTree.TxtEffectDesc" then	
+		InText:set(FText(InText:get():ToString().."("..detailtextItem..")"))
+		detailtextItem=nil
+
+--	elseif InText:get():ToString():find("君子牌") then
+--		print("2.."..tostring(name).." "..name47)
+--	elseif InText:get():ToString():find("些微增加") then
+--		print("2.."..tostring(name).." "..name47)
 
 	end
 end)
