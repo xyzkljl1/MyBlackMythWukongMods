@@ -19,7 +19,7 @@ local Dictionary={
 	["化吉"]="(7.5->8.7)",
 	["筋节"]="(30%)",
 	["应手"]="(22.5/秒->14.5/秒)",
-	["得心"]="(4->6 per Hit)",
+	["得心"]="(4->6 per Hit, 不影响原地棍花(3 per Hit))",
 	--体段修行
 	["吐纳绵长"]="(+2.5气力回复/lv)",
 	["五脏坚固"]="(+10/lv)",
@@ -166,7 +166,6 @@ local Dictionary={
 	["Might Fortification"]="(+0.0125/lv,Base: 0.625)",
 	["Evergreen"]="(-0.0208/lv,Base 1.25)",
 }
-
 local DictionarySpirit={
 	--211.8/195.4/170.8/129.7
 	--103.8/92.7
@@ -279,6 +278,32 @@ local DictionarySpiritPassive={
 	["鼠弩手"]="-18%",["Rat Archer"]="-18%",
 }
 
+local DictionaryGourd={
+	["妙仙葫芦"]="20秒内+20攻击",	["Wandering Wight"]="+20 ATK in 20s",
+	["湘妃葫芦"]="15秒内+15抗性",	["Guangmou"]="+15 in 15s",
+	["五鬼葫芦"]="20秒内+15攻击",	["Commander Beetle"]="+15 ATK in 20s",
+
+	["琼浆"]="+20",	["Commander Beetle"]="+20",
+	["无忧醑"]="低于20%血量时恢复量24%->60%",	["Commander Beetle"]="24%->60% under 20% HP",
+	["九霞清醑"]="+15.0",	["Commander Beetle"]="+15.0",
+	["松醪"]="+75.0",	["Commander Beetle"]="+75.0",
+
+	["龟泪"]="满血时+20法力",	["Commander Beetle"]="+20 when 100% HP",
+	["虎舍利"]="15秒内+5%",	["Commander Beetle"]="+5% in 15s",--92306
+	["瑶池莲子"]="5秒内共回复6%",	["Commander Beetle"]="total 6% in 5s",
+	["梭罗琼芽"]="15秒内+10% ",	["Commander Beetle"]="+10% in 15s",
+	["铁弹"]="30%减伤",	["Commander Beetle"]="30% Damage Redution",
+	["双冠血"]="15秒内+5%暴击",	["Commander Beetle"]="+5% CritRate in 15s",
+	["嫩玉藕"]="15秒内+5%防御",	["Commander Beetle"]="+5% in 15s",
+	["铁骨银参"]="+30",	["Commander Beetle"]="+30",
+
+	["胆中珠"]="15秒内+15",	["Commander Beetle"]="+15 in 15s",
+	["霹雳角"]="15秒内+15",	["Commander Beetle"]="+15 in 15s",
+	["甜雪"]="15秒内+15",	["Commander Beetle"]="+15 in 15s",
+
+}
+--根器：每个泡酒物+4%MaxHP
+--金棕衣：反伤玩家攻击力的10%
 
 --NotifyOnNewObject没有找到合适的对象
 --[[
@@ -307,51 +332,108 @@ end
 local detailtext=nil
 local detailtextSpirit=nil
 local detailtextSpiritPassive=nil
+local detailtextGourd=nil
 
 
 --目前看来，title一定在text之前设置
+--TODO: optimize
+
+
+local GourdTitleList47={
+["WidgetTree.BI_HuluDetail.WidgetTree.TxtNameRuby"]=true,--装备界面 葫芦
+["WidgetTree.BI_WineDetail.WidgetTree.TxtNameRuby"]=true,--泡制界面 酒
+["getTree.BI_WineMatDetail.WidgetTree.TxtNameRuby"]=true,--泡制界面 泡酒物
+["etail.WidgetTree.BI_WineDesc.WidgetTree.TxtName"]=true,--装备界面 酒
+}
+local GourdDetailList47={
+	["WidgetTree.BI_HuluDetail.WidgetTree.TxtHuluDesc"]=true,--装备界面 葫芦效果
+	["WidgetTree.BI_WineDetail.WidgetTree.TxtWineDesc"]=true,--泡制界面 酒效果
+	["tTree.BI_WineMatDetail.WidgetTree.TxtEffectDesc"]=true,--泡制界面 泡酒物效果
+	["etail.WidgetTree.BI_WineDesc.WidgetTree.TxtDesc"]=true,--装备界面 酒
+	}
 RegisterHook("/Script/UMG.TextBlock:SetText",function(Context,InText)
 	local name=Context:get():GetFullName()
+	local name47=name:sub(-47)
 	if name:sub(-45)==".WidgetTree.BI_SpellDetail.WidgetTree.TxtName" then	--天赋名字
 		title=InText:get():ToString()
 		detailtext=Dictionary[title] --or "(None)"
 		--print("--")
 		--print(tostring(title))
 		--print(tostring(Dictionary[title]))
+
 	elseif detailtextSpirit~=nil and name:sub(-43)==".WidgetTree.BI_RZDDetail.WidgetTree.TxtCost" then--精魂能量消耗
 		--print(tostring(InText:get():ToString()).."/"..tostring(name))
 		InText:set(FText(InText:get():ToString().."("..detailtextSpirit.." at Lv1)"))
 		detailtextSpirit=nil
 		--InText:set(FText(detailtextSpirit or "Unknown"))
-	--elseif InText:get():ToString():find("服用丹药的同时") then
+
+	elseif GourdTitleList47[name47]==true then
+		detailtextGourd=DictionaryGourd[InText:get():ToString()]
+
+	elseif detailtextGourd~=nil and GourdDetailList47[name47]==true then	
+		InText:set(FText(InText:get():ToString().."("..detailtextGourd..")"))
+		detailtextGourd=nil
+
+
+	elseif name:find("WidgetTree.BI_HuluDetail.WidgetTree.BI_MatDesc.WidgetTree.BI_SoakDesc_C") --装备界面泡酒物名字/效果
+		or name:find("WidgetTree.BI_MaterialListItem.WidgetTree.BI_MaterialListItem_V2_C") then --泡制界面泡酒物缩略名字
+		if name:sub(-7)=="TxtName" then
+			detailtextGourd=DictionaryGourd[InText:get():ToString()]
+		elseif detailtextGourd~=nil and name:sub(-7)=="TxtDesc" then
+			InText:set(FText(InText:get():ToString().."("..detailtextGourd..")"))
+			detailtextGourd=nil
+		end
+
+	--elseif InText:get():ToString():find("蓝桥风月") then
+	--	print(".."..tostring(name))
+	--elseif InText:get():ToString():find("每饮一口") then
 	--	print(".."..tostring(name))
 	end
 end)
 
 RegisterHook("/Script/UMG.RichTextBlock:SetText",function(Context,InText)
 	local name=Context:get():GetFullName()
-	if name:sub(-50)==".WidgetTree.BI_SpellDetail.WidgetTree.TxtSpellDesc" then--天赋名字
+	local name47=name:sub(-47)
+	if name:sub(-50)==".WidgetTree.BI_SpellDetail.WidgetTree.TxtSpellDesc" then	--天赋名字
 		--print(tostring(detailtext))
 		if detailtext~=nil then
 			InText:set(FText(InText:get():ToString()..detailtext))
 		end
 		detailtext=nil
-	elseif name:sub(-47)==".WidgetTree.BI_RZDDetail.WidgetTree.TxtNameRuby" then--精魂名字
+
+	elseif name47==".WidgetTree.BI_RZDDetail.WidgetTree.TxtNameRuby" then	--精魂名字
 		detailtextSpirit=DictionarySpirit[InText:get():ToString()] --or "(None)"
 		detailtextSpiritPassive=DictionarySpiritPassive[InText:get():ToString()]
 		--print("!!"..tostring(InText:get():ToString()).."/"..tostring(detailtext))
+
+	elseif GourdTitleList47[name47]==true then	--酒/葫芦/泡酒物名字
+		detailtextGourd=DictionaryGourd[InText:get():ToString()]
+
 	elseif name:sub(-21)==".WidgetTree.TxtEffect" then --精魂升级描述
-		--print(".."..tostring(InText:get():ToString()))
 		if InText:get():ToString()=="Reduces the Qi cost for the skill." then
 			InText:set(FText("Reduces the Qi cost for the skill.(-8%/18%/39% at Lv 2/3/5)"))
 		elseif InText:get():ToString()=="减少施展此技所需元气" then
 			InText:set(FText("减少施展此技所需元气 (-8%/18%/39% at Lv 2/3/5)"))
 		end
-	elseif detailtextSpiritPassive~=nil and name:sub(-73)==".WidgetTree.BI_RZDDetail.WidgetTree.TreasureEqDesc.WidgetTree.TxtSuitDesc" then--精魂被动描述
+		--print(".."..tostring(InText:get():ToString()))
+
+	elseif detailtextSpiritPassive~=nil and name:sub(-73)==".WidgetTree.BI_RZDDetail.WidgetTree.TreasureEqDesc.WidgetTree.TxtSuitDesc" then	--精魂被动描述
 		InText:set(FText(InText:get():ToString().."("..detailtextSpiritPassive..")"))
 		detailtextSpiritPassive=nil
-	--elseif InText:get():ToString():find("服用丹药的同时") then
+
+	elseif detailtextGourd~=nil and GourdDetailList47[name47]==true then	--泡酒物效果
+		InText:set(FText(InText:get():ToString().."("..detailtextGourd..")"))
+		detailtextGourd=nil
+
+	elseif detailtextGourd~=nil and name:find("WidgetTree.BI_MaterialListItem.WidgetTree.BI_MaterialListItem_V2_C") then--泡制界面泡酒物缩略效果
+		InText:set(FText(InText:get():ToString().."("..detailtextGourd..")"))
+		detailtextGourd=nil		
+
+	--elseif InText:get():ToString():find("蓝桥风月") then
 	--	print(".."..tostring(name))
+	--elseif InText:get():ToString():find("每饮一口") then
+	--	print(".."..tostring(name))
+
 	end
 end)
 
