@@ -1,8 +1,10 @@
 ﻿local ModName="[SkillDetailDesc] "
+
 --author:xyzkljl1
 --需要以utf8保存以识别中文
 --local config = require("skilldetaildesc-config")
 --108+
+
 local Dictionary={
 	--根基-气力
 	["调息"]="+15%/lv",
@@ -225,6 +227,8 @@ local DictionarySpirit={
 	["燧统领"]="103.8",["Flint Chief"]="103.8",
 	["黑脸鬼"]="64.9",["Charface"]="64.9",
 	["石父"]="103.8",["Father of Stones"]="103.8",
+	["沙二郎"]="211.8",["Second Rat Prince"]="211.8",
+
 
 	["Wandering Wight"]="211.8",
 	["Guangmou"]="211.8",
@@ -268,7 +272,7 @@ local DictionarySpiritPassive={
 	["百足虫"]=nil,["Centipede Guai"]=nil,
 	["无量蝠"]=nil,["Apramāṇa Bat"]=nil,
 	["不空"]="根据等级+18/24/30 per Hit",["Non-Void"]="+18/24/30 per Hit by Lv",
-	["不净"]="根据等级10秒内+6%/+8%/+10%减伤",["Non-Pure"]="+6%/+8%/+10% DamageRedution in 10s by Lv",
+	["不净"]="根据等级10秒内+6%/+8%/+10%减伤",["Non-Pure"]="+6%/+8%/+10% DamageReduction in 10s by Lv",
 	["不白"]="根据等级+6/+8/+10",["Non-White"]="+6/+8/+10 by Lv",
 	["不能"]="根据等级+2%/2.5%/3%暴击,+4%/5%/6%爆伤,+5/7/10攻击力,-50/75/100法力上限",["Non-Able"]="+2%/2.5%/3% CritRate,+4%/5%/6% CritDamage,+5/7/10 ATK,-50/75/100 MaxMP by Lv",
 
@@ -316,36 +320,43 @@ local DictionarySpiritPassive={
 	["燧统领"]="根据等级+5/7/10",["Flint Chief"]="+5/7/10 by Lv",
 	["黑脸鬼"]="根据等级+6%/8%/10%",["Charface"]="+6%/8%/10% by Lv",
 	["石父"]="根据等级+1.5%/2%/2.5%暴击,+3%/4%/5%暴伤",["Father of Stones"]="+1.5%/2%/2.5% CritChance,+3%/4%/5% CritDamage by Lv",
+	["沙二郎"]="生命值低于25%时根据等级+10/15/20攻击",["Second Rat Prince"]="+10/15/20 ATK under 25% MaxHP by Lv",
 }
 
 --酒、葫芦、泡酒物
 local DictionaryGourd={
-	["妙仙葫芦"]="20秒内+20攻击",	["Immortal Blessing Gourd"]="+20 ATK in 20s",
-	["湘妃葫芦"]="15秒内+15抗性",	["Xiang River Goddess Gourd"]="+15 in 15s",
-	["五鬼葫芦"]="20秒内+15攻击",	["Plaguebane Gourd"]="+15 ATK in 20s",
-	["燃葫芦"]="15秒内+30气力",	["Firey Gourd"]="+30 Stamina in 15s",
+	["妙仙葫芦"]="20秒内+20攻击",			["Immortal Blessing Gourd"]="+20 ATK in 20s",
+	["湘妃葫芦"]="15秒内+15抗性",			["Xiang River Goddess Gourd"]="+15 in 15s",
+	["五鬼葫芦"]="20秒内+15攻击",			["Plaguebane Gourd"]="+15 ATK in 20s",
+	["燃葫芦"]="15秒内+30气力",				["Firey Gourd"]="+30 Stamina in 15s",
 
-	["椰子酒·十年陈"]="约额外4%恢复量",["10-Year-Old Coconut Wine"]="about 4% MAXHP extra recover",
-	["椰子酒·十八年陈"]="约额外4%恢复量",["18-Year-Old Coconut Wine"]="about 4% MAXHP extra recover",
-	["琼浆"]="+20",	["Jade Essence"]="+20",
+	["椰子酒·十年陈"]="约额外4%恢复量",	["10-Year-Old Coconut Wine"]="about 4% MAXHP extra recover",
+	["椰子酒·十八年陈"]="约额外4%恢复量",	["18-Year-Old Coconut Wine"]="about 4% MAXHP extra recover",
+	["琼浆"]="+20",							["Jade Essence"]="+20",
 	["无忧醑"]="低于20%血量时恢复量24%->60%",	["Worryfree Brew"]="24%->60% under 20% HP",
-	["九霞清醑"]="+15.0",	["Sunset of the Nine Skies"]="+15.0",
-	["松醪"]="+75.0",	["Pinebrew"]="+75.0",
+	["九霞清醑"]="+15.0",					["Sunset of the Nine Skies"]="+15.0",
+	["松醪"]="+75.0",						["Pinebrew"]="+75.0",
 
-	["龙膏"]="6秒内+12%攻击",	["Loong Balm"]="+12 ATK in 6s",
-	["龟泪"]="满血时+20法力",	["Turtle Tear"]="+20 when 100% HP",
-	["瑶池莲子"]="5秒内共回复6%",	["Celestial Lotus Seeds"]="total 6% in 5s",
-	["虎舍利"]="15秒内+5%",	["Tiger Relic"]="+5% in 15s",--92306
-	["梭罗琼芽"]="15秒内+10% ",	["Laurel Buds"]="+10% in 15s",
-	["铁弹"]="30%减伤",	["Iron Pellet"]="30% Damage Redution",
+	["龙膏"]="6秒内+12%攻击",				["Loong Balm"]="+12 ATK in 6s",
+	["龟泪"]="满血时+20法力",				["Turtle Tear"]="+20 when 100% HP",
+	["瑶池莲子"]="5秒内共回复6%上限",		["Celestial Lotus Seeds"]="total 6% MaxHP in 5s",
+	["虎舍利"]="15秒内+5%",					["Tiger Relic"]="+5% in 15s",--92306
+	["梭罗琼芽"]="15秒内+10% ",				["Laurel Buds"]="+10% in 15s",
+	["铁弹"]="30%减伤",						["Iron Pellet"]="30% Damage Reduction",
 	["紫纹缃核"]="低于20%血量时额外回复+12%生命上限",	["Purple-Veined Peach Pit"]="+20% MaxHP when under 20% HP",
-	["双冠血"]="15秒内+5%暴击",	["Double-Combed Rooster Blood"]="+5% CritRate in 15s",
-	["嫩玉藕"]="15秒内+5%防御",	["Tender Jade Lotus"]="+5% in 15s",
-	["铁骨银参"]="+30",	["Steel Ginseng"]="+30",
+	["双冠血"]="15秒内+5%暴击",				["Double-Combed Rooster Blood"]="+5% CritRate in 15s",
+	["嫩玉藕"]="15秒内+5%防御",				["Tender Jade Lotus"]="+5% in 15s",
+	["铁骨银参"]="+30",						["Steel Ginseng"]="+30",
+	["胆中珠"]="15秒内+15",					["Gall Gem"]="+15 in 15s",
+	["霹雳角"]="15秒内+15",					["Thunderbolt Horn"]="+15 in 15s",
+	["甜雪"]="15秒内+15",					["Sweet Ice"]="+15 in 15s",
 
-	["胆中珠"]="15秒内+15",	["Gall Gem"]="+15 in 15s",
-	["霹雳角"]="15秒内+15",	["Thunderbolt Horn"]="+15 in 15s",
-	["甜雪"]="15秒内+15",	["Sweet Ice"]="+15 in 15s",
+	["血杞子"]="+5秒",						["Goji Shoots"]="+5s",
+	["困龙须"]="+2秒",						["Stranded Loong's Whisker"]="+2s",
+	["不老藤"]="回复1/3气力上限,15秒内+50%气力回复",	["Undying Vine"]="Recover 1/3 MaxSt.+50% Stamina Recover in 15s",
+	["蕙性兰"]="11秒内共回复12%生命上限",	["Graceful Orchid"]="total 12% MaxHP in 11s",
+	["青山骨"]="30秒内+30生命上限",			["Goat Skull"]="+30 in 30s",
+	["火焰丹头"]="15秒内+15",				["Flame Mediator"]="+15 in 15s",
 }
 
 --珍玩，消耗品
@@ -372,14 +383,20 @@ local DictionaryItem={
 	["卵中骨"]="+10",	["Spine in the Sack"]="+10",
 	["白贝腰链"]="+5",	["White Seashell Waist Chain"]="+5",
 	["细磁茶盂"]="+11",	["Fine China Tea Bowl"]="+11",
-	["虎头牌"]="20秒内+10%攻击",	["Tiger Tally"]="+10% ATK in 20s",
-	["‌砗磲佩"]="-5%",	["Tridacna Pendant"]="-5%",
+	["虎头牌"]="6秒内+8%攻击",	["Tiger Tally"]="+8% ATK in 6s",
+	["砗磲佩"]="-5%",	["Tridacna Pendant"]="-5%",
 	["琉璃舍利瓶"]="+45",	["Glazed Reliquary"]="+45",
 	["三清令"]="生命不足一半时+10%",	["Tablet of the Three Supreme"]="+10% under 50% HP",
 	["金钮"]="满血时+15攻击",	["Gold Button"]="+15 when full HP",
 	["阳燧珠"]="+12",	["Flame Orb"]="+12",
 	["摩尼珠"]="15秒内+8%",	["Mani Bead"]="+8% in 15s",
 
+	["玛瑙罐"]="+14",	["Agate Jar"]="+14",
+	["雷榍"]="+12",	["Thunderstone"]="+12",
+	["雷火印"]="+30",	["Thunderflame Seal"]="+30",
+	["吉祥灯"]="20秒内-80生命上限，+10%攻击",	["Auspicious Lantern"]="-80 MaxHP,+10% ATK in 20s",
+	["定颜珠"]="180秒内+60生命上限,+40法力/气力上限",	["Preservation Orb"]="+60 MaxHP,+40 MaxMP/MaxSt in 180s",
+	["虎筋绦子"]="6秒内+12%攻击",	["Tiger Tendon Belt"]="+12% ATK in 6s",
 	--消耗品
 	["朝元膏"]="130秒内+60",	["Essence Decoction"]="+60 in 130s",
 	["益气膏"]="130秒内+60",	["Tonifying Decoction"]="+60 in 130s",
@@ -401,15 +418,49 @@ local DictionaryItem={
 	["避凶药"]="80秒内+10%",	["Evil Repelling Medicament"]="+10% in 80s",
 	["镜中丹"]="+60",	["Mirage Pill"]="+60",
 	--["九转还魂丹"]="130秒",	["Tonifying Decoction"]="130s",
+
+	["参势丸"]="33秒内+10/秒",	["Ginseng Pellets"]="+10/s in 33s",
 }
 
 --套装效果
---unused
 local DictionarySuit={
-	["行者套"]="每层+10%攻击",["Pilgrim's Garb"]="+10% ATK per stack"	
-	--自毒套，+20%攻击
+	["心灵福至"]="每个天赋+24防御",["Fortune's Favor"]="+24 DEF per Relic Talent",
+	["日行千里"]="每层+10%攻击",["Swift Pilgrim"]="+10% ATK per stack"	,
+	["举步生风"]="+15棍势",["Gale Guardian"]="+15 Focus" ,
+	["花下死"]="x0.8毒伤(和抗性效果乘算),+20%攻击",["Poison Ward"]="x0.8 Poison Damage(Multi with \nPoison Resist effect).+20% ATK"	,
+	["试比天高"]="10秒内+8%暴击",["Heaven's Equal"]="+8% Crit in 10s"	,
+	["毒魔狠怪"]="+100棍势，+10%持续时间",["Fuban Strength"]="+100 focus.+10% Duration"	,
+	--["炼魔荡怪"]="每层+10%攻击",["Pilgrim's Garb"]="+10% ATK per stack"	,
+	["锱铢必较"]="+10%灵蕴",["Every Bit Counts"]="+10% Will"	,
+	["浪里白条"]="x0.5气力消耗(和天赋效果乘算)",["Wave-Rider"]="x0.5 Stamina Cost(Multi with talent effect)",
+	["龙血玄黄"]="+10赋雷攻击",["Thunder Veins"]="+10 Thunder ATK",	
+	["借假修真"]="20秒内+15%攻击,暴击+3元气,\n击杀+5元气",["Gilded Radiance"]="+15% ATK in 20s. +3/+5 Qi when Crit/Kill",	
+	["百折不挠"]="5秒内+10%防御",["Unyielding Resolve"]="+10% DEF in 5s",	
+	["离火入魔"]="[4]+25%伤害 -30%伤害减免",["Outrage"]="[4]+25% Damage.-30% DamageReduction",	
+	["泥塑金装"]="变身期间及变身结束后12秒内+20%伤害减免,约+1.5/s神力回复，翻滚回复约0.3神力",["From Mud to Lotus"]="+20% DamageReduction in 12s.About\n +1.5/s Might recover.Gain about\n 0.3 Might when roll",	
+	["铜心铁胆"]="+50棍势",["Iron Will"]="+50 Focus",	
 }
---[[
+--独门妙用
+local DictionaryEquip={
+	["大力王面"]="+10棍势，强硬时+30",["Bull King's Mask"]="+10 Focus.+30 when Tenacity",	
+	["锦鳞战袍"]="低于半血时每秒+1.5%生命上限(水中+2%)",["Serpentscale Battlerobe"]="+1.5%MaxHP/s under 50% MaxHP;+2% MaxHP/s in water",	
+	["厌火夜叉面"]="低于半血时+15攻击",["Yaksha Mask of Outrage"]="+15ATK under 50% HP",	
+	["金身怒目面"]="+100棍势",["Golden Mask of Fury"]="+100",
+	["长嘴脸"]="饮酒后15秒内+30攻击，15~20秒+20攻击，20秒后-20攻击",["Snout Mask"]="+30 ATK in 15s;+20 ATK in 15~20s;-20 ATK after 20s",
+	["鳖宝头骨"]="+2%",["Skull of Turtle Treasure"]="+2%",
+	["地灵伞盖"]="高于1%血量时每秒-3HP,额外回复+15%生命上限",["Earth Spirit Capped"]="-3HP/s when over 1% HP.+15% MaxHP Recover",
+	["昆岐毒敌甲"]="+15",["Venomous Sting Insect Armor"]="+15",
+	["阴阳法衣"]="阳:+20%伤害减免。阴:20%暴击-30%伤害减免",["Yin-Yang Daoist Robe"]="Yang:+20% DamageReduction. Yin:+20% Crit,-30% DamageReduction",
+	["山珍蓑衣"]="15秒内+30",["Ginseng Cape"]="+30 in 15s",
+	["玄硬铁手"]="3秒内+15%攻击",["Iron-Tough Gauntlets"]="+15% ATK in 3s",
+	["金刚护臂"]="-10%",["Vajra Armguard"]="-10%",
+	["赭黄臂甲"]="每消耗一段棍势8秒内+6%暴击",["Ochre Armguard"]="+6% in 8s for each focus level",
+	["不净泥足"]="10秒",["Non-Pure Greaves"]="10s",
+	["藏风护腿"]="+10",["Galeguard Greaves"]="+10",
+	["南海念珠"]="+40生命/法力上限",["Guanyin's Prayer Beads"]="+40 MaxHP/MP",
+	["羽士戗金甲"]="20秒内+10%攻击",["Centipede Qiang-Jin Armor"]="+10%ATK in 20s",
+}
+--[[ 
 --Fuck chinese characters,Fuck encoding
 local x="见机强攻"
 local y="‌见机强攻"
@@ -420,6 +471,7 @@ local y="‌见机强攻"
 print("-- Group2:")
 print(tostring(x==y))--true
 ]]--
+
 local DictionaryRelic={
 	["见机强攻"]="轻棍1-5段全部命中的棍势由15/18/17/28/40变为15/18/26/35/43",	["Opportune Watcher"]="Light Attack 1-5 focus point if all hit :15/18/17/28/40 -> 15/18/26/35/43",
 	--["眼乖手疾"]="+45",	["Eagle Eye"]="+45",
@@ -459,7 +511,9 @@ end
 for k,v in pairs(DictionarySuit) do
 	DictionaryMerge[k]=v
 end
-
+for k,v in pairs(DictionaryEquip) do
+	DictionaryMerge[k]=v
+end
 
 --NotifyOnNewObject没有找到合适的对象
 --[[
@@ -501,9 +555,9 @@ local MergeTitleList43={ -- Gourd/Wine/WineMat/Relic ....
 ["Tree.BI_GenqiDecs_2.WidgetTree.TxtGenqiRuby"]=true,--根器天赋
 ["Tree.BI_GenqiDecs_3.WidgetTree.TxtGenqiRuby"]=true,--根器天赋
 ["ree.BI_JewelryDetail.WidgetTree.TxtNameRuby"]=true,--珍玩
---["tTree.BI_EquipDetail.WidgetTree.TxtNameRuby"]=true,--套装效果
 ["etTree.BI_ItemDetail.WidgetTree.TxtNameRuby"]=true,--行囊
 ["idgetTree.BI_SpellDetail.WidgetTree.TxtName"]=true,--天赋
+["tTree.BI_EquipDetail.WidgetTree.TxtNameRuby"]=true,--装备名
 }
 local MergeDetailList43={
 	["etTree.BI_HuluDetail.WidgetTree.TxtHuluDesc"]=true,--装备界面 葫芦效果
@@ -516,7 +570,11 @@ local MergeDetailList43={
 	["e.BI_JewelryDetail.WidgetTree.TxtEffectDesc"]=true,--珍玩
 	["Tree.BI_SpellDetail.WidgetTree.TxtSpellDesc"]=true,--天赋
 	["Tree.BI_ItemDetail.WidgetTree.TxtEffectDesc"]=true,--行囊
+	["ree.BI_EquipDetail.WidgetTree.TxtLegendDesc"]=true,--装备独门妙用
 	}
+
+--local lastSuitDescWidget=nil
+--local lastSuitDescWidgetText=nil
 function HookTextBlockSetText(Context,InText)
 	local name=Context:get():GetFullName()
 	if type(name) ~= "string" then return end
@@ -545,16 +603,30 @@ function HookTextBlockSetText(Context,InText)
 			or name:find("WidgetTree.BI_MaterialListItem.WidgetTree.BI_MaterialListItem_V2_C") then
 			InText:set(FText(InText:get():ToString().."("..detailtextMerge..")"))
 			detailtextMerge=nil
-		end		
-	--[[
-	elseif InText:get():ToString():find("朝元膏") then
-		print(".."..tostring(name).." "..name43)
-	elseif InText:get():ToString():find("服用后长时间") then
-		print(".."..tostring(name).." "..name43)
-		]]--
+		end
+	elseif name43=="Tree.BI_EquipDetail.WidgetTree.TxtSuitTitle" then --套装名，套装效果在名字之前被Set
+		local suitTitle=InText:get():ToString()
+		local suitDesc=DictionarySuit[suitTitle]
+		--if lastSuitDescWidget~=nil and lastSuitDescWidget:IsValid() and suitDesc~=nil then
+		if suitDesc~=nil then
+			--lastSuitDescWidget:SetText(FText(lastSuitDescWidgetText.."("..suitDesc..")")) --此处SetText又会触发一次hook并设置lastSuitDescWidget,要在SetText后清零
+			--改单条套装效果文本无法控制出现在哪条上，改成直接放在套装名上，可以\n换行
+			InText:set(FText(InText:get():ToString().."\n("..suitDesc..")"))
+			--lastSuitDescWidget=nil
+			--lastSuitDescWidgetText=nil
+			--print("Set")
+		end
+	--elseif InText:get():ToString():find("大力王面") then
+	--	print("C.."..tostring(name).." "..name43)
+	--elseif InText:get():ToString():find("受到伤害时") then
+	--	print("D.."..tostring(name).." "..name43)
+		
 	end
+	--print(".."..tostring(InText:get():ToString()))
 end
-
+--["tTree.BI_EquipDetail.WidgetTree.TxtNameRuby"]=true,--装备名 Rich
+--套装效果名not rich: /Engine/Transient.GameEngine_2147482611:BGW_GameInstance_B1_2147482576.BUI_B1_Root_V2_C_2147470897.WidgetTree.BUI_EquipMain_C_2147427437.WidgetTree.BI_EquipDetailCompare.WidgetTree.BI_EquipDetail.WidgetTree.TxtSuitTitle Tree.BI_EquipDetail.WidgetTree.TxtSuitTitle
+--RichTextBlock       /Engine/Transient.GameEngine_2147482611:BGW_GameInstance_B1_2147482576.BUI_B1_Root_V2_C_2147470897.WidgetTree.BUI_EquipMain_C_2147427437.WidgetTree.BI_EquipDetailCompare.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc.WidgetTree.BI_SuitDesc_C_2147422605.WidgetTree.TxtSuitDesc
 function HookRichTextBlockSetText(Context,InText)
 	local name=Context:get():GetFullName()
 	if type(name) ~= "string" then return end
@@ -586,27 +658,32 @@ function HookRichTextBlockSetText(Context,InText)
 		elseif name:find("WidgetTree.BI_MaterialListItem.WidgetTree.BI_MaterialListItem_V2_C") then--泡制界面泡酒物缩略效果
 			InText:set(FText(InText:get():ToString().."("..detailtextMerge..")"))
 			detailtextMerge=nil
-		--.WidgetTree.BI_EquipDetailCompare.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc.WidgetTree.BI_SuitDesc_C_2147459831.WidgetTree.TxtSuitDesc
-		--[[
-		--换装界面套装效果，当前装备和装备比较时不同控件,每查看一个装备都会临时创建一个比较控件，退出菜单后清空
-		--有多条效果时每条效果各有一个text，不做区分，改了一个之后清空detailtext
-		--装备名和套装效果名都在套装效果之后set，坑爹
-		elseif name:sub(-11)=="TxtSuitDesc" and 
-				(name:find("BI_EquipDetailCompare.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc") 
-					or name:find("BI_EquipDetail.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc"))  then
-				InText:set(FText(InText:get():ToString().."("..detailtextMerge..")"))
-				detailtextMerge=nil
-		--]]
 		end
 	--[[
-	elseif InText:get():ToString():find("朝元膏") then
-		print(".."..tostring(name).." "..name43)
-	elseif InText:get():ToString():find("服用后长时间") then
-		print(".."..tostring(name).." "..name43)
-		]]--
+	--.WidgetTree.BI_EquipDetailCompare.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc.WidgetTree.BI_SuitDesc_C_2147459831.WidgetTree.TxtSuitDesc
+	--换装界面套装效果，当前装备和装备比较时不同控件,每查看一个装备都会临时创建一个比较控件，退出菜单后清空
+	--有多条效果时每条效果各有一个text，不做区分，改了一个之后清空detailtext
+	--装备名和套装效果名都在套装效果之后set，坑爹
+	--反过来搞，记录最后一个被赋值的textblock，设置title的时候修改该textblock;
+	elseif name:sub(-11)=="TxtSuitDesc" and 
+			(name:find("BI_EquipDetailCompare.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc") 
+				or name:find("BI_EquipDetail.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc"))  then
+			lastSuitDescWidget=Context:get()
+			lastSuitDescWidgetText=InText:get():ToString()
+			--print("Last Widet: ",tostring(lastSuitDescWidget:GetFullName()))
+	]]--
+	--elseif InText:get():ToString():find("大力王面") then
+	--	print("A.."..tostring(name).." "..name43)
+	--elseif InText:get():ToString():find("受到伤害时") then
+	--	print("B.."..tostring(name).." "..name43)		
 	end
+	--print(".."..tostring(InText:get():ToString()))
 end
 
+local hooked=false
+
+--RegisterHook("/Script/Engine.PlayerController:ClientRestart", function()
+--	if false and not hooked then
 RegisterHook("/Script/UMG.TextBlock:SetText",function(Context,InText)
 	--Can pcall prevent the mystery crash??
 	success,res = pcall(HookTextBlockSetText,Context,InText)
@@ -614,12 +691,20 @@ RegisterHook("/Script/UMG.TextBlock:SetText",function(Context,InText)
 		print(ModName.." Fuck "..res)
 	end
 end)
-RegisterHook("/Script/UMG.RichTextBlock:SetText",
+RegisterHook("/Script/UMG.RichTextBlock:SetText",function(Context,InText)
 	success,res = pcall(HookRichTextBlockSetText,Context,InText)
 	if not success then
 		print(ModName.." Fuck "..res)
 	end
 end)
+		--hooked=true
+		--print(ModName.."Hook")
+--	end
+--end)
 
-
+--RegisterKeyBind(Key.F12,function()
+--	RegisterHook("/Script/UMG.TextBlock:SetText",function()end)
+--end)
+--RegisterHook("/Script/UMG.TextBlock:SetText",function()end)
 --Work()
+
