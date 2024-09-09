@@ -60,7 +60,7 @@ local Dictionary={
 	["不休"]="-10%/lv",
 	["智力高强"]="每级+0.02攻击力/1法力，基础0.12攻击力/1法力",
 	["放手一搏"]="0.03%暴击/1气力",
-	["凝滞"]="+0.16秒/lv，基础8秒",
+	["凝滞"]="每层+0.16秒，基础8秒",
 	["瞬机"]="+60%持续",	
 	["圆明"]="+2/4/5秒，基础20.5秒",
 
@@ -143,7 +143,7 @@ local Dictionary={
 	["Smart Move"]="每级+0.02攻击力/1法力，基础0.12攻击力/1法力",
 	["All or Nothing"]="0.03%暴击/1气力",
 	
-	["Stagnation"]="+0.16s/lv, Base 8s",
+	["Stagnation"]="+0.16s per stack, Base 8s",
 	["Evanescence"]="+60% duration",	
 	["Flaring Dharma"]="+2/4/5s，Base 20.5s",
 	--身法
@@ -178,8 +178,6 @@ local Dictionary={
 }
 
 local DictionarySpirit={
-	--211.8/195.4/170.8/129.7
-	--103.8/92.7
 	["幽魂"]="211.8",
 	["广谋"]="211.8",
 	["虫总兵"]="103.8",
@@ -229,6 +227,14 @@ local DictionarySpirit={
 	["石父"]="103.8",["Father of Stones"]="103.8",
 	["沙二郎"]="211.8",["Second Rat Prince"]="211.8",
 
+	["蘑女"]="211.8",["Fungiwoman"]="211.8",
+	["老人参精"]="205.2",["Old Ginseng Guai"]="205.2",
+	["儡蜱士"]="205.2",["Puppet Tick"]="205.2",
+	["傀蛛士"]="64.9",["Puppet Spider"]="64.9",
+	["幽灯鬼"]="103.8",["Lantern Holder"]="103.8",
+	["戒刀僧"]="103.8",["Blade Monk"]="103.8",
+	["狼刺客"]="64.9",["Wolf Assassin"]="64.9",
+
 
 	["Wandering Wight"]="211.8",
 	["Guangmou"]="211.8",
@@ -265,13 +271,37 @@ local DictionarySpirit={
 	["Swift Bat"]="64.9",
 	["Rat Archer"]="103.8",
 }
+--升级减少消耗的百分比不同
+--211.8/195.4/170.8/129.7
+--103.8/92.7
+for k,v in pairs(DictionarySpirit) do
+	if v=="211.8" then
+		v="211.8/195.4/170.8/129.7"
+	elseif v=="205.2" then
+		v="205.2/197/184.7/164.2"
+	elseif v=="103.8" then
+		v="103.8/92.7/79.8/64.9"
+	elseif v=="64.9" then
+		v="64.9/59/51.9/43.2"
+	elseif v=="47.2" then
+		v="47.2/43.2/38.4/32.4"
+
+	elseif v=="22.6" then
+		v="22.6/?/18.9/16.2"
+	elseif v=="10.4" then
+		v="10.4/9.7/8.8/7.6"
+	end
+	DictionarySpirit[k]="("..v..")"
+end
+
+
 local DictionarySpiritPassive={
-	["幽魂"]="根据等级+18/24/30",	["Wandering Wight"]="+18/24/30 by Lv",
+	["幽魂"]="根据等级+20/24/30",	["Wandering Wight"]="+20/24/30 by Lv",
 	["广谋"]="根据等级+6/+8/+10",	["Guangmou"]="+6/+8/+10 by Lv",
 	["虫总兵"]="根据等级+10/12/15",	["Commander Beetle"]="+10/12/15 by Lv",
 	["百足虫"]=nil,["Centipede Guai"]=nil,
 	["无量蝠"]=nil,["Apramāṇa Bat"]=nil,
-	["不空"]="根据等级+18/24/30 per Hit",["Non-Void"]="+18/24/30 per Hit by Lv",
+	["不空"]="根据等级+20/24/30 per Hit",["Non-Void"]="+20/24/30 per Hit by Lv",
 	["不净"]="根据等级10秒内+6%/+8%/+10%减伤",["Non-Pure"]="+6%/+8%/+10% DamageReduction in 10s by Lv",
 	["不白"]="根据等级+6/+8/+10",["Non-White"]="+6/+8/+10 by Lv",
 	["不能"]="根据等级+2%/2.5%/3%暴击,+4%/5%/6%爆伤,+5/7/10攻击力,-50/75/100法力上限",["Non-Able"]="+2%/2.5%/3% CritRate,+4%/5%/6% CritDamage,+5/7/10 ATK,-50/75/100 MaxMP by Lv",
@@ -280,7 +310,7 @@ local DictionarySpiritPassive={
 	["百目真人"]="根据等级+10/12/15",	["Gore-Eye Daoist"]="+10/12/15 by Lv",
 	["虎伥"]="根据等级+6%/8%/10%",	["Tiger's Acolyte"]="+6%/8%/10% by Lv",
 	["地狼"]="根据等级+2/2.4/3 per Hit",["Earth Wolf"]="+2/2.4/3 per Hit by Lv",
-	["波里个浪"]="根据等级-6%/8%/10%",["Baw-Li-Guhh-Lang"]="-6%/8%/10% by Lv",
+	["波里个浪"]="根据等级-6%/8%/10%",["波波浪浪"]="根据等级-6%/8%/10%",["Baw-Li-Guhh-Lang"]="-6%/8%/10% by Lv",["Baw-Baw-Lang-Lang"]="-6%/8%/10% by Lv",
 	["蛇司药"]="根据等级回复6%/8%/10%生命上限",["Snake Herbalist"]="6%/8%/10% MaxHP by Lv",
 	["青冉冉"]="根据等级每6秒回复1.5%/1.75%/2%生命上限",	["Verdant Glow"]="1.5%/1.75%/2% MaxHP per 6 seconds by Lv",
 	["蛇捕头"]="根据等级+5%/10%/25%攻击，-20%/40%/100%防御",	["Snake Sheriff"]="+5%/10%/25% ATK,-20%/40%/100% DEF at Lv1",
@@ -323,7 +353,14 @@ local DictionarySpiritPassive={
 	["沙二郎"]="生命值低于25%时根据等级+10/15/20攻击",["Second Rat Prince"]="+10/15/20 ATK under 25% MaxHP by Lv",
 	--取平地普通移动再停止后最后一个数字，该数字是稳定的,观察PlayerLocomotion.MaxSpeed:650/663/669/682.5
 	["百足虫"]="+2%/3%/5%,基础650",["Centipede Guai"]="+2%/3%/5% by Lv.Base 650",
-
+	
+	["蘑女"]="+20/24/30生命,-10/12/15气力",["Fungiwoman"]="+20/24/30生命，-10/12/15气力",
+	--["老人参精"]="205.2",["Old Ginseng Guai"]="205.2",
+	["儡蜱士"]="-10/15/20消耗",["Puppet Tick"]="-10/15/20 MP Cost",
+	["傀蛛士"]="-6%/8%/10%神力消耗速度",["Puppet Spider"]="-6%/8%/10% Energy Cost Speed",
+	["幽灯鬼"]="+6%/8%/10%",["Lantern Holder"]="+6%/8%/10%",
+	["戒刀僧"]="10秒内+10/15/20攻击",["Blade Monk"]="+10/15/20 ATK in 10s",
+	["狼刺客"]="+3%/4%/5%",["Wolf Assassin"]="+3%/4%/5%",
 }
 
 --酒、葫芦、泡酒物
@@ -440,9 +477,9 @@ local DictionarySuit={
 	["心灵福至"]="每个天赋+24防御",	["Fortune's Favor"]="+24 DEF per Relic Talent",
 	--650->702，+满级百足734.5
 	["日行千里"]="+8%移动速度，每层+10%攻击\n[*]:每秒+12棍势",	["Swift Pilgrim"]="+8% Speed.+10% ATK per stack\n[*]:+12 Focus/s"	,
-	["举步生风"]="+15棍势",			["Gale Guardian"]="+15 Focus" ,
+	["举步生风"]="+15棍势,-0.765秒冷却;[*]:不会额外减少冷却",			["Gale Guardian"]="+15 Focus,-0.765s CD;[*]:Won't reduce more CD" ,
 	["花下死"]="x0.8毒伤(和抗性效果乘算),+20%攻击",["Poison Ward"]="x0.8 Poison Damage(Multi with \nPoison Resist effect).+20% ATK"	,
-	["试比天高"]="10秒内+8%暴击",	["Heaven's Equal"]="+8% Crit in 10s"	,
+	["试比天高"]="10秒内+8%暴击;-1秒冷却 per Hit",	["Heaven's Equal"]="+8% Crit in 10s;-1s CD per Hit"	,
 	["毒魔狠怪"]="+100棍势，+10%持续时间",["Fuban Strength"]="+100 focus.+10% Duration"	,
 	["锱铢必较"]="+10%灵蕴",		["Every Bit Counts"]="+10% Will"	,
 	["浪里白条"]="x0.5气力消耗(和天赋效果乘算)",["Wave-Rider"]="x0.5 Stamina Cost(Multi with talent effect)",
@@ -451,9 +488,10 @@ local DictionarySuit={
 	["百折不挠"]="5秒内+10%防御",	["Unyielding Resolve"]="+10% DEF in 5s",	
 	["离火入魔"]="[4]+25%伤害 -30%伤害减免",["Outrage"]="[4]+25% Damage.-30% DamageReduction",	
 	["泥塑金装"]="变身时及变身结束后12秒内+20%伤害减免,\n约+1.5/s神力回复,翻滚回复约0.3神力",["From Mud to Lotus"]="+20% DamageReduction in 12s.About\n +1.5/s Might recover.Gain about\n 0.3 Might when roll",	
-	["铜心铁胆"]="+50棍势",			["Iron Will"]="+50 Focus",	
-	["乘风乱舞"]="[*]:+20法力消耗;假身持续时间不变,但不会因破隐而消失",			["Dance of the Black Wind"]="[*]:+20 MP Cost",	
-	--["炼魔荡怪"]="",["Pilgrim's Garb"]="",
+	["铜心铁胆"]="+50棍势;-5秒冷却",			["Iron Will"]="+50 Focus;-5s CD",	
+	["乘风乱舞"]="[*]:+20法力消耗;假身持续时间\n不变,但不会因破隐而消失",			["Dance of the Black Wind"]="[*]:+20 MP Cost",	
+
+	["炼魔荡怪"]="-15秒冷却",["Evil Crasher"]="-15s CD",
 }
 --独门妙用
 local DictionaryEquip={
@@ -467,7 +505,7 @@ local DictionaryEquip={
 	["昆岐毒敌甲"]="+15",					["Venomous Sting Insect Armor"]="+15",
 	["阴阳法衣"]="阳:+20%伤害减免。阴:20%暴击-30%伤害减免",["Yin-Yang Daoist Robe"]="Yang:+20% DamageReduction. Yin:+20% Crit,-30% DamageReduction",
 	["山珍蓑衣"]="15秒内+30",				["Ginseng Cape"]="+30 in 15s",
-	["玄硬铁手"]="3秒内+15%攻击",			["Iron-Tough Gauntlets"]="+15% ATK in 3s",
+	["玄铁硬手"]="3秒内+15%攻击",			["Iron-Tough Gauntlets"]="+15% ATK in 3s",
 	["金刚护臂"]="-10%",					["Vajra Armguard"]="-10%",
 	["赭黄臂甲"]="每消耗一段棍势8秒内+6%暴击",["Ochre Armguard"]="+6% in 8s for each focus level",
 	["不净泥足"]="10秒",					["Non-Pure Greaves"]="10s",
@@ -605,7 +643,7 @@ function HookTextBlockSetText(Context,InText)
 
 	if detailtextSpirit~=nil and name43==".WidgetTree.BI_RZDDetail.WidgetTree.TxtCost" then--精魂能量消耗
 		--print(tostring(InText:get():ToString()).."/"..tostring(name))
-		InText:set(FText(InText:get():ToString().."("..detailtextSpirit.." at Lv1)"))
+		InText:set(FText(InText:get():ToString()..detailtextSpirit))
 		detailtextSpirit=nil
 		--InText:set(FText(detailtextSpirit or "Unknown"))
 
@@ -659,6 +697,7 @@ function HookRichTextBlockSetText(Context,InText)
 		detailtextSpiritPassive=DictionarySpiritPassive[InText:get():ToString()]
 		--print("!!"..tostring(InText:get():ToString()).."/"..tostring(detailtext))
 
+	--[[
 	elseif name:sub(-21)==".WidgetTree.TxtEffect" then --精魂升级描述
 		if InText:get():ToString()=="Reduces the Qi cost for the skill." then
 			InText:set(FText("Reduces the Qi cost for the skill.(-8%/18%/39% at Lv 2/3/5)"))
@@ -666,6 +705,7 @@ function HookRichTextBlockSetText(Context,InText)
 			InText:set(FText("减少施展此技所需元气 (-8%/18%/39% at Lv 2/3/5)"))
 		end
 		--print(".."..tostring(InText:get():ToString()))
+		]]--
 
 	elseif MergeTitleList43[name43]==true then	--DictionaryMerge中的名字
 		detailtextMerge=DictionaryMerge[InText:get():ToString()]
