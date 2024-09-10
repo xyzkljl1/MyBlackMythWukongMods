@@ -19,15 +19,25 @@ local Dictionary={
 
 	--武艺
 	["接力"]="18->23 per Hit",
-	["化吉"]="7.5->8.7",
+	--10506 PassiveSkillDesc 16写的是Mul 50%,实测约+18%，回复量会浮动，约7.5~8，点完变成9上下
+	["化吉"]="约+18%",["Silver Lining"]="about +18%",
+	--10508 46/47 SkillEffectDamageExpand
+	--["断筋"]="Lv1-2:+100/150",["TODO"]="Lv1-2:+100/150",
 	["筋节"]="30%",
 	["应手"]="-30%, 基础26/秒(移步48/秒)",
+	--10506 PassiveSkillDesc 39-41
+	["通变"]="+4%/lv SkillEffect",["Versatility"]="+4%/lv SkillEffect",
+	--10603 51/52 SkillEffectFloat
+	["压溃"]="Lv1-2:+5%/8% SkillEffect",["Smashing Force"]="Lv1-2:+5%/8% SkillEffect",
+	--10702 53/54
+	["铁树"]="-20%/lv",["Steel Pillar"]="-20%/lv",
 	["得心"]="4->6 per Hit, 不影响原地棍花(3 per Hit)",
 	--体段修行
 	["吐纳绵长"]="+2.5气力回复/lv",
 	["五脏坚固"]="+10/lv",
 	["气海充盈"]="+10/lv",
-	--["灾苦消减"]="？/lv",
+	--TalentSDesc 100303 PassiveSkillDesc 20-25
+	["灾苦消减"]="-5%持续时间/lv",["Bane Mitigation"]="-5% Duration/lv",
 	["怒相厚积"]="+1%/lv",
 	["皮肉粗糙"]="+10/lv",
 	["法性贯通"]="+10/lv",
@@ -43,10 +53,13 @@ local Dictionary={
 	["熟谙"]="每级令0-4级重棍气力消耗-4/-5/-7.5/-10/-10，有身根器的减耗效果时该天赋效果减半，0-4棍势等级基础消耗55/65/90/115/115",
 	["克刚"]="Lv1:+20%/Lv2:+30%",
 	["抖擞"]="+100",
-	["骋势"]="+1% 每层",
+	["骋势"]="9秒内+1% 每层",
 	["拂痒"]="20%",
-
 	["精壮"]="+5%/lv,基础55点棍势/秒",
+
+	--1048~1050
+	["乘胜追击"]="根据棍势+5%/10%/15%/20% 攻击",["Vantage Point"]="+5%/10%/15%/20% ATK by focus level",
+
 	--奇术
 	["不破不立"]="+15MP",
 	["假借须臾"]="50MP->80MP,+2秒持续",
@@ -61,25 +74,44 @@ local Dictionary={
 	["智力高强"]="每级+0.02攻击力/1法力，基础0.12攻击力/1法力",
 	["放手一搏"]="0.03%暴击/1气力",
 	["凝滞"]="每层+0.16秒，基础8秒",
-	["瞬机"]="+60%持续",	
+	--BuffDesc-Talent 1027
+	["瞬机"]="+60%持续;+30%敌人承受伤害",		["Evanescence"]="+60% duration;+30% Enemy Damage Taken",	
 	["圆明"]="+2/4/5秒，基础20.5秒",
+
+	--FUStBuffDesc-Talent 1025 TalentSDesc 10901 PassiveSkillDesc 57/58，降低对手的伤害减免，buff基础数值是0，通过passiveskill修改buffeffect
+	["脆断"]="Lv1-2:+10%/15%敌人承受伤害",["Crash"]="Lv1-2:+10%/15% Enemy Damage Taken",
 
 	--身法
 	["洞察"]="Lv1:+3%/Lv2:+4% 每层",
-	["破影一击"]="30MP->40MP",
-	["频频"]="15s->13s",
+	--Talent 2101 AtkMul 2000
+	["破影一击"]="30MP->40MP;+20% 攻击",	["Absolute Strike"]="30MP->40MP;+20% ATK",
+
+	["频频"]="15s->13s",--11105 85 -2s
 	["巩固"]="+15%,持续15秒",
 	["知机"]="+75",
 	["厉无咎"]="Lv1:10MP/Lv2:15MP",
-	["养气"]="+2秒/lv,基础10秒",
+	["养气"]="+2秒/lv,基础10秒",	["Converging Clouds"]="+2s/lv,Base10s",
+	--Talent 11006 Passive 74/75
+	["捣虚"]="+15%/lv",["Ruse"]="+15%/lv",
 
+	--1059,10/15/15? walk/run/dash?
+	["纵横"]="徐行/奔跑/冲刺速度+10%/15%/15%",["Gallop"]="+10%/15%/15% Walk/Run/Sprint speed",
 	--毫毛
 	["玄同"]="积攒效率为本体的20%",
 	["毛吞大海"]="20MP/lv",
+	--11201 Passive 88/89
+	["存身"]="+2秒/lv",["Longstrand"]="+2s/lv",
+	["同寿"]="+10%",["Grey Hair"]="+10%",--11205 96
+	["浇油"]="+15%/lv",["Insult to Injury"]="+15%/lv",--11208 97/98 1083buff基础15%,1/2级天赋+0/+15%
+	["回阳"]="-10秒",["Glorious Return"]="-10s",--buff 1111
+	["不增不减"]="回复20%法力上限",["Spirited Return"]="Recover 20% MaxMP",
+	--Talent 1082
+	["仗势"]="+15% 攻击",["Tyranny of Numbers"]="+15% ATK",
 	--变化
 	["虚相凶猛"]="+2/lv",
 	["炼实返虚"]="+15/lv",
 	["磊磊"]="+15/lv",
+	--TalentSDesc 301103 PassiveSkillDesc 232  233 实际是-1.5 3.5 
 	["剪尾"]="-10%",
 	["红眼"]="+1 每层",
 	["恶秽"]="Lv1->6:+4/6/8/10/12/14",
@@ -93,8 +125,11 @@ local Dictionary={
 	["步月"]="Lv1-3:+10%/15%/20%攻击力",
 	["奔霄"]="Lv1->6:+4/6/8/10/12/14",
 	["不坏身"]="+12",
+	
+	--TalentSDesc 301108 PassiveSkillDesc 236 
+	["一闪"]="+0.3秒？",["Lightning Flash"]="+0.3s？",
 
-	--英文
+	--英文 
 	["Focused Breath"]="+15% Stamina Recover/lv",
 	["Simian Agility"]="-2.5/lv,Base Cost 20",
 	["Endurance"]="Lv1: -20%/Lv2: -30%, Base Cost 7.5/s",
@@ -105,7 +140,7 @@ local Dictionary={
 	["Everlasting Vigor"]="+50% Stamina Recover",
 	--武艺
 	["Effortless Finisher"]="18->23 per Hit",
-	["Silver Lining"]="7.5->8.7",
+	
 
 	["Sturdy"]="30%",
 	["Graceful Whirl"]="-30%, Base Cost 26/s(48/s when moving)",
@@ -126,7 +161,7 @@ local Dictionary={
 	["Instinct"]="Each level let 0-4 Focus-Level heavy-attack cost: -4/-5/-7.5/-10/-10. Only have 50% effect when having Nimble Body(body relic).Base cost of each focus-level:55/65/90/115/115",
 	["Ironbound Resolve"]="Lv1:+20%/Lv2:+30%",
 	["Invigoration"]="+100",
-	["Force Cascade"]="+1% per stack",
+	["Force Cascade"]="+1% per stack in 9s",
 	["Gale's Blessing"]="20%",
 	["Quick Hand"]="+5%/lv,Base 55 focus point/s",
 	--奇术
@@ -140,20 +175,19 @@ local Dictionary={
 
 	["Foregone, Foregained"]="20%MaxHP",
 	["Light Heart"]="-10%/lv",
-	["Smart Move"]="每级+0.02攻击力/1法力，基础0.12攻击力/1法力",
-	["All or Nothing"]="0.03%暴击/1气力",
+	["Smart Move"]="+0.02 ATK per MP/lv，Base +0.12 ATK per MP",
+	["All or Nothing"]="0.03% Crit per Stamina",
 	
 	["Stagnation"]="+0.16s per stack, Base 8s",
-	["Evanescence"]="+60% duration",	
+
 	["Flaring Dharma"]="+2/4/5s，Base 20.5s",
 	--身法
 	["Concealed Observation"]="Lv1:+3%/Lv2:+4% per stack",
-	["Absolute Strike"]="30MP->40MP",
 	["Rock Mastery"]="15s->13s",
 	["Ironclad"]="+15% for 15s",
 	["Nick of Time"]="+75",
 	["Bold Venture"]="Lv1:10MP/Lv2:15MP",
-	["Ruse"]="+2s/lv,Base10s",
+
 
 	--毫毛
 	["Harmony"]="20% efficiency comparing to player",
@@ -319,16 +353,16 @@ local DictionarySpiritPassive={
 	["虫校尉"]="根据等级+10/12/15",	["Beetle Captain"]="+10/12/15 by Lv",
 	["蝎太子"]="根据等级+10/12/15",["Scorpion Prince"]="+10/12/15 by Lv",
 	["泥塑金刚"]="根据等级+10/12/15",	["Clay Vajra"]="+10/12/15 by Lv",
-	["赤发鬼"]=nil,	["Red-Haired Yaksha"]=nil,
+	["赤发鬼"]="根据等级+10%/12%/15% SkillEffect",	["Red-Haired Yaksha"]="+10%/12%/15% SkillEffect",--33687/33487/33187 295/275/255
 	["鸦香客"]="根据等级+10/12/15",	["Crow Diviner"]="+10/12/15 by Lv",
 	["隼居士"]="根据等级+10/12/15",	["Falcon Hermit"]="+10/12/15 by Lv",
 	["夜叉奴"]="根据等级+10/12/15 per Hit",	["Enslaved Yaksha"]="+10/12/15 per Hit by Lv",
 	["菇男"]="根据等级6%/8%/10%",["Fungiman"]="6%/8%/10% by Lv",
-	["巡山鬼"]=nil,	["Mountain Patroller"]=nil,
+	["巡山鬼"]=nil,	["Mountain Patroller"]=nil,--303686 254/274/294 1061410/1061430/1061460?
 	["鼠司空"]="根据等级+10/12/15",	["Rat Governor"]="+10/12/15 by Lv",
 	["骨悚然"]="根据等级+1%/2%/3%",	["Spearbone"]="+1%/2%/3% by Lv",
 	--7.5/7.07/6.74  4.725
-	["石双双"]="根据等级-6%/8%/10%气力消耗",	["Poisestone"]="-6%/8%/10% Stamina Cost by Lv",
+	["石双双"]="根据等级-6%/8%/10%气力消耗,+10%/12%/15% 跳跃轻击SkillEffect",	["Poisestone"]="-6%/8%/10% Stamina Cost,+10%/12%/15% SkillEffect by Lv", --33681/33581 247/267/287
 	["鼠禁卫"]="根据等级+6/8/10",["Rat Imperial Guard"]="+6/8/10 by Lv",
 	["狸侍长"]="根据等级+5/7/10",["Civet Sergeant"]="+5/7/10 by Lv",
 	["疾蝠"]="根据等级+10/12/15",["Swift Bat"]="+10/12/15 by Lv",
@@ -346,21 +380,21 @@ local DictionarySpiritPassive={
 	["兴烘掀·掀烘兴"]="根据等级+30/36/45防御,-5/7/10攻击",["Top Takes Bottom, Bottom Takes Top"]="+30/36/45 DEF,-5/7/10 ATK by Lv",
 	["雾里云·云里雾"]="根据等级-6/-8/-10",["Misty Cloud, Cloudy Mist"]="-6/8/10 by Lv",
 	["地罗刹"]="根据等级10秒内+6%/8%/10%",["Earth Rakshasa"]="+6%/8%/10% in 10s by Lv",
-	--["鳖宝"]="根据等级+5/7/10",["Turtle Treasure"]="+5/7/10 by Lv",
+	["鳖宝"]="根据等级+10%/12%/15% SkillEffect",["Turtle Treasure"]="+10%/12%/15% SkillEffect by Lv",--303184/33484 Passive 292/272
 	["燧统领"]="根据等级+5/7/10",["Flint Chief"]="+5/7/10 by Lv",
 	["黑脸鬼"]="根据等级+6%/8%/10%",["Charface"]="+6%/8%/10% by Lv",
 	["石父"]="根据等级+1.5%/2%/2.5%暴击,+3%/4%/5%暴伤",["Father of Stones"]="+1.5%/2%/2.5% CritChance,+3%/4%/5% CritDamage by Lv",
 	["沙二郎"]="生命值低于25%时根据等级+10/15/20攻击",["Second Rat Prince"]="+10/15/20 ATK under 25% MaxHP by Lv",
 	--取平地普通移动再停止后最后一个数字，该数字是稳定的,观察PlayerLocomotion.MaxSpeed:650/663/669/682.5
-	["百足虫"]="+2%/3%/5%,基础650",["Centipede Guai"]="+2%/3%/5% by Lv.Base 650",
+	["百足虫"]="根据等级+2%/3%/5%,基础650",["Centipede Guai"]="+2%/3%/5% by Lv.Base 650",
 	
-	["蘑女"]="+20/24/30生命,-10/12/15气力",["Fungiwoman"]="+20/24/30生命，-10/12/15气力",
-	--["老人参精"]="205.2",["Old Ginseng Guai"]="205.2",
-	["儡蜱士"]="-10/15/20消耗",["Puppet Tick"]="-10/15/20 MP Cost",
-	["傀蛛士"]="-6%/8%/10%神力消耗速度",["Puppet Spider"]="-6%/8%/10% Energy Cost Speed",
-	["幽灯鬼"]="+6%/8%/10%",["Lantern Holder"]="+6%/8%/10%",
-	["戒刀僧"]="10秒内+10/15/20攻击",["Blade Monk"]="+10/15/20 ATK in 10s",
-	["狼刺客"]="+3%/4%/5%",["Wolf Assassin"]="+3%/4%/5%",
+	["蘑女"]="根据等级+20/24/30生命,-10/12/15气力",["Fungiwoman"]="+20/24/30生命，-10/12/15气力",
+	["老人参精"]="根据等级+6%/8%/10%",["Old Ginseng Guai"]="+6%/8%/10% by Lv", --303157 33657/33457/33157 244/264/
+	["儡蜱士"]="根据等级-10/15/20消耗",["Puppet Tick"]="-10/15/20 MP Cost by Lv",
+	["傀蛛士"]="根据等级-6%/8%/10%神力消耗速度",["Puppet Spider"]="-6%/8%/10% Energy Cost Speed by Lv",
+	["幽灯鬼"]="根据等级+6%/8%/10%",["Lantern Holder"]="+6%/8%/10% by Lv",
+	["戒刀僧"]="根据等级10秒内+10/15/20攻击",["Blade Monk"]="+10/15/20 ATK in 10s by Lv",
+	["狼刺客"]="根据等级+3%/4%/5%",["Wolf Assassin"]="+3%/4%/5% by Lv",
 }
 
 --酒、葫芦、泡酒物
@@ -369,6 +403,8 @@ local DictionaryGourd={
 	["湘妃葫芦"]="15秒内+15抗性",			["Xiang River Goddess Gourd"]="+15 in 15s",
 	["五鬼葫芦"]="20秒内+15攻击",			["Plaguebane Gourd"]="+15 ATK in 20s",
 	["燃葫芦"]="15秒内+30气力",				["Firey Gourd"]="+30 Stamina in 15s",
+	--2804 DmgAdditionBase 30
+	["乾坤彩葫芦"]="30秒内+30%伤害加成",				["Multi-Glazed Gourd"]="+30% Damage in 30s",
 
 	["椰子酒"]="实际回复28%+15",	["Coconut Wine"]="Actually 28%+15",
 	["椰子酒·三年陈"]="实际回复32%+25",	["3-Year-Old Coconut Wine"]="Actually 32%+25",
@@ -377,11 +413,13 @@ local DictionaryGourd={
 	["椰子酒·十八年陈"]="实际回复42%+46",	["18-Year-Old Coconut Wine"]="Actually 42%+46",
 	["椰子酒·三十年陈"]="实际回复45%+51",	["30-Year-Old Coconut Wine"]="Actually 45%+51",
 	["猴儿酿"]="实际回复48%+55",	["Monkey Brew"]="Actually 48%+55",
-	["猴儿酿"]="的确是55%",	["Jade Dew"]="Indeed 55%",
+	["玉液"]="的确是55%",	["Jade Dew"]="Indeed 55%",
+	["蓝桥风月"]="15秒内+30%移动速度",	["Bluebridge Romance"]="+30% in 15s",
 
 	["琼浆"]="+20",							["Jade Essence"]="+20",
 	["无忧醑"]="低于20%血量时恢复量24%->60%",	["Worryfree Brew"]="24%->60% under 20% HP",
-	["九霞清醑"]="+15.0",					["Sunset of the Nine Skies"]="+15.0",
+	--BuffDesc-Item 92023
+	["九霞清醑"]="+15.0元气;+20法宝能量",					["Sunset of the Nine Skies"]="+15.0 Qi;+20.0 Treasure Energy",
 	["松醪"]="+75.0",						["Pinebrew"]="+75.0",
 
 	["龙膏"]="6秒内+12%攻击",				["Loong Balm"]="+12 ATK in 6s",
@@ -397,6 +435,11 @@ local DictionaryGourd={
 	["胆中珠"]="15秒内+15",					["Gall Gem"]="+15 in 15s",
 	["霹雳角"]="15秒内+15",					["Thunderbolt Horn"]="+15 in 15s",
 	["甜雪"]="15秒内+15",					["Sweet Ice"]="+15 in 15s",
+	--Item 92317 92327 92328
+	["瞌睡虫蜕"]="15秒内踉跄;定身法-2秒，安神法-5秒，聚形散气-3秒，铜头铁臂-2秒，毫毛-8秒",					["Slumbering Beetle Husk"]="Stagger in 15s;Immobilize -2s,Ring of Fire -5s,Cloud Step -3s,Rock Solid-2s,A Pluck of Many -8s",
+	["清虚道果"]="15秒",					["Fruit of Dao"]="15s",
+	--Talent 2100 AtkMul 20%
+	["十二重楼胶"]="+20% 攻击",					["Breath of Fire"]="+20% ATK",
 
 	["血杞子"]="+5秒",						["Goji Shoots"]="+5s",
 	["困龙须"]="+2秒",						["Stranded Loong's Whisker"]="+2s",
@@ -408,7 +451,8 @@ local DictionaryGourd={
 
 --珍玩，消耗品
 local DictionaryItem={
-	["君子牌"]="about 0.12/s",	["Virtuous Bamboo Engraving"]="about 0.12/s", -- 不是加在属性上，而是获得一个buff
+	--Item 96035 0.1?不是加在属性上，而是获得一个buff
+	["君子牌"]="about 0.1/s",	["Virtuous Bamboo Engraving"]="about 0.1/s", 
 	["白狐毫"]="-20%神力消耗速度",	["Snow Fox Brush"]="-20% Energy consume speed",
 	["耐雪枝"]="+12",	["Frostsprout Twig"]="+12",
 	["错金银带钩"]="+12",	["Cuo Jin-Yin Belt Hook"]="+12",
@@ -448,49 +492,57 @@ local DictionaryItem={
 	--695.5
 	["风铎"]="+7%",	["Wind Chime"]="+7%",
 	--消耗品
-	["朝元膏"]="130秒内+60",	["Essence Decoction"]="+60 in 130s",
-	["益气膏"]="130秒内+60",	["Tonifying Decoction"]="+60 in 130s",
-	["延寿膏"]="130秒内+60",	["Longevity Decoction"]="+60 in 130s",
+	--鼻根器+10%持续2
+	["朝元膏"]="120秒内+60",	["Essence Decoction"]="+60 in 130s",
+	["益气膏"]="120秒内+60",	["Tonifying Decoction"]="+60 in 130s",
+	["延寿膏"]="120秒内+60",	["Longevity Decoction"]="+60 in 130s",
 
-	["登仙散"]="80秒",	["Ascension Powder"]="80s",
-	["龙光倍力丸"]="80秒内+15攻击15%暴击20%暴伤",	["Loong Aura Amplification Pellets"]="+15 ATK/15% Crit/20% CritDamage in 80s",
+	["登仙散"]="75秒",	["Ascension Powder"]="75s",
+	["龙光倍力丸"]="75秒内+15攻击15%暴击20%暴伤",	["Loong Aura Amplification Pellets"]="+15 ATK/15% Crit/20% CritDamage in 75s",
 	["加味参势丸"]="+480",	["Enhanced Ginseng Pellets"]="+480",
-	["聚珍伏虎丸"]="80秒内+15攻击",	["Enhanced Tiger Subduing Pellets"]="+15 ATK in 80s",
-	["轻身散"]="130秒",	["Body-Fleeting Powder"]="+60 in 130s",
+	["聚珍伏虎丸"]="75秒内+15攻击",	["Enhanced Tiger Subduing Pellets"]="+15 ATK in 75s",
+	["轻身散"]="120秒",	["Body-Fleeting Powder"]="+60 in 130s",
 
-	["倍力丸"]="80秒内+10%",	["Amplification Pellets"]="+10% in 80s",
-	["伏虎丸"]="80秒内+8攻击",	["Tiger Subduing Pellets"]="+8 ATK in 80s",
-	["坚骨药"]="80秒",	["Fortifying Medicament"]="80s",
-	["温里散"]="80秒内+30",	["Body-Warming Powder"]="+30 in 80s",
-	["度瘴散"]="80秒内+30",	["Antimiasma Powder"]="+30 in 80s",
-	["神霄散"]="80秒内+30",	["Shock-Quelling Powder"]="+30 in 80s",
-	["清凉散"]="80秒内+30",	["Body-Cooling Powder"]="+30 in 80s",
-	["避凶药"]="80秒内+10%",	["Evil Repelling Medicament"]="+10% in 80s",
+	["倍力丸"]="75秒内+10%",	["Amplification Pellets"]="+10% in 75s",
+	["伏虎丸"]="75秒内+8攻击",	["Tiger Subduing Pellets"]="+8 ATK in 75s",
+	["坚骨药"]="75秒",	["Fortifying Medicament"]="75s",
+	["温里散"]="75秒内+30",	["Body-Warming Powder"]="+30 in 75s",
+	["度瘴散"]="75秒内+30",	["Antimiasma Powder"]="+30 in 75s",
+	["神霄散"]="75秒内+30",	["Shock-Quelling Powder"]="+30 in 75s",
+	["清凉散"]="75秒内+30",	["Body-Cooling Powder"]="+30 in 75s",
+	["避凶药"]="75秒内+10%",	["Evil Repelling Medicament"]="+10% in 75s",
 	["镜中丹"]="+60",	["Mirage Pill"]="+60",
-	--["九转还魂丹"]="130秒",	["Tonifying Decoction"]="130s",
+	--["九转还魂丹"]="120秒",	["Tonifying Decoction"]="130s",
 
-	["参势丸"]="33秒内+10/秒",	["Ginseng Pellets"]="+10/s in 33s",
+	["参势丸"]="30秒内+10/秒",	["Ginseng Pellets"]="+10/s in 30s",
 }
 
 --套装效果
 local DictionarySuit={
 	["心灵福至"]="每个天赋+24防御",	["Fortune's Favor"]="+24 DEF per Relic Talent",
 	--650->702，+满级百足734.5
-	["日行千里"]="+8%移动速度，每层+10%攻击\n[*]:每秒+12棍势",	["Swift Pilgrim"]="+8% Speed.+10% ATK per stack\n[*]:+12 Focus/s"	,
-	["举步生风"]="+15棍势,-0.765秒冷却;[*]:不会额外减少冷却",			["Gale Guardian"]="+15 Focus,-0.765s CD;[*]:Won't reduce more CD" ,
+	--Talent 2041-2044
+	["日行千里"]="+8%/10%奔跑/冲刺速度;\n每层+10%攻击,持续2秒;\n[*]:每秒+12棍势",	["Swift Pilgrim"]="+8%/10% Run/Sprint speed.\n+10% ATK per stack in 2s\n[*]:+12 Focus/s"	,
+	--96005/96006 实测每次减少0.75~1秒冷却不定？？非传奇和传奇没有区别？？
+	["举步生风"]="+15棍势,-0.75~1秒冷却?\n[*]:不会额外减少冷却",			["Gale Guardian"]="+15 Focus,-0.75s~1s CD？\n[*]:Won't reduce more CD" ,
 	["花下死"]="x0.8毒伤(和抗性效果乘算),+20%攻击",["Poison Ward"]="x0.8 Poison Damage(Multi with \nPoison Resist effect).+20% ATK"	,
 	["试比天高"]="10秒内+8%暴击;-1秒冷却 per Hit",	["Heaven's Equal"]="+8% Crit in 10s;-1s CD per Hit"	,
 	["毒魔狠怪"]="+100棍势，+10%持续时间",["Fuban Strength"]="+100 focus.+10% Duration"	,
 	["锱铢必较"]="+10%灵蕴",		["Every Bit Counts"]="+10% Will"	,
+	--Talent 2037 ->90301?,鳞棍2034->15003?
 	["浪里白条"]="x0.5气力消耗(和天赋效果乘算)",["Wave-Rider"]="x0.5 Stamina Cost(Multi with talent effect)",
 	["龙血玄黄"]="+10赋雷攻击\n[*]:+10赋雷攻击",		["Thunder Veins"]="+10 Thunder ATK\n[*]:+10 Thunder ATK",	
 	["借假修真"]="20秒内+15%攻击,暴击+3元气,\n击杀+5元气",["Gilded Radiance"]="+15% ATK in 20s. +3/+5 Qi when Crit/Kill",	
 	["百折不挠"]="5秒内+10%防御",	["Unyielding Resolve"]="+10% DEF in 5s",	
-	["离火入魔"]="[4]+25%伤害 -30%伤害减免",["Outrage"]="[4]+25% Damage.-30% DamageReduction",	
-	["泥塑金装"]="变身时及变身结束后12秒内+20%伤害减免,\n约+1.5/s神力回复,翻滚回复约0.3神力",["From Mud to Lotus"]="+20% DamageReduction in 12s.About\n +1.5/s Might recover.Gain about\n 0.3 Might when roll",	
+	["离火入魔"]="[2]+20% SkillEffect \n[4]+25%伤害 -30%伤害减免",["Outrage"]="[2]+20% SkillEffect \n[4]+25% Damage.-30% DamageReduction",	--90711 Passive 167
+	--Talent 2135 -0.005，实测变身还原+1.5每秒 ；2137 -0.00375,实测约1.12每秒，结合-0.005推测应为1.125/s
+	["泥塑金装"]="+20%伤害减免，翻滚回复约0.3神力;\n变身后12秒内+1.5/s神力回复;\n化身还原后4秒内+1.125/s神力回复",["From Mud to Lotus"]="+20% DamageReduction;Gain about 0.3 Might\n when roll; +1.5/s Might Recover in 12s after\n tranformation;+1.125/s Might Recover\n in 4s after vigor.",	
 	["铜心铁胆"]="+50棍势;-5秒冷却",			["Iron Will"]="+50 Focus;-5s CD",	
 	["乘风乱舞"]="[*]:+20法力消耗;假身持续时间\n不变,但不会因破隐而消失",			["Dance of the Black Wind"]="[*]:+20 MP Cost",	
+	--Talent 2063
+	["走石飞砂"]="20%减伤",			["Raging Sandstorm"]="20% Damage Reduction",	
 
+	--Talent 2181 青铜套内部叫黑铁
 	["炼魔荡怪"]="-15秒冷却",["Evil Crasher"]="-15s CD",
 }
 --独门妙用
@@ -501,8 +553,8 @@ local DictionaryEquip={
 	["金身怒目面"]="+100棍势",				["Golden Mask of Fury"]="+100",
 	["长嘴脸"]="饮酒后15秒内+30攻击，15~20秒+20攻击，20秒后-20攻击",["Snout Mask"]="+30 ATK in 15s;+20 ATK in 15~20s;-20 ATK after 20s",
 	["鳖宝头骨"]="+2%",						["Skull of Turtle Treasure"]="+2%",
-	["地灵伞盖"]="高于1%血量时每秒-3HP,额外回复+15%生命上限",["Earth Spirit Capped"]="-3HP/s when over 1% HP.+15% MaxHP Recover",
-	["昆岐毒敌甲"]="+15",					["Venomous Sting Insect Armor"]="+15",
+	["地灵伞盖"]="高于1%血量时每秒-3HP,额外回复+15%生命上限",["Earth Spirit Cap"]="-3HP/s when over 1% HP.+15% MaxHP Recover",
+	["昆蚑毒敌甲"]="+15",					["Venomous Sting Insect Armor"]="+15",
 	["阴阳法衣"]="阳:+20%伤害减免。阴:20%暴击-30%伤害减免",["Yin-Yang Daoist Robe"]="Yang:+20% DamageReduction. Yin:+20% Crit,-30% DamageReduction",
 	["山珍蓑衣"]="15秒内+30",				["Ginseng Cape"]="+30 in 15s",
 	["玄铁硬手"]="3秒内+15%攻击",			["Iron-Tough Gauntlets"]="+15% ATK in 3s",
@@ -510,16 +562,26 @@ local DictionaryEquip={
 	["赭黄臂甲"]="每消耗一段棍势8秒内+6%暴击",["Ochre Armguard"]="+6% in 8s for each focus level",
 	["不净泥足"]="10秒",					["Non-Pure Greaves"]="10s",
 	["藏风护腿"]="+10",						["Galeguard Greaves"]="+10",
-	["南海念珠"]="+40生命/法力上限",		["Guanyin's Prayer Beads"]="+40 MaxHP/MP",
+	--Talent 2713/2714
+	["南海念珠"]="300秒内+40生命/法力上限",		["Guanyin's Prayer Beads"]="+40 MaxHP/MP in 300s",
+	--Talent 2142
 	["羽士戗金甲"]="20秒内+10%攻击",		["Centipede Qiang-Jin Armor"]="+10%ATK in 20s",
+	--Talent 2098
+	["乌金行缠"]="+15%攻击",		["Ebongold Gaiters"]="+15%ATK",
+	--Talent 2702
+	["白脸子"]="+15%攻击",		["Grey Wolf Mask"]="+15%ATK",
+	--蜢虫头907005 97005、97015 185、186
+	["长须头面"]="+15%/20% SkillEffect",		["Locust Antennae Mask"]="+15%/20% SkillEffect",
 
 	["狼牙棒"]="5秒内获得共127.5棍势(2.5+25*5)",		["Spikeshaft Staff"]="Gain 127.5(2.5+25*5) Focus in 5s",
 	["昆棍·百眼"]="每段棍势+5HP(中毒敌人+40)",		["Visionary Centipede Staff"]="+5 HP(40 for Poisoned enemy) for each focus level",
 	["昆棍·蛛仙"]="每段棍势+5HP",		["Spider Celestial Staff"]="+5 HP for each focus level",
 	["昆棍"]="每段棍势+5HP",		["Chitin Staff"]="+5 HP for each focus level",
-
 	["昆棍·通天"]="每段棍势+5HP",		["Adept Spine-Shooting Fuban Staff"]="+5 HP for each focus level",
 	["混铁棍"]="每点防御+0.15攻击",		["Dark Iron Staff"]="+0.15ATK per DEF",
+
+	["飞龙宝杖"]="+20% SkillEffect",		["Golden Loong Staff"]="+20% SkillEffect",--15015 145
+	["三尖两刃枪"]="+15% SkillEffect",		["Tri-Point Double-Edged Spear"]="+15% SkillEffect",--15015 145
 }
 --[[ 
 --Fuck chinese characters,Fuck encoding
@@ -535,16 +597,19 @@ print(tostring(x==y))--true
 
 local DictionaryRelic={
 	["见机强攻"]="轻棍1-5段全部命中的棍势由15/18/17/28/40变为15/18/26/35/43",	["Opportune Watcher"]="Light Attack 1-5 focus point if all hit :15/18/17/28/40 -> 15/18/26/35/43",
-	--["眼乖手疾"]="+45",	["Eagle Eye"]="+45",
+	--buff talent 1053
+	["眼乖手疾"]="-12.5秒",	["Eagle Eye"]="-12.5s",
 	["慧眼圆睁"]="+15%",	["Keen Insight"]="+15%",
-	--["金钮"]="满血时+15攻击",	["All Ears"]="+15 when full HP",
+	
+	["耳听八方"]="+0.066秒?",	["All Ears"]="+0.066s?",--20201 Passive 121
 	--["阳燧珠"]="+12",	["Sound as A Bell"]="+12",
 	["耳畔风响"]="5秒内+10%攻击",	["Whistling Wind"]="+10% ATK in 5s",
-	--见机强攻
-	--["阳燧珠"]="+12",	["Lingering Aroma"]="+12",
-	--["阳燧珠"]="+12",	["In One Breath"]="+12",
-	--["阳燧珠"]="+12",	["Hold Breath"]="+12",
+
+	["气味相投"]="15秒内+10%伤害加成",	["Lingering Aroma"]="+10% Damage in 15s", --buff 2107
+	--["阳燧珠"]="+12",	["In One Breath"]="+12", --20303 Passive  127
+	["屏气敛息"]="+0.066秒?",	["Hold Breath"]="+0.066s？",
 	
+	["舌尝思"]="+10%丹药持续时间",	["Envious Tongue"]="+10% Duration",
 	["丹满力足"]="5秒内+15%",	["Refreshing Taste"]="+15% in 5s",
 	--["阳燧珠"]="+12",	["Spread the Word"]="+12",
 	["遍尝百草"]="每个增加+4%生命上限的回复量",	["Tongue of A Connoisseur"]="Each +4% MaxHP recover",
@@ -552,6 +617,9 @@ local DictionaryRelic={
 	["身轻体快"]="0-4级棍势气力消耗55/65/90/115/115 -> 35/40/52.5/65/65 令熟谙天赋效果减半",	["Nimble Body"]="0-4 Focus-Level heavy-attack cost: 55/65/90/115/115 -> 35/40/52.5/65/65 Reduce Instinct talent effect by half",
 	["福寿长臻"]="+60",	["Everlasting Vitality"]="+60",
 	["灾愆不侵"]="+15",	["Divine Safeguard"]="+15",
+
+	["万相归真"]="不同动作分别+5%或+10% SkillEffect",	["Elegance in Simplicity"]="+5% or 10% SkillEffect",
+	["不生不灭"]="30秒内+30%伤害加成",	["Unbegotten, Undying"]="+30% Damage in 30s",
 }
 
 --Merge All dic to Dictionary
@@ -615,6 +683,7 @@ local MergeTitleList43={ -- Gourd/Wine/WineMat/Relic ....
 ["Tree.BI_GenqiDecs_1.WidgetTree.TxtGenqiRuby"]=true,--根器天赋
 ["Tree.BI_GenqiDecs_2.WidgetTree.TxtGenqiRuby"]=true,--根器天赋
 ["Tree.BI_GenqiDecs_3.WidgetTree.TxtGenqiRuby"]=true,--根器天赋
+["Tree.BI_GenqiDetail.WidgetTree.TxtGenqiName"]=true,--根器名
 ["ree.BI_JewelryDetail.WidgetTree.TxtNameRuby"]=true,--珍玩
 ["etTree.BI_ItemDetail.WidgetTree.TxtNameRuby"]=true,--行囊
 ["idgetTree.BI_SpellDetail.WidgetTree.TxtName"]=true,--天赋
@@ -628,6 +697,7 @@ local MergeDetailList43={
 	["ee.BI_GenqiDecs_1.WidgetTree.TxtGenqiTalent"]=true,--根器天赋
 	["ee.BI_GenqiDecs_2.WidgetTree.TxtGenqiTalent"]=true,--根器天赋
 	["ee.BI_GenqiDecs_3.WidgetTree.TxtGenqiTalent"]=true,--根器天赋
+	["ee.BI_GenqiDetail.WidgetTree.TxtGenqiBSkill"]=true,--根器主效果
 	["e.BI_JewelryDetail.WidgetTree.TxtEffectDesc"]=true,--珍玩
 	["Tree.BI_SpellDetail.WidgetTree.TxtSpellDesc"]=true,--天赋
 	["Tree.BI_ItemDetail.WidgetTree.TxtEffectDesc"]=true,--行囊
@@ -677,10 +747,10 @@ function HookTextBlockSetText(Context,InText)
 			--lastSuitDescWidgetText=nil
 			--print("Set")
 		end
-	--elseif InText:get():ToString():find("牙") then
-	--	print("C.."..tostring(name).." "..name43)
-	--elseif InText:get():ToString():find("识破对手") then
-	--	print("D.."..tostring(name).." "..name43)
+	elseif InText:get():ToString():find("食髓知味") then
+		print("C.."..tostring(name).." "..name43)
+	elseif InText:get():ToString():find("舌尝思") then
+		print("D.."..tostring(name).." "..name43)
 		
 	end
 	--print(".."..tostring(InText:get():ToString()))
@@ -736,10 +806,10 @@ function HookRichTextBlockSetText(Context,InText)
 			--print("Last Widet: ",tostring(lastSuitDescWidget:GetFullName()))
 	]]--
 	--5 127.5
-	--elseif InText:get():ToString():find("狼牙棒") then
-	--	print("A.."..tostring(name).." "..name43)
-	--elseif InText:get():ToString():find("识破对手") then
-	--	print("B.."..tostring(name).." "..name43)		
+	elseif InText:get():ToString():find("食髓知味") then
+		print("A.."..tostring(name).." "..name43)
+	elseif InText:get():ToString():find("舌尝思") then
+		print("B.."..tostring(name).." "..name43)		
 	end
 
 	--print(".."..tostring(InText:get():ToString()))
