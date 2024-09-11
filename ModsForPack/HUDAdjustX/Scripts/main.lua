@@ -3,7 +3,6 @@ local ModName="[HUDAdjustX] "
 --version:1.2
 local config = require("hudadjustx-config")
 local WidgetLib=nil
-local MyMod=nil
 local hooked=false
 
 RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context,pawn)
@@ -11,21 +10,21 @@ RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context,p
 		--变身有好几种，用到时才会加载
 		NotifyOnNewObject("/Script/b1-Managed.BI_TransStyleCS", function(ConstructedObject)
 			--print(tostring(ConstructedObject:GetFullName()))
+			--CanvasPanelSlot /Engine/Transient.GameEngine_2147482611:BGW_GameInstance_B1_2147482576.BUI_B1_Root_V2_C_2147430313.WidgetTree.BUI_BattleMain_C_2147428150.WidgetTree.BI_Trans.WidgetTree.BI_TransStyle_19_C_2147427641.WidgetTree.BI_TransStyleBase.WidgetTree.StyleCon
+			--CanvasPanel /Engine/Transient.GameEngine_2147482611:BGW_GameInstance_B1_2147482576.BUI_B1_Root_V2_C_2147430313.WidgetTree.BUI_BattleMain_C_2147428150.WidgetTree.BI_Trans.WidgetTree.BI_TransStyle_16_C_2147412336.WidgetTree.StyleCon
 			local panelname=ConstructedObject:GetFullName():gsub("([^ ]*) (.*)","%2")..".WidgetTree.StyleCon"
+			local panelname2=ConstructedObject:GetFullName():gsub("([^ ]*) (.*)","%2")..".WidgetTree.BI_TransStyleBase.WidgetTree.StyleCon"--如小黄龙
 			ExecuteWithDelay(10000,function()
 				local panel=StaticFindObject(panelname)
+				if (not panel) or (not panel:IsValid()) then
+					panel=StaticFindObject(panelname2)
+				end
 				if panel and panel:IsValid() then
 					print(ModName.."Init transstyle:"..tostring(panel:GetFullName()))
-					if (not MyMod) or (not MyMod:IsValid()) then
-						MyMod=StaticFindObject("/Game/Mods/HUDAdjustX/ModActor.Default__ModActor_C")
-					end 
-					if (not MyMod) or (not MyMod:IsValid()) then
-						print(ModName.."Can't Find MyMod when init transstyle")						
-					end
 					panel["Slots"]:ForEach(function(index,elem)
 						--print(tostring(index))
 						--print(tostring(elem:get():GetFullName()))
-						MyMod:SetPosition(elem:get(),config.fpbar_x+400,config.fpbar_y+80)
+						elem:get():SetPosition({X=config.fpbar_x+400,Y=config.fpbar_y+80})
 					end)
 				end
 			end)
@@ -63,11 +62,11 @@ function SetCanvasSlotPosition(widget,x,y,bSetOffset)
 		print(tostring(slot:GetAlignment()["X"]))
 		print(tostring(slot:GetAlignment()["Y"]))
 		]]--
-		if slot and slot:IsValid() then
-			MyMod:SetPosition(slot,x,y)
-			if bSetOffset then
-				MyMod:SetOffset(slot,x,y,-x,0)
-			end
+		if slot and slot:IsValid() then			
+			slot:SetPosition({X=x,Y=y})
+			--if bSetOffset then
+			--	MyMod:SetOffset(slot,x,y,-x,0)
+			--end
 		end
 	end
 end
@@ -79,11 +78,6 @@ function SetParam(message)
 	BattleMainUI=FindFirstOf("BUI_BattleMain_C")
 	if not BattleMainUI:IsValid() then
 		print(ModName.."Game not ready,Abort")
-		return false
-	end
-	MyMod=StaticFindObject("/Game/Mods/HUDAdjustX/ModActor.Default__ModActor_C") -- Default object is enought here
-	if not MyMod:IsValid() then
-		print(ModName.."Can't Find BP mod,Abort")
 		return false
 	end
 	WidgetLib=StaticFindObject("/Script/UMG.Default__WidgetLayoutLibrary")
@@ -133,7 +127,7 @@ function SetParam(message)
 	--end)
 	
 	--BI_BloodBarList_C /Engine/Transient.GameEngine_2147482611:BGW_GameInstance_B1_2147482576.BUI_B1_Root_V2_C_2147472232.WidgetTree.BUI_BloodBarList_C_2147471273.WidgetTree.BI_BloodBarList
-	bossHPlist=FindAllOf("BI_BloodBarList_C")
+	bossHPlist=FindAllOf("BI_BloodBarList_C") or {}
 	bossHP=nil
 	for _,widget in pairs(bossHPlist) do
 		if widget:GetFullName():find("GameInstance") then
@@ -151,11 +145,39 @@ function SetParam(message)
 	SetCanvasSlotPosition(skillshortcut,config.skill_x,config.skill_y)
 	SetCanvasSlotPosition(itemshortcut,config.item_x,config.item_y)
 	SetCanvasSlotPosition(treasureshortcut,config.treasure_x,config.treasure_y)
-	SetCanvasSlotPosition(rzdshortcut,config.rzd_x,config.rzd_y)	
+	SetCanvasSlotPosition(rzdshortcut,config.rzd_x,config.rzd_y)
 	SetCanvasSlotPosition(bossHP,config.bosshp_x,config.bosshp_y)
+	local tmp_vis=skillshortcut:GetVisibility()
+	skillshortcut:SetVisibility(2)
+	itemshortcut:SetVisibility(2)
+	skillshortcut:SetVisibility(tmp_vis)
+	itemshortcut:SetVisibility(tmp_vis)
+
+	--skillshortcut:SetVisibility(2)
+	--skillshortcut:SetVisibility(0)
 	--SetCanvasSlotPosition(x,300,300)
 	print(ModName.."Init Done")
 	return true
 end
+
+--由于莫名原因，传送/复活后物品/技能栏会有一部分不显示，需要刷一下
+RegisterHook("/Script/b1.BGWGameInstance:CloseLoadingScreen",function()
+ExecuteWithDelay(3000,function()
+	print(ModName.."Refresh on CloseLoadingScreen")
+	local BattleMainUI=FindFirstOf("BUI_BattleMain_C")
+	if BattleMainUI:IsValid() then
+		WidgetLib=StaticFindObject("/Script/UMG.Default__WidgetLayoutLibrary")
+		prefix=BattleMainUI:GetFullName():gsub("([^ ]*) (.*)","%2")..".WidgetTree." -- BattleMainUI object name
+		skillshortcut=StaticFindObject(prefix.."BI_ShortcutSkill")
+		itemshortcut=StaticFindObject(prefix.."BI_ShortcutItem")
+
+		local tmp_vis=skillshortcut:GetVisibility()
+		skillshortcut:SetVisibility(2)
+		itemshortcut:SetVisibility(2)
+		skillshortcut:SetVisibility(tmp_vis)
+		itemshortcut:SetVisibility(tmp_vis)		
+	end
+end)
+end)
 
 SetParam("Init on Load")
