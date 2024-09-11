@@ -16,6 +16,8 @@ local Dictionary={
 	["走险"]="+10/lv,基础 40",
 	["志心"]="+10/lv,基础 40",
 	["绵绵"]="+50%气力回复",
+	--["任翻腾"]="",--第一段翻滚由SkillDesc 10301变为10305
+	["直取"]="+100/lv,基础800/900/1000",["Switft Engage"]="+100/lv,Base 800/900/1000",--Passive 13/14 SkillCtrlDesc 10701,10798-10801
 
 	--武艺
 	["接力"]="18->23 per Hit",
@@ -26,9 +28,9 @@ local Dictionary={
 	["筋节"]="30%",
 	["应手"]="-30%, 基础26/秒(移步48/秒)",
 	--10506 PassiveSkillDesc 39-41
-	["通变"]="+4%/lv SkillEffect",["Versatility"]="+4%/lv SkillEffect",
+	["通变"]="+4%/lv 动作倍率",["Versatility"]="+4%/lv SkillEffect",
 	--10603 51/52 SkillEffectFloat
-	["压溃"]="Lv1-2:+5%/8% SkillEffect",["Smashing Force"]="Lv1-2:+5%/8% SkillEffect",
+	["压溃"]="Lv1-2:+5%/8% 动作倍率",["Smashing Force"]="Lv1-2:+5%/8% SkillEffect",
 	--10702 53/54
 	["铁树"]="-20%/lv",["Steel Pillar"]="-20%/lv",
 	["得心"]="4->6 per Hit, 不影响原地棍花(3 per Hit)",
@@ -50,12 +52,13 @@ local Dictionary={
 	--43/50/67.5/85 Lv3
 	--29/32.5/41.2/50 Lv3+r
 	--35/40/52.5/65 r
-	["熟谙"]="每级令0-4级重棍气力消耗-4/-5/-7.5/-10/-10，有身根器的减耗效果时该天赋效果减半，0-4棍势等级基础消耗55/65/90/115/115",
+	["熟谙"]="每级令0-4级重棍气力消耗-4/-5/-7.5/-10/-10，有根器的减耗效果时该天赋效果减半，0-4棍势等级基础消耗55/65/90/115/115",
 	["克刚"]="Lv1:+20%/Lv2:+30%",
 	["抖擞"]="+100",
 	["骋势"]="9秒内+1% 每层",
 	["拂痒"]="20%",
 	["精壮"]="+5%/lv,基础55点棍势/秒",
+	["借力"]="Lv1-2:回复30/50",["Borrowed Strength"]="Lv1-2:Recover 30/50",--Passive 13/14 SkillCtrlDesc 10701,10798-10801
 
 	--1048~1050
 	["乘胜追击"]="根据棍势+5%/10%/15%/20% 攻击",["Vantage Point"]="+5%/10%/15%/20% ATK by focus level",
@@ -89,7 +92,7 @@ local Dictionary={
 	["频频"]="15s->13s",--11105 85 -2s
 	["巩固"]="+15%,持续15秒",
 	["知机"]="+75",
-	["厉无咎"]="Lv1:10MP/Lv2:15MP",
+	["厉无咎"]="Lv1-2:+10MP/15MP;-0.2/0.3秒,基础1秒",	["Bold Venture"]="Lv1-2:+10MP/15MP;-0.2s/0.3s,Base 1s", --101103 Passive 77-84
 	["养气"]="+2秒/lv,基础10秒",	["Converging Clouds"]="+2s/lv,Base10s",
 	--Talent 11006 Passive 74/75
 	["捣虚"]="+15%/lv",["Ruse"]="+15%/lv",
@@ -107,10 +110,12 @@ local Dictionary={
 	["不增不减"]="回复20%法力上限",["Spirited Return"]="Recover 20% MaxMP",
 	--Talent 1082
 	["仗势"]="+15% 攻击",["Tyranny of Numbers"]="+15% ATK",
+	["去来空"]="20%",["Cycle Breaker"]="20%",--101404 112
 	--变化
 	["虚相凶猛"]="+2/lv",
 	["炼实返虚"]="+15/lv",
 	["磊磊"]="+15/lv",
+
 	--TalentSDesc 301103 PassiveSkillDesc 232  233 实际是-1.5 3.5 
 	["剪尾"]="-10%",
 	["红眼"]="+1 每层",
@@ -126,8 +131,8 @@ local Dictionary={
 	["奔霄"]="Lv1->6:+4/6/8/10/12/14",
 	["不坏身"]="+12",
 	
-	--TalentSDesc 301108 PassiveSkillDesc 236 
-	["一闪"]="+0.3秒？",["Lightning Flash"]="+0.3s？",
+	--TalentSDesc 301108 PassiveSkillDesc 236 BuffDesc-lz
+	["一闪"]="+0.5秒->0.8秒",["Lightning Flash"]="+0.5s->0.8s",
 
 	--英文 
 	["Focused Breath"]="+15% Stamina Recover/lv",
@@ -186,7 +191,7 @@ local Dictionary={
 	["Rock Mastery"]="15s->13s",
 	["Ironclad"]="+15% for 15s",
 	["Nick of Time"]="+75",
-	["Bold Venture"]="Lv1:10MP/Lv2:15MP",
+
 
 
 	--毫毛
@@ -325,7 +330,7 @@ for k,v in pairs(DictionarySpirit) do
 	elseif v=="10.4" then
 		v="10.4/9.7/8.8/7.6"
 	end
-	DictionarySpirit[k]="("..v..")"
+	DictionarySpirit[k]=v
 end
 
 
@@ -353,7 +358,7 @@ local DictionarySpiritPassive={
 	["虫校尉"]="根据等级+10/12/15",	["Beetle Captain"]="+10/12/15 by Lv",
 	["蝎太子"]="根据等级+10/12/15",["Scorpion Prince"]="+10/12/15 by Lv",
 	["泥塑金刚"]="根据等级+10/12/15",	["Clay Vajra"]="+10/12/15 by Lv",
-	["赤发鬼"]="根据等级+10%/12%/15% SkillEffect",	["Red-Haired Yaksha"]="+10%/12%/15% SkillEffect",--33687/33487/33187 295/275/255
+	["赤发鬼"]="根据等级+10%/12%/15% 动作倍率",	["Red-Haired Yaksha"]="+10%/12%/15% SkillEffect",--33687/33487/33187 295/275/255
 	["鸦香客"]="根据等级+10/12/15",	["Crow Diviner"]="+10/12/15 by Lv",
 	["隼居士"]="根据等级+10/12/15",	["Falcon Hermit"]="+10/12/15 by Lv",
 	["夜叉奴"]="根据等级+10/12/15 per Hit",	["Enslaved Yaksha"]="+10/12/15 per Hit by Lv",
@@ -362,7 +367,7 @@ local DictionarySpiritPassive={
 	["鼠司空"]="根据等级+10/12/15",	["Rat Governor"]="+10/12/15 by Lv",
 	["骨悚然"]="根据等级+1%/2%/3%",	["Spearbone"]="+1%/2%/3% by Lv",
 	--7.5/7.07/6.74  4.725
-	["石双双"]="根据等级-6%/8%/10%气力消耗,+10%/12%/15% 跳跃轻击SkillEffect",	["Poisestone"]="-6%/8%/10% Stamina Cost,+10%/12%/15% SkillEffect by Lv", --33681/33581 247/267/287
+	["石双双"]="根据等级-6%/8%/10%气力消耗,+10%/12%/15% 跳跃轻击动作倍率",	["Poisestone"]="-6%/8%/10% Stamina Cost,+10%/12%/15% SkillEffect by Lv", --33681/33581 247/267/287
 	["鼠禁卫"]="根据等级+6/8/10",["Rat Imperial Guard"]="+6/8/10 by Lv",
 	["狸侍长"]="根据等级+5/7/10",["Civet Sergeant"]="+5/7/10 by Lv",
 	["疾蝠"]="根据等级+10/12/15",["Swift Bat"]="+10/12/15 by Lv",
@@ -380,7 +385,7 @@ local DictionarySpiritPassive={
 	["兴烘掀·掀烘兴"]="根据等级+30/36/45防御,-5/7/10攻击",["Top Takes Bottom, Bottom Takes Top"]="+30/36/45 DEF,-5/7/10 ATK by Lv",
 	["雾里云·云里雾"]="根据等级-6/-8/-10",["Misty Cloud, Cloudy Mist"]="-6/8/10 by Lv",
 	["地罗刹"]="根据等级10秒内+6%/8%/10%",["Earth Rakshasa"]="+6%/8%/10% in 10s by Lv",
-	["鳖宝"]="根据等级+10%/12%/15% SkillEffect",["Turtle Treasure"]="+10%/12%/15% SkillEffect by Lv",--303184/33484 Passive 292/272
+	["鳖宝"]="根据等级+10%/12%/15% 动作倍率",["Turtle Treasure"]="+10%/12%/15% SkillEffect by Lv",--303184/33484 Passive 292/272
 	["燧统领"]="根据等级+5/7/10",["Flint Chief"]="+5/7/10 by Lv",
 	["黑脸鬼"]="根据等级+6%/8%/10%",["Charface"]="+6%/8%/10% by Lv",
 	["石父"]="根据等级+1.5%/2%/2.5%暴击,+3%/4%/5%暴伤",["Father of Stones"]="+1.5%/2%/2.5% CritChance,+3%/4%/5% CritDamage by Lv",
@@ -440,6 +445,7 @@ local DictionaryGourd={
 	["清虚道果"]="15秒",					["Fruit of Dao"]="15s",
 	--Talent 2100 AtkMul 20%
 	["十二重楼胶"]="+20% 攻击",					["Breath of Fire"]="+20% ATK",
+	["蜂山石髓"]="15%？",					["Bee Mountain Stone"]="15%？",
 
 	["血杞子"]="+5秒",						["Goji Shoots"]="+5s",
 	["困龙须"]="+2秒",						["Stranded Loong's Whisker"]="+2s",
@@ -473,7 +479,7 @@ local DictionaryItem={
 	["铜佛坠"]="+5",	["Bronze Buddha Pendant"]="+5",
 	["卵中骨"]="+10",	["Spine in the Sack"]="+10",
 	["白贝腰链"]="+5",	["White Seashell Waist Chain"]="+5",
-	["细磁茶盂"]="+11",	["Fine China Tea Bowl"]="+11",
+	["细磁茶盂"]="+8",	["Fine China Tea Bowl"]="+8",
 	["虎头牌"]="6秒内+8%攻击",	["Tiger Tally"]="+8% ATK in 6s",
 	["砗磲佩"]="身法-1秒/奇术-3秒/毫毛-6s",	["Tridacna Pendant"]="-1s/3s/6s by type",
 	["琉璃舍利瓶"]="+45",	["Glazed Reliquary"]="+45",
@@ -488,6 +494,7 @@ local DictionaryItem={
 	["吉祥灯"]="20秒内-80生命上限，+10%攻击",	["Auspicious Lantern"]="-80 MaxHP,+10% ATK in 20s",
 	["定颜珠"]="180秒内+60生命上限,+40法力/气力上限",	["Preservation Orb"]="+60 MaxHP,+40 MaxMP/MaxSt in 180s",
 	["虎筋绦子"]="6秒内+12%攻击",	["Tiger Tendon Belt"]="+12% ATK in 6s",
+	["未来珠"]="100次?",	["Maitreya's Orb"]="100 times?",--buff-item 96010-96012
 
 	--695.5
 	["风铎"]="+7%",	["Wind Chime"]="+7%",
@@ -534,7 +541,7 @@ local DictionarySuit={
 	["龙血玄黄"]="+10赋雷攻击\n[*]:+10赋雷攻击",		["Thunder Veins"]="+10 Thunder ATK\n[*]:+10 Thunder ATK",	
 	["借假修真"]="20秒内+15%攻击,暴击+3元气,\n击杀+5元气",["Gilded Radiance"]="+15% ATK in 20s. +3/+5 Qi when Crit/Kill",	
 	["百折不挠"]="5秒内+10%防御",	["Unyielding Resolve"]="+10% DEF in 5s",	
-	["离火入魔"]="[2]+20% SkillEffect \n[4]+25%伤害 -30%伤害减免",["Outrage"]="[2]+20% SkillEffect \n[4]+25% Damage.-30% DamageReduction",	--90711 Passive 167
+	["离火入魔"]="[2]+20% 动作倍率 \n[4]+25%伤害 -30%伤害减免",["Outrage"]="[2]+20% SkillEffect \n[4]+25% Damage.-30% DamageReduction",	--90711 Passive 167
 	--Talent 2135 -0.005，实测变身还原+1.5每秒 ；2137 -0.00375,实测约1.12每秒，结合-0.005推测应为1.125/s
 	["泥塑金装"]="+20%伤害减免，翻滚回复约0.3神力;\n变身后12秒内+1.5/s神力回复;\n化身还原后4秒内+1.125/s神力回复",["From Mud to Lotus"]="+20% DamageReduction;Gain about 0.3 Might\n when roll; +1.5/s Might Recover in 12s after\n tranformation;+1.125/s Might Recover\n in 4s after vigor.",	
 	["铜心铁胆"]="+50棍势;-5秒冷却",			["Iron Will"]="+50 Focus;-5s CD",	
@@ -571,7 +578,7 @@ local DictionaryEquip={
 	--Talent 2702
 	["白脸子"]="+15%攻击",		["Grey Wolf Mask"]="+15%ATK",
 	--蜢虫头907005 97005、97015 185、186
-	["长须头面"]="+15%/20% SkillEffect",		["Locust Antennae Mask"]="+15%/20% SkillEffect",
+	["长须头面"]="+15%/20% 动作倍率",		["Locust Antennae Mask"]="+15%/20% SkillEffect",
 
 	["狼牙棒"]="5秒内获得共127.5棍势(2.5+25*5)",		["Spikeshaft Staff"]="Gain 127.5(2.5+25*5) Focus in 5s",
 	["昆棍·百眼"]="每段棍势+5HP(中毒敌人+40)",		["Visionary Centipede Staff"]="+5 HP(40 for Poisoned enemy) for each focus level",
@@ -580,8 +587,8 @@ local DictionaryEquip={
 	["昆棍·通天"]="每段棍势+5HP",		["Adept Spine-Shooting Fuban Staff"]="+5 HP for each focus level",
 	["混铁棍"]="每点防御+0.15攻击",		["Dark Iron Staff"]="+0.15ATK per DEF",
 
-	["飞龙宝杖"]="+20% SkillEffect",		["Golden Loong Staff"]="+20% SkillEffect",--15015 145
-	["三尖两刃枪"]="+15% SkillEffect",		["Tri-Point Double-Edged Spear"]="+15% SkillEffect",--15015 145
+	["飞龙宝杖"]="+20% 动作倍率",		["Golden Loong Staff"]="+20% SkillEffect",--15015 145
+	["三尖两刃枪"]="+15% 动作倍率",		["Tri-Point Double-Edged Spear"]="+15% SkillEffect",--15015 145
 }
 --[[ 
 --Fuck chinese characters,Fuck encoding
@@ -601,13 +608,13 @@ local DictionaryRelic={
 	["眼乖手疾"]="-12.5秒",	["Eagle Eye"]="-12.5s",
 	["慧眼圆睁"]="+15%",	["Keen Insight"]="+15%",
 	
-	["耳听八方"]="+0.066秒?",	["All Ears"]="+0.066s?",--20201 Passive 121
-	--["阳燧珠"]="+12",	["Sound as A Bell"]="+12",
+	["耳听八方"]="+0.066秒,基础0.4(劈棍)/0.366(戳棍)/0.3(不明)/0.5(不明)秒",	["All Ears"]="+0.066s,Base 0.4(Smash)/0.366(Pillar)/0.3(Unknown)/0.5(Unknown) second",--20201 Passive 121 287,293,114,10110
+	["如撞金钟"]="-0.2秒，基础1秒",	["Sound as A Bell"]="-0.2s,Base 1s", -- Ｐａｓｓｉｖｅ　122-125　Buff-lz 228 buff-talent 1069
 	["耳畔风响"]="5秒内+10%攻击",	["Whistling Wind"]="+10% ATK in 5s",
 
 	["气味相投"]="15秒内+10%伤害加成",	["Lingering Aroma"]="+10% Damage in 15s", --buff 2107
-	--["阳燧珠"]="+12",	["In One Breath"]="+12", --20303 Passive  127
-	["屏气敛息"]="+0.066秒?",	["Hold Breath"]="+0.066s？",
+	--["阳燧珠"]="+12",	["In One Breath"]="+12", -
+	["屏气敛息"]="+0.066秒,0-3段翻滚基础时间0.4/0.433/0.466/0.5秒",	["Hold Breath"]="+0.066s,0-3 level roll base time 0.4/0.433/0.466/0.5s",---20303 Passive  127 buff-lz  10105-10109 
 	
 	["舌尝思"]="+10%丹药持续时间",	["Envious Tongue"]="+10% Duration",
 	["丹满力足"]="5秒内+15%",	["Refreshing Taste"]="+15% in 5s",
@@ -618,13 +625,23 @@ local DictionaryRelic={
 	["福寿长臻"]="+60",	["Everlasting Vitality"]="+60",
 	["灾愆不侵"]="+15",	["Divine Safeguard"]="+15",
 
-	["万相归真"]="不同动作分别+5%或+10% SkillEffect",	["Elegance in Simplicity"]="+5% or 10% SkillEffect",
+	["万相归真"]="+5%/10% 动作倍率",	["Elegance in Simplicity"]="+5%/10% SkillEffect",
 	["不生不灭"]="30秒内+30%伤害加成",	["Unbegotten, Undying"]="+30% Damage in 30s",
+
+	--法宝激活效果
+	["辟火罩"]="40秒内+600火抗，每秒获得5棍势",["Fireproof Mantle"]="+600 FireResist,+5 Focus/s in 40s",
+	["定风珠"]="20秒内+50%伤害减免",["Wind Tamer"]="+50% DamageReduction in 20s",
+}
+local DictionaryTreasurePassive={
+	["辟火罩"]="+30",["Fireproof Mantle"]="+30",
+	["定风珠"]="+2%",["Wind Tamer"]="+2%",
+	["绣花针"]="+2%暴击+6%暴伤",["Weaver's Needle"]="+2%Crit +6% CritDamage",
+	["芭蕉扇"]="+10",["Plantain Fan"]="+10",
 }
 
 --Merge All dic to Dictionary
---DictionarySpirit/DictionarySpiritPassive不能合并，因为其中有相同key
 local DictionaryMerge={}
+local DictionaryMergeSecondary={}
 for k,v in pairs(Dictionary) do
 	DictionaryMerge[k]=v
 end
@@ -643,6 +660,17 @@ end
 for k,v in pairs(DictionaryEquip) do
 	DictionaryMerge[k]=v
 end
+for k,v in pairs(DictionarySpirit) do
+	DictionaryMerge[k]=v
+end
+--因为有重复key，放到secondary
+for k,v in pairs(DictionaryTreasurePassive) do
+	DictionaryMergeSecondary[k]=v
+end
+for k,v in pairs(DictionarySpiritPassive) do
+	DictionaryMergeSecondary[k]=v
+end
+
 
 --NotifyOnNewObject没有找到合适的对象
 --[[
@@ -668,13 +696,10 @@ end
 ]]--
 --BUI_TalentMain_C /Game/00Main/UI/BluePrintsV3/LearnSpell/BUI_TalentMain.Default__BUI_TalentMain_C
 
-local detailtextSpirit=nil
-local detailtextSpiritPassive=nil
 local detailtextMerge=nil
-
+local detailtextMergeSecondary=nil
 
 --目前看来，这些title一定在text之前设置。只有套装效果例外
---TODO: optimize
 local MergeTitleList43={ -- Gourd/Wine/WineMat/Relic ....
 ["etTree.BI_HuluDetail.WidgetTree.TxtNameRuby"]=true,--装备界面 葫芦
 ["etTree.BI_WineDetail.WidgetTree.TxtNameRuby"]=true,--泡制界面 酒
@@ -688,6 +713,8 @@ local MergeTitleList43={ -- Gourd/Wine/WineMat/Relic ....
 ["etTree.BI_ItemDetail.WidgetTree.TxtNameRuby"]=true,--行囊
 ["idgetTree.BI_SpellDetail.WidgetTree.TxtName"]=true,--天赋
 ["tTree.BI_EquipDetail.WidgetTree.TxtNameRuby"]=true,--装备名
+["getTree.BI_RZDDetail.WidgetTree.TxtNameRuby"]=true,--精魂名
+["ee.BI_TreasureDetail.WidgetTree.TxtNameRuby"]=true,--法宝名
 }
 local MergeDetailList43={
 	["etTree.BI_HuluDetail.WidgetTree.TxtHuluDesc"]=true,--装备界面 葫芦效果
@@ -702,6 +729,11 @@ local MergeDetailList43={
 	["Tree.BI_SpellDetail.WidgetTree.TxtSpellDesc"]=true,--天赋
 	["Tree.BI_ItemDetail.WidgetTree.TxtEffectDesc"]=true,--行囊
 	["ree.BI_EquipDetail.WidgetTree.TxtLegendDesc"]=true,--装备独门妙用
+	[".WidgetTree.BI_RZDDetail.WidgetTree.TxtCost"]=true,--精魂能量消耗
+	[".BI_TreasureDetail.WidgetTree.TxtActiveDesc"]=true,--法宝激活效果
+	}
+local MergeDetailList43Secondary={
+	["tTree.TreasureEqDesc.WidgetTree.TxtSuitDesc"]=true,--精魂被动
 	}
 
 --local lastSuitDescWidget=nil
@@ -711,18 +743,17 @@ function HookTextBlockSetText(Context,InText)
 	if type(name) ~= "string" then return end
 	local name43=name:sub(-43)
 
-	if detailtextSpirit~=nil and name43==".WidgetTree.BI_RZDDetail.WidgetTree.TxtCost" then--精魂能量消耗
-		--print(tostring(InText:get():ToString()).."/"..tostring(name))
-		InText:set(FText(InText:get():ToString()..detailtextSpirit))
-		detailtextSpirit=nil
-		--InText:set(FText(detailtextSpirit or "Unknown"))
-
-	elseif MergeTitleList43[name43]==true then --DictionaryMerge
-		detailtextMerge=DictionaryMerge[InText:get():ToString()]
+	if MergeTitleList43[name43]==true then --DictionaryMerge
+		local t=InText:get():ToString()
+		detailtextMerge=DictionaryMerge[t]
+		detailtextMergeSecondary=DictionaryMergeSecondary[t]
 
 	elseif detailtextMerge~=nil and MergeDetailList43[name43]==true then --DictionaryMerge
 		InText:set(FText(InText:get():ToString().."("..detailtextMerge..")"))
 		detailtextMerge=nil
+	--elseif detailtextMergeSecondary~=nil and MergeDetailList43Secondary[name43]==true then --DictionaryMerge
+	--	InText:set(FText(InText:get():ToString().."("..detailtextMergeSecondary..")"))
+	--	detailtextMergeSecondary=nil
 
 	elseif name:sub(-7)=="TxtName" then
 		if name:find("WidgetTree.BI_HuluDetail.WidgetTree.BI_MatDesc.WidgetTree.BI_SoakDesc_C") --装备界面泡酒物名字
@@ -735,6 +766,7 @@ function HookTextBlockSetText(Context,InText)
 			InText:set(FText(InText:get():ToString().."("..detailtextMerge..")"))
 			detailtextMerge=nil
 		end
+
 	elseif name43=="Tree.BI_EquipDetail.WidgetTree.TxtSuitTitle" then --套装名，套装效果在名字之前被Set
 		local suitTitle=InText:get():ToString()
 		local suitDesc=DictionarySuit[suitTitle]
@@ -747,12 +779,15 @@ function HookTextBlockSetText(Context,InText)
 			--lastSuitDescWidgetText=nil
 			--print("Set")
 		end
-	elseif InText:get():ToString():find("食髓知味") then
-		print("C.."..tostring(name).." "..name43)
-	elseif InText:get():ToString():find("舌尝思") then
-		print("D.."..tostring(name).." "..name43)
-		
+
+	--elseif InText:get():ToString():find("辟火罩") then
+	--	print("C.."..tostring(name).." "..name43)
+	--elseif InText:get():ToString():find("较大增加") then
+	--	print("D.."..tostring(name).." "..name43)		
 	end
+	--if InText:get():ToString():find("较大增加") then
+	--	print("E.."..tostring(name).." "..name43)		
+	--end
 	--print(".."..tostring(InText:get():ToString()))
 end
 --["tTree.BI_EquipDetail.WidgetTree.TxtNameRuby"]=true,--装备名 Rich
@@ -762,27 +797,20 @@ function HookRichTextBlockSetText(Context,InText)
 	local name=Context:get():GetFullName()
 	if type(name) ~= "string" then return end
 	local name43=name:sub(-43)
-	if name43=="getTree.BI_RZDDetail.WidgetTree.TxtNameRuby" then	--精魂名字
-		detailtextSpirit=DictionarySpirit[InText:get():ToString()] --or "(None)"
-		detailtextSpiritPassive=DictionarySpiritPassive[InText:get():ToString()]
-		--print("!!"..tostring(InText:get():ToString()).."/"..tostring(detailtext))
 
-	--[[
-	elseif name:sub(-21)==".WidgetTree.TxtEffect" then --精魂升级描述
-		if InText:get():ToString()=="Reduces the Qi cost for the skill." then
-			InText:set(FText("Reduces the Qi cost for the skill.(-8%/18%/39% at Lv 2/3/5)"))
-		elseif InText:get():ToString()=="减少施展此技所需元气" then
-			InText:set(FText("减少施展此技所需元气 (-8%/18%/39% at Lv 2/3/5)"))
-		end
-		--print(".."..tostring(InText:get():ToString()))
-		]]--
-
-	elseif MergeTitleList43[name43]==true then	--DictionaryMerge中的名字
-		detailtextMerge=DictionaryMerge[InText:get():ToString()]
+	if MergeTitleList43[name43]==true then	--DictionaryMerge/DictionaryMergeSecondary中的名字
+		local t=InText:get():ToString()
+		detailtextMerge=DictionaryMerge[t]
+		detailtextMergeSecondary=DictionaryMergeSecondary[t]
 		
-	elseif detailtextSpiritPassive~=nil and name:sub(-73)==".WidgetTree.BI_RZDDetail.WidgetTree.TreasureEqDesc.WidgetTree.TxtSuitDesc" then	--精魂被动描述
-		InText:set(FText(InText:get():ToString().."("..detailtextSpiritPassive..")"))
-		detailtextSpiritPassive=nil
+	elseif detailtextMergeSecondary~=nil then
+		if MergeDetailList43Secondary[name43]==true then --DictionaryMergeSecondary
+			InText:set(FText(InText:get():ToString().."("..detailtextMergeSecondary..")"))
+			detailtextMergeSecondary=nil
+		elseif name:sub(-11)=="TxtSuitDesc" and name:find("BI_TreasureDetail.WidgetTree.TreasureEqDesc.WidgetTree.BI_TreasureEqDesc_C") then--法宝被动
+			InText:set(FText(InText:get():ToString().."("..detailtextMergeSecondary..")"))
+			detailtextMergeSecondary=nil
+		end
 
 	elseif detailtextMerge~=nil then
 		if MergeDetailList43[name43]==true then	--DictionaryMerge
@@ -792,27 +820,14 @@ function HookRichTextBlockSetText(Context,InText)
 			InText:set(FText(InText:get():ToString().."("..detailtextMerge..")"))
 			detailtextMerge=nil
 		end
-	--[[
-	--.WidgetTree.BI_EquipDetailCompare.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc.WidgetTree.BI_SuitDesc_C_2147459831.WidgetTree.TxtSuitDesc
-	--换装界面套装效果，当前装备和装备比较时不同控件,每查看一个装备都会临时创建一个比较控件，退出菜单后清空
-	--有多条效果时每条效果各有一个text，不做区分，改了一个之后清空detailtext
-	--装备名和套装效果名都在套装效果之后set，坑爹
-	--反过来搞，记录最后一个被赋值的textblock，设置title的时候修改该textblock;
-	elseif name:sub(-11)=="TxtSuitDesc" and 
-			(name:find("BI_EquipDetailCompare.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc") 
-				or name:find("BI_EquipDetail.WidgetTree.BI_EquipDetail.WidgetTree.BI_SuitDesc"))  then
-			lastSuitDescWidget=Context:get()
-			lastSuitDescWidgetText=InText:get():ToString()
-			--print("Last Widet: ",tostring(lastSuitDescWidget:GetFullName()))
-	]]--
-	--5 127.5
-	elseif InText:get():ToString():find("食髓知味") then
-		print("A.."..tostring(name).." "..name43)
-	elseif InText:get():ToString():find("舌尝思") then
-		print("B.."..tostring(name).." "..name43)		
+	--elseif InText:get():ToString():find("辟火罩") then
+	--	print("A.."..tostring(name).." "..name43)
+	--elseif InText:get():ToString():find("较大增加") then
+	--	print("B.."..tostring(name).." "..name43)
 	end
-
-	--print(".."..tostring(InText:get():ToString()))
+	--if InText:get():ToString():find("较大增加") then
+	--	print("F.."..tostring(name).." "..name43)		
+	--end
 end
 
 local hooked=false
@@ -832,14 +847,3 @@ RegisterHook("/Script/UMG.RichTextBlock:SetText",function(Context,InText)
 		print(ModName.." Fuck "..res)
 	end
 end)
-		--hooked=true
-		--print(ModName.."Hook")
---	end
---end)
-
---RegisterKeyBind(Key.F12,function()
---	RegisterHook("/Script/UMG.TextBlock:SetText",function()end)
---end)
---RegisterHook("/Script/UMG.TextBlock:SetText",function()end)
---Work()
-
