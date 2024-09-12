@@ -448,7 +448,7 @@ local DictionaryGourd={
 	["甜雪"]="15秒内+15",					["Sweet Ice"]="+15 in 15s",
 	--Item 92317 92327 92328
 	["瞌睡虫蜕"]="15秒内踉跄;定身法-2秒，安神法-5秒，聚形散气-3秒，铜头铁臂-2秒，毫毛-8秒",					["Slumbering Beetle Husk"]="Stagger in 15s;Immobilize -2s,Ring of Fire -5s,Cloud Step -3s,Rock Solid-2s,A Pluck of Many -8s",
-	["清虚道果"]="15秒内+0.66秒无敌，0-3段翻滚基础时间0.4/0.433/0.466/0.5秒",					["Fruit of Dao"]="+0.66s in 15s; 0-3 level roll base immue time:0.4/0.433/0.466/0.5",--92320 Passive 199 10105-10109
+	["清虚道果"]="15秒内+0.066秒无敌，0-3段翻滚基础时间0.4/0.433/0.466/0.5秒",					["Fruit of Dao"]="+0.066s in 15s; 0-3 level roll base immue time:0.4/0.433/0.466/0.5",--92320 Passive 199 10105-10109
 	--Talent 2100 AtkMul 20% 时间10秒，是10秒内施放隐身还是10秒内打出破隐?
 	["十二重楼胶"]="10秒内？+20%攻击",					["Breath of Fire"]="+20% ATK in 10s?",
 	["蜂山石髓"]="15%？",					["Bee Mountain Stone"]="15%？",
