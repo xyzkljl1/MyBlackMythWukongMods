@@ -52,7 +52,13 @@ local Dictionary={
 	--43/50/67.5/85 Lv3
 	--29/32.5/41.2/50 Lv3+r
 	--35/40/52.5/65 r
-	["熟谙"]="每级令0-4级重棍气力消耗-4/-5/-7.5/-10/-10，有根器的减耗效果时该天赋效果减半，0-4棍势等级基础消耗55/65/90/115/115",
+	--100504 Passive 36-38里写的是-10%,但和实测对每种风格都是减固定值
+	--劈棍原地重击消耗10+55/65/90/115/115，立棍10+40/65/75/100/100，戳棍47.5/57.5/82.5/107.5，跳劈(三种棍势一样)50/75/100/125/125, 
+	--3级天赋劈棍43/50/67.5/85，立棍28/50/53/70，戳棍35.5/42.5/60/77.5
+	--不影响跳劈,不影响蓄力起手(三种风格起手消耗10/10/15)
+	["熟谙"]="每级令0-4级重棍-4/-5/-7.5/-10/-10气力消耗，有身轻体快(根器)时效果减半，0-4级重棍基础消耗:劈棍55/65/90/115/115,立棍40/65/75/100/100,戳棍47.5/57.5/82.5/107.5;不影响蓄力起手式和跳跃重击",
+	["Instinct"]="Each level reduce 0-4 Focus-Level heavy-attack cost: -4/-5/-7.5/-10/-10. Only have 50% effect when having Nimble Body(body relic).Base cost of each focus-level:Smash 55/65/90/115/115,Pillar 40/65/75/100/100,The other 47.5/57.5/82.5/107.5;Not affect charging and jump heavy attack cost",
+
 	["克刚"]="Lv1:+20%/Lv2:+30%",
 	["抖擞"]="+100",
 	["骋势"]="9秒内+1% 每层",
@@ -65,7 +71,7 @@ local Dictionary={
 
 	--奇术
 	["不破不立"]="+15MP",
-	["假借须臾"]="50MP->80MP,+2秒持续",
+	["假借须臾"]="50MP->80MP,+30%持续时间",	["Time Bargain"]="50MP->80MP, +30% Duration", --100904 10904,10914,10924 Passive 61-63
 	["烈烈"]="20/s->23/s",
 	["昂扬"]="+30% -> 40+30%",
 	["弥坚"]="Lv1:+10/Lv2:+15 每跳",
@@ -76,7 +82,9 @@ local Dictionary={
 	["不休"]="-10%/lv",
 	["智力高强"]="每级+0.02攻击力/1法力，基础0.12攻击力/1法力",
 	["放手一搏"]="0.03%暴击/1气力",
-	["凝滞"]="每层+0.16秒，基础8秒",
+	["凝滞"]="每层+2%持续时间?基础8秒",--10905 Passive 64/65 Buff 1064 写的是DingshenDefAdditionBase +2,但是Passive里只改了叠加上限没改数值，怀疑是百分比加成，每层+2%
+	["Stagnation"]="+2% Duration per stack? Base 8s",
+
 	--BuffDesc-Talent 1027
 	["瞬机"]="+60%持续;+30%敌人承受伤害",		["Evanescence"]="+60% duration;+30% Enemy Damage Taken",	
 	["圆明"]="+2/4/5秒，基础20.5秒",
@@ -103,11 +111,12 @@ local Dictionary={
 	["玄同"]="积攒效率为本体的20%",
 	["毛吞大海"]="20MP/lv",
 	--11201 Passive 88/89
-	["存身"]="+2秒/lv",["Longstrand"]="+2s/lv",
+	["存身"]="+2秒/lv,基础约25秒",["Longstrand"]="+2s/lv,Base about 25s",
 	["同寿"]="+10%",["Grey Hair"]="+10%",--11205 96
 	["浇油"]="+15%/lv",["Insult to Injury"]="+15%/lv",--11208 97/98 1083buff基础15%,1/2级天赋+0/+15%
 	["回阳"]="-10秒",["Glorious Return"]="-10s",--buff 1111
 	["不增不减"]="回复20%法力上限",["Spirited Return"]="Recover 20% MaxMP",
+	["合契"]="每层+0.4s?",["Synergy"]="+0.4s per stack?",--101201 Passive 89 1001101写的+4，实测最多约+4秒？
 	--Talent 1082
 	["仗势"]="+15% 攻击",["Tyranny of Numbers"]="+15% ATK",
 	["去来空"]="20%",["Cycle Breaker"]="20%",--101404 112
@@ -118,7 +127,7 @@ local Dictionary={
 
 	--TalentSDesc 301103 PassiveSkillDesc 232  233 实际是-1.5 3.5 
 	["剪尾"]="-10%",
-	["红眼"]="+1 每层",
+	["红眼"]="60秒内+1 攻击力/每层",	["Red Eyes"]="+1 per stack in 60s",
 	["恶秽"]="Lv1->6:+4/6/8/10/12/14",
 	["霏霏"]="Lv1->6:+4/6/8/10/12/14",
 	["爆躁"]="Lv1->6:+4/6/8/10/12/14",
@@ -163,7 +172,6 @@ local Dictionary={
 	["Wrathful Might"]="+4%/lv",
 	--棍法
 	["Exhilaration"]="+2%/3%/4%Lv1/Lv2/Lv3 MaxHP",
-	["Instinct"]="Each level let 0-4 Focus-Level heavy-attack cost: -4/-5/-7.5/-10/-10. Only have 50% effect when having Nimble Body(body relic).Base cost of each focus-level:55/65/90/115/115",
 	["Ironbound Resolve"]="Lv1:+20%/Lv2:+30%",
 	["Invigoration"]="+100",
 	["Force Cascade"]="+1% per stack in 9s",
@@ -171,7 +179,7 @@ local Dictionary={
 	["Quick Hand"]="+5%/lv,Base 55 focus point/s",
 	--奇术
 	["Spirit Shards"]="+15MP",
-	["Time Bargain"]="50MP->80MP, +2s",
+
 	["Raging Flames"]="20/s->23/s",
 	["Burning Zeal"]="+30% -> 40+30%",
 	["Consolidation"]="Lv1:+10/Lv2:+15 per tick",
@@ -183,7 +191,6 @@ local Dictionary={
 	["Smart Move"]="+0.02 ATK per MP/lv，Base +0.12 ATK per MP",
 	["All or Nothing"]="0.03% Crit per Stamina",
 	
-	["Stagnation"]="+0.16s per stack, Base 8s",
 
 	["Flaring Dharma"]="+2/4/5s，Base 20.5s",
 	--身法
@@ -203,7 +210,6 @@ local Dictionary={
 	["Steadfast"]="+15/lv",
 	["Cold Edge"]="-10%",
 	["Hidden Might"]="+3.3%/lv",
-	["Red Eyes"]="+1 per stack",
 	["Rage Burst"]="Lv1->6:+4/6/8/10/12/14",
 	["Filthy Malice"]="Lv1->6:+4/6/8/10/12/14",
 	["Snow Veil"]="Lv1->6:+4/6/8/10/12/14",
@@ -419,7 +425,7 @@ local DictionaryGourd={
 	["椰子酒·三十年陈"]="实际回复45%+51",	["30-Year-Old Coconut Wine"]="Actually 45%+51",
 	["猴儿酿"]="实际回复48%+55",	["Monkey Brew"]="Actually 48%+55",
 	["玉液"]="的确是55%",	["Jade Dew"]="Indeed 55%",
-	["蓝桥风月"]="15秒内+30%移动速度",	["Bluebridge Romance"]="+30% in 15s",
+	["蓝桥风月"]="15秒内+30%移动速度",	["Bluebridge Romance"]="+30% in 15s",--Buff-Talent 2816 写的是15%/15%/15% 实测 约+30%/+30%/约+30% ,why???
 
 	["琼浆"]="+20",							["Jade Essence"]="+20",
 	["无忧醑"]="低于20%血量时恢复量24%->60%",	["Worryfree Brew"]="24%->60% under 20% HP",
@@ -442,14 +448,16 @@ local DictionaryGourd={
 	["甜雪"]="15秒内+15",					["Sweet Ice"]="+15 in 15s",
 	--Item 92317 92327 92328
 	["瞌睡虫蜕"]="15秒内踉跄;定身法-2秒，安神法-5秒，聚形散气-3秒，铜头铁臂-2秒，毫毛-8秒",					["Slumbering Beetle Husk"]="Stagger in 15s;Immobilize -2s,Ring of Fire -5s,Cloud Step -3s,Rock Solid-2s,A Pluck of Many -8s",
-	["清虚道果"]="15秒",					["Fruit of Dao"]="15s",
-	--Talent 2100 AtkMul 20%
-	["十二重楼胶"]="+20% 攻击",					["Breath of Fire"]="+20% ATK",
+	["清虚道果"]="15秒内+0.66秒无敌，0-3段翻滚基础时间0.4/0.433/0.466/0.5秒",					["Fruit of Dao"]="+0.66s in 15s; 0-3 level roll base immue time:0.4/0.433/0.466/0.5",--92320 Passive 199 10105-10109
+	--Talent 2100 AtkMul 20% 时间10秒，是10秒内施放隐身还是10秒内打出破隐?
+	["十二重楼胶"]="10秒内？+20%攻击",					["Breath of Fire"]="+20% ATK in 10s?",
 	["蜂山石髓"]="15%？",					["Bee Mountain Stone"]="15%？",
+	["灵台药苗"]="10秒内+25%持续时间",					["Moutain Lingtai Seedlings"]="25% Duration in 10s", --92305 Passive 193 
+	["铜丸"]="10秒",					["Copper Pill"]="10s",
 
-	["血杞子"]="+5秒",						["Goji Shoots"]="+5s",
-	["困龙须"]="+2秒",						["Stranded Loong's Whisker"]="+2s",
-	["不老藤"]="回复1/3气力上限,15秒内+50%气力回复",	["Undying Vine"]="Recover 1/3 MaxSt.+50% Stamina Recover in 15s",
+	["血杞子"]="15秒内+5秒持续",						["Goji Shoots"]="+5s Duration in 15s", --92319? Passive 198
+	["困龙须"]="10秒内+2秒持续",						["Stranded Loong's Whisker"]="+2s Duration in 10s",--92304 Passive 192
+	["不老藤"]="回复33.33%气力上限,15秒内+50%气力回复",	["Undying Vine"]="Recover 33.33% MaxSt.+50% Stamina Recover in 15s",
 	["蕙性兰"]="11秒内共回复12%生命上限(1%*12)",	["Graceful Orchid"]="total 12% MaxHP(1%*12) in 11s",
 	["青山骨"]="30秒内+30生命上限",			["Goat Skull"]="+30 in 30s",
 	["火焰丹头"]="15秒内+15",				["Flame Mediator"]="+15 in 15s",
@@ -497,7 +505,7 @@ local DictionaryItem={
 	["未来珠"]="100次?",	["Maitreya's Orb"]="100 times?",--buff-item 96010-96012
 
 	--695.5
-	["风铎"]="+7%",	["Wind Chime"]="+7%",
+	["风铎"]="+7% 移动速度",	["Wind Chime"]="+7% move speed", --1006008 buff-desc 96008 写的是7%实测也是7%
 	--消耗品
 	--鼻根器+10%持续2
 	["朝元膏"]="120秒内+60",	["Essence Decoction"]="+60 in 130s",
@@ -528,7 +536,7 @@ local DictionaryItem={
 local DictionarySuit={
 	["心灵福至"]="每个天赋+24防御",	["Fortune's Favor"]="+24 DEF per Relic Talent",
 	--650->702，+满级百足734.5
-	--Talent 2041-2044
+	--Talent 2041-2044 写的是0/8/10,实测是0/8%/约10%
 	["日行千里"]="+8%/10%奔跑/冲刺速度;\n每层+10%攻击,持续2秒;\n[*]:每秒+12棍势",	["Swift Pilgrim"]="+8%/10% Run/Sprint speed.\n+10% ATK per stack in 2s\n[*]:+12 Focus/s"	,
 	--96005/96006 实测每次减少0.75~1秒冷却不定？？非传奇和传奇没有区别？？
 	["举步生风"]="+15棍势,-0.75~1秒冷却?\n[*]:不会额外减少冷却",			["Gale Guardian"]="+15 Focus,-0.75s~1s CD？\n[*]:Won't reduce more CD" ,
@@ -603,7 +611,7 @@ print(tostring(x==y))--true
 ]]--
 
 local DictionaryRelic={
-	["见机强攻"]="轻棍1-5段全部命中的棍势由15/18/17/28/40变为15/18/26/35/43",	["Opportune Watcher"]="Light Attack 1-5 focus point if all hit :15/18/17/28/40 -> 15/18/26/35/43",
+	["见机强攻"]="轻棍1-5段全中获得的棍势由15/18/17/28/40变为15/18/26/35/43",	["Opportune Watcher"]="Light Attack 1-5 focus point if all hit :15/18/17/28/40 -> 15/18/26/35/43",
 	--buff talent 1053
 	["眼乖手疾"]="-12.5秒",	["Eagle Eye"]="-12.5s",
 	["慧眼圆睁"]="+15%",	["Keen Insight"]="+15%",
@@ -614,14 +622,14 @@ local DictionaryRelic={
 
 	["气味相投"]="15秒内+10%伤害加成",	["Lingering Aroma"]="+10% Damage in 15s", --buff 2107
 	--["阳燧珠"]="+12",	["In One Breath"]="+12", -
-	["屏气敛息"]="+0.066秒,0-3段翻滚基础时间0.4/0.433/0.466/0.5秒",	["Hold Breath"]="+0.066s,0-3 level roll base time 0.4/0.433/0.466/0.5s",---20303 Passive  127 buff-lz  10105-10109 
+	["屏气敛息"]="+0.066秒,0-3段翻滚基础无敌时间0.4/0.433/0.466/0.5秒",	["Hold Breath"]="+0.066s,0-3 level roll base time 0.4/0.433/0.466/0.5s",---20303 Passive  127 buff-lz  10105-10109 
 	
 	["舌尝思"]="+10%丹药持续时间",	["Envious Tongue"]="+10% Duration",
 	["丹满力足"]="5秒内+15%",	["Refreshing Taste"]="+15% in 5s",
 	--["阳燧珠"]="+12",	["Spread the Word"]="+12",
-	["遍尝百草"]="每个增加+4%生命上限的回复量",	["Tongue of A Connoisseur"]="Each +4% MaxHP recover",
+	["遍尝百草"]="每个增加+4%生命上限的回复量",	["Tongue of A Connoisseur"]="+4% MaxHP recover each",
 
-	["身轻体快"]="0-4级棍势气力消耗55/65/90/115/115 -> 35/40/52.5/65/65 令熟谙天赋效果减半",	["Nimble Body"]="0-4 Focus-Level heavy-attack cost: 55/65/90/115/115 -> 35/40/52.5/65/65 Reduce Instinct talent effect by half",
+	["身轻体快"]="0-4级棍势气力消耗-20/25/37.5/60,令熟谙天赋效果减半",	["Nimble Body"]="0-4 Focus-Level heavy-attack cost :-20/25/37.5/60. Reduce Instinct(talent) effect by half",
 	["福寿长臻"]="+60",	["Everlasting Vitality"]="+60",
 	["灾愆不侵"]="+15",	["Divine Safeguard"]="+15",
 
