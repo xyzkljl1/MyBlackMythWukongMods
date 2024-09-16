@@ -82,8 +82,8 @@ local Dictionary={
 	["不休"]="-10%/lv",
 	["智力高强"]="每级+0.02攻击力/1法力，基础0.12攻击力/1法力",
 	["放手一搏"]="0.03%暴击/1气力",
-	["凝滞"]="每层+2%持续时间?基础8秒",--10905 Passive 64/65 Buff 1064 写的是DingshenDefAdditionBase +2,但是Passive里只改了叠加上限没改数值，怀疑是百分比加成，每层+2%
-	["Stagnation"]="+2% Duration per stack? Base 8s",
+	["凝滞"]="每层-2%敌人定身抗性,基础8秒",--10905 Passive 64/65 Buff 1064 写的是DingshenDefAdditionBase +2,但是Passive里只改了叠加上限没改数值，怀疑是百分比加成，每层+2%
+	["Stagnation"]="-2% Enemy Immobilize Resist per stack, Base 8s",
 
 	--BuffDesc-Talent 1027
 	["瞬机"]="+60%持续;+30%敌人承受伤害",		["Evanescence"]="+60% duration;+30% Enemy Damage Taken",	
@@ -332,7 +332,7 @@ for k,v in pairs(DictionarySpirit) do
 		v="47.2/43.2/38.4/32.4"
 
 	elseif v=="22.6" then
-		v="22.6/?/18.9/16.2"
+		v="22.6/20.9/18.9/16.2"
 	elseif v=="10.4" then
 		v="10.4/9.7/8.8/7.6"
 	end
@@ -566,7 +566,7 @@ local DictionaryEquip={
 	["锦鳞战袍"]="低于半血时每秒+1.5%生命上限(水中+2%)",["Serpentscale Battlerobe"]="+1.5%MaxHP/s under 50% MaxHP;+2% MaxHP/s in water",	
 	["厌火夜叉面"]="低于半血时+15攻击",		["Yaksha Mask of Outrage"]="+15ATK under 50% HP",	
 	["金身怒目面"]="+100棍势",				["Golden Mask of Fury"]="+100",
-	["长嘴脸"]="饮酒后15秒内+30攻击，15~20秒+20攻击，20秒后-20攻击",["Snout Mask"]="+30 ATK in 15s;+20 ATK in 15~20s;-20 ATK after 20s",
+	["长嘴脸"]="饮酒后15秒内+10攻击,20秒后-20攻击",["Snout Mask"]="+10 ATK in 15s;-20 ATK after 20s",
 	["鳖宝头骨"]="+2%",						["Skull of Turtle Treasure"]="+2%",
 	["地灵伞盖"]="高于1%血量时每秒-3HP,额外回复+15%生命上限",["Earth Spirit Cap"]="-3HP/s when over 1% HP.+15% MaxHP Recover",
 	["昆蚑毒敌甲"]="+15",					["Venomous Sting Insect Armor"]="+15",
