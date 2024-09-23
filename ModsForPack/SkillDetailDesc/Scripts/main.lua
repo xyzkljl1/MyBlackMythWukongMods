@@ -542,7 +542,7 @@ local DictionarySuit={
 	["举步生风"]="+15棍势,-0.75~1秒冷却?\n[*]:不会额外减少冷却",			["Gale Guardian"]="+15 Focus,-0.75s~1s CD？\n[*]:Won't reduce more CD" ,
 	["花下死"]="x0.8毒伤(和抗性效果乘算),+20%攻击",["Poison Ward"]="x0.8 Poison Damage(Multi with \nPoison Resist effect).+20% ATK"	,
 	["试比天高"]="10秒内+8%暴击;-1秒冷却 per Hit",	["Heaven's Equal"]="+8% Crit in 10s;-1s CD per Hit"	,
-	["毒魔狠怪"]="+100棍势，+10%持续时间",["Fuban Strength"]="+100 focus.+10% Duration"	,
+	["毒魔狠怪"]="+100棍势，+20%持续时间",["Fuban Strength"]="+100 focus.+20% Duration"	,--独角仙套 91912 Passive 185
 	["锱铢必较"]="+10%灵蕴",		["Every Bit Counts"]="+10% Will"	,
 	--Talent 2037 ->90301?,鳞棍2034->15003?
 	["浪里白条"]="x0.5气力消耗(和天赋效果乘算)",["Wave-Rider"]="x0.5 Stamina Cost(Multi with talent effect)",
@@ -551,7 +551,7 @@ local DictionarySuit={
 	["百折不挠"]="5秒内+10%防御",	["Unyielding Resolve"]="+10% DEF in 5s",	
 	["离火入魔"]="[2]+20% 动作倍率 \n[4]+25%伤害 -30%伤害减免",["Outrage"]="[2]+20% SkillEffect \n[4]+25% Damage.-30% DamageReduction",	--90711 Passive 167
 	--Talent 2135 -0.005，实测变身还原+1.5每秒 ；2137 -0.00375,实测约1.12每秒，结合-0.005推测应为1.125/s
-	["泥塑金装"]="+20%伤害减免，翻滚回复约0.3神力;\n变身后12秒内+1.5/s神力回复;\n化身还原后4秒内+1.125/s神力回复",["From Mud to Lotus"]="+20% DamageReduction;Gain about 0.3 Might\n when roll; +1.5/s Might Recover in 12s after\n tranformation;+1.125/s Might Recover\n in 4s after vigor.",	
+	["泥塑金装"]="[2]黑泥期间+20%伤害减免，翻滚回复约0.3神力;\n[4]结束变身时获得12秒黑泥，期间+1.5/s神力回复;\n化身还原后获得6秒黑泥，前4秒内+1.125/s神力回复",["From Mud to Lotus"]="[2]+20% DamageReduction;Gain about 0.3 Might upon roll;\n[4] Gain Mud and +1.5/s Might Recover in 12s upon quiting\n tranformation;Gain Mud in 6s and +1.125/s Might\n Recover in 4s upon quiting vigor.",	
 	["铜心铁胆"]="+50棍势;-5秒冷却",			["Iron Will"]="+50 Focus;-5s CD",	
 	["乘风乱舞"]="[*]:+20法力消耗;假身持续时间\n不变,但不会因破隐而消失",			["Dance of the Black Wind"]="[*]:+20 MP Cost",	
 	--Talent 2063
@@ -617,7 +617,7 @@ local DictionaryRelic={
 	["慧眼圆睁"]="+15%",	["Keen Insight"]="+15%",
 	
 	["耳听八方"]="+0.066秒,基础0.4(劈棍)/0.366(戳棍)/0.3(不明)/0.5(不明)秒",	["All Ears"]="+0.066s,Base 0.4(Smash)/0.366(Pillar)/0.3(Unknown)/0.5(Unknown) second",--20201 Passive 121 287,293,114,10110
-	["如撞金钟"]="-0.2秒，基础1秒",	["Sound as A Bell"]="-0.2s,Base 1s", -- Ｐａｓｓｉｖｅ　122-125　Buff-lz 228 buff-talent 1069
+	["如撞金钟"]="-0.1秒，基础1秒",	["Sound as A Bell"]="-0.1s,Base 1s", -- Ｐａｓｓｉｖｅ　122-125　Buff-lz 228 buff-talent 1069
 	["耳畔风响"]="5秒内+10%攻击",	["Whistling Wind"]="+10% ATK in 5s",
 
 	["气味相投"]="15秒内+10%伤害加成",	["Lingering Aroma"]="+10% Damage in 15s", --buff 2107
