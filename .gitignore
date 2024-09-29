@@ -1,0 +1,15 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/b1/.vs/b1
+/b1/Build/Windows
+/b1/Binaries/Win64
+/b1/Config
+/b1/Intermediate
+/b1/Saved
+/ModsForPack/ItemDesc/b1/Content/00Main/PBTable/Runtime
+/CSharpMods/.vs/CSharpMods
+/CSharpMods/EffectDetailDescription/.vs
+/CSharpMods/EffectDetailDescription/bin
+/CSharpMods/EffectDetailDescription/obj
