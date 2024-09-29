@@ -551,7 +551,7 @@ local DictionarySuit={
 	["百折不挠"]="5秒内+10%防御",	["Unyielding Resolve"]="+10% DEF in 5s",	
 	["离火入魔"]="[2]+20% 动作倍率 \n[4]+25%伤害 -30%伤害减免",["Outrage"]="[2]+20% SkillEffect \n[4]+25% Damage.-30% DamageReduction",	--90711 Passive 167
 	--Talent 2135 -0.005，实测变身还原+1.5每秒 ；2137 -0.00375,实测约1.12每秒，结合-0.005推测应为1.125/s
-	["泥塑金装"]="[2]黑泥期间+20%伤害减免，翻滚回复约0.3神力;\n[4]结束变身时获得12秒黑泥，期间+1.5/s神力回复;\n化身还原后获得6秒黑泥，前4秒内+1.125/s神力回复",["From Mud to Lotus"]="[2]+20% DamageReduction;Gain about 0.3 Might upon roll;\n[4] Gain Mud and +1.5/s Might Recover in 12s upon quiting\n tranformation;Gain Mud in 6s and +1.125/s Might\n Recover in 4s upon quiting vigor.",	
+	["泥塑金装"]="[2]黑泥期间+20%伤害减免，翻滚回复约0.3神力;\n[4]结束变身时获得12秒黑泥，期间+1.5/s神力回复;\n化身还原后获得6秒黑泥，前4秒内+1.125/s神力回复",["From Mud to Lotus"]="[2]+20% DamageReduction;Gain about 0.3 Might upon roll;\n[4] Gain Mud and +1.5/s Might Recover in 12s \nupon quiting tranformation;Gain Mud in 6s and +1.125/s \nMight Recover in 4s upon quiting vigor.",	
 	["铜心铁胆"]="+50棍势;-5秒冷却",			["Iron Will"]="+50 Focus;-5s CD",	
 	["乘风乱舞"]="[*]:+20法力消耗;假身持续时间\n不变,但不会因破隐而消失",			["Dance of the Black Wind"]="[*]:+20 MP Cost",	
 	--Talent 2063
@@ -571,7 +571,7 @@ local DictionaryEquip={
 	["地灵伞盖"]="高于1%血量时每秒-3HP,额外回复+15%生命上限",["Earth Spirit Cap"]="-3HP/s when over 1% HP.+15% MaxHP Recover",
 	["昆蚑毒敌甲"]="+15",					["Venomous Sting Insect Armor"]="+15",
 	["阴阳法衣"]="阳:+20%伤害减免。阴:20%暴击-30%伤害减免",["Yin-Yang Daoist Robe"]="Yang:+20% DamageReduction. Yin:+20% Crit,-30% DamageReduction",
-	["山珍蓑衣"]="15秒内+30",				["Ginseng Cape"]="+30 in 15s",
+	["山珍蓑衣"]="15秒内+40",				["Ginseng Cape"]="+40 in 15s",
 	["玄铁硬手"]="3秒内+15%攻击",			["Iron-Tough Gauntlets"]="+15% ATK in 3s",
 	["金刚护臂"]="-10%",					["Vajra Armguard"]="-10%",
 	["赭黄臂甲"]="每消耗一段棍势8秒内+6%暴击",["Ochre Armguard"]="+6% in 8s for each focus level",
