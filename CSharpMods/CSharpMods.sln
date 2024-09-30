@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EffectDetailDescription", "EffectDetailDescription\EffectDetailDescription.csproj", "{9D410EA6-7C8D-4131-9FEA-2F68A61CC6CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stronger Weapon Compatible", "Stronger Weapon Compatible\Stronger Weapon Compatible.csproj", "{2268A84C-7BB1-4A2C-9E29-35798FB6C34E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrongerWeaponCompatible", "StrongerWeaponCompatible\StrongerWeaponCompatible.csproj", "{2268A84C-7BB1-4A2C-9E29-35798FB6C34E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
