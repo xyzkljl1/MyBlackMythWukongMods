@@ -174,21 +174,6 @@ namespace EffectDetailDescription
             Log("MyMod::Init called.Start Timer");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
             //Utils.RegisterKeyBind(ModifierKeys.Control, Key.ENTER, FindPlayer);
-            Utils.RegisterKeyBind(Key.O, delegate {
-                GameDBRuntime.GetItemDesc(2218).CarryMax = 100;
-                var world = MyUtils.GetWorld();
-                if (world is null) return;
-                var equipMain = GSUI.UIMgr.FindUIPage(world, (int)EUIPageID.EquipMain);
-                var bagMain = GSUI.UIMgr.FindUIPage(world, (int)EUIPageID.BagMain);
-                if (equipMain is null) return;
-                if(bagMain is null) return;
-                var detail = bagMain.GetField<GSUIView>("ItemDetail");
-                if (detail is null) return;
-                var tb = detail.GetField<URichTextBlock>("TxtEffectDesc");
-                if (tb is null) return;
-                //Console.WriteLine($"detail.Text:{tb.GetText()}");
-                //tb.SetText(FText.FromString("ddddd"));
-            });
 
             PreFillDict();//对Data.XXXDict的预处理
 
@@ -318,7 +303,11 @@ namespace EffectDetailDescription
                     //Log($"Search {suitDesc.ID}.{i}");
                     if (Data.SuitInfoDesc.ContainsKey(id))
                     {
-                        suitDesc.SuitInfo[i].SuitEffectDesc = $"FUStSuitDesc.{suitDesc.ID}.SuitInfo__{i}.SuitEffectDesc".ToFTextRemoveRich().ToString() + Data.SuitInfoDesc[id].GetTr();
+                        var tmp = $"FUStSuitDesc.{suitDesc.ID}.SuitInfo__{i}.SuitEffectDesc".ToFTextRemoveRich().ToString();
+                        if (tmp.StartsWith("FUStSuitDesc"))
+                            continue;
+                            //tmp = suitDesc.SuitInfo[i].SuitEffectDesc;
+                        suitDesc.SuitInfo[i].SuitEffectDesc = tmp + Data.SuitInfoDesc[id].GetTr();
                         //Log($"Hit {suitDesc.ID}.{i} ::{Data.SuitInfoDesc[id].GetTr()}");
 
                     }
@@ -327,7 +316,11 @@ namespace EffectDetailDescription
                         id=suitDesc.SuitInfo[i].SuitEffectID;
                         if (Data.SuitInfoDesc.ContainsKey(id))
                         {
-                            suitDesc.SuitInfo[i].SuitEffectDesc = $"FUStSuitDesc.{suitDesc.ID}.SuitInfo__{i}.SuitEffectDesc".ToFTextRemoveRich().ToString() + Data.SuitInfoDesc[id].GetTr();
+                            var tmp = $"FUStSuitDesc.{suitDesc.ID}.SuitInfo__{i}.SuitEffectDesc".ToFTextRemoveRich().ToString();
+                            if (tmp.StartsWith("FUStSuitDesc"))
+                                continue;
+                                //tmp = suitDesc.SuitInfo[i].SuitEffectDesc;
+                            suitDesc.SuitInfo[i].SuitEffectDesc = tmp + Data.SuitInfoDesc[id].GetTr();
                             //Log($"Hit {suitDesc.ID}.{i} ::{Data.SuitInfoDesc[id].GetTr()}");
                         }
                     }
