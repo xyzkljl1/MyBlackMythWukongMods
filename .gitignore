@@ -17,3 +17,7 @@
 /CSharpMods/Stronger Weapon Compatible/obj/Release
 /CSharpMods/StrongerWeaponCompatible/bin/Release
 /CSharpMods/StrongerWeaponCompatible/obj/Release
+/CSharpMods/ProtobufLoader/bin/Release
+/CSharpMods/ProtobufLoader/obj/Release
+*.7z
+/ModsForPack/EffectDetailDescription/EffectDetailDescription.dll
