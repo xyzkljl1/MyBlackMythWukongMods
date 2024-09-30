@@ -352,7 +352,57 @@ namespace EffectDetailDescription
             {200601,new List<string>{ "+5%/10% 动作倍率", "+5%/10% SkillEffect"}},//万相归真/Elegance in Simplicity
             {200603,new List<string>{ "30秒内+30%伤害加成", "+30% Damage in 30s"}},//不生不灭/Unbegotten, Undying
         };
+        //套装效果
+        public static DescDict SuitInfoDesc = new DescDict
+        {
+            //SuitInfo和RedQualityInfo都是通过AttrEffectID或TalentID生效
 
+            //Talent 2037->90301 ?,鳞棍2034->15003?
+            {900311,new List<string>{ "x0.5气力消耗(和天赋效果乘算)", "x0.5 Stamina Cost(Multi with talent effect)"}},//浪里白条/Wave-Rider
+            //没找到对应passive
+            //{900321,new List<string>{ "x0.5气力消耗(和天赋效果乘算)", "x0.5 Stamina Cost(Multi with talent effect)"}},//浪里白条/Wave-Rider
+            //650->702，+满级百足734.5
+            //Talent 2041 - 2044 写的是0 / 8 / 10,实测是0 / 8 %/ 约10 %
+            {900411,new List<string>{ "+8%/10%奔跑/冲刺速度", "+8%/10% Run/Sprint speed."}},//日行千里/Swift Pilgrim
+            {900412,new List<string>{ "每层+10%攻击,持续2秒", "+10% ATK per stack in 2s"}},//日行千里/Swift Pilgrim
+            {900421,new List<string>{ "每秒+12棍势", "+12 Focus/s"}},//日行千里/Swift Pilgrim
+
+            {900511,new List<string>{ "每个天赋+24防御", "+24 DEF per Relic Talent"}},//心灵福至/Fortune's Favor
+            //Talent 2063
+            {900611,new List<string>{ "20%减伤", "20% Damage Reduction"}},//走石飞砂/Raging Sandstorm
+            {900711,new List<string>{ "+20% 动作倍率", "+20% SkillEffect"}},//离火入魔/Outrage
+            {705,new List<string>{ "+25%伤害 -30%伤害减免", "+25% Damage.-30% DamageReduction"}},//离火入魔/Outrage
+            {900811,new List<string>{ "+10赋雷攻击", "+10 Thunder ATK"}},//龙血玄黄/Thunder Veins
+            {900821,new List<string>{ "+10赋雷攻击", "+10 Thunder ATK"}},//龙血玄黄/Thunder Veins
+            {901011,new List<string>{ "20秒内+15%攻击", "+15% ATK in 20s"}},//借假修真/Gilded Radiance
+            {901012,new List<string>{ "暴击+3元气,\n击杀+5元气", "+3/+5 Qi when Crit/Kill"}},//借假修真/Gilded Radiance
+            //96005 / 96006 实测每次减少0.75~1秒冷却不定？？非传奇和传奇没有区别？？
+            {901211,new List<string>{ "+15棍势", "+15 Focus"}},//举步生风/Gale Guardian
+            {901212,new List<string>{ "+-0.75~1秒冷却?", "-0.75s~1s CD？"}},//举步生风/Gale Guardian
+            //TalentSDesc 91221 91222 91223,但是Passive里只有91221
+            {901221,new List<string>{ "-0.1s无敌时间，不会额外减少冷却", "-0.1s Immune Duration.Won't reduce more CD"}},//举步生风/Gale Guardian
+            
+            //90711 Passive 167
+            //Talent 2135 - 0.005，实测变身还原 + 1.5每秒 ；2137 - 0.00375, 实测约1.12每秒，结合 - 0.005推测应为1.125 / s
+            {901311,new List<string>{ "+20%伤害减免，结束变身时获得12秒黑泥，化身还原后获得6秒黑泥", "+20% DamageReduction.Gain Mud in 12s upon quiting tranformation;Gain Mud in 6s upon quiting vigor."}},//泥塑金装/From Mud to Lotus
+            {901312,new List<string>{ "翻滚回复约0.3神力,结束变身后12秒内+1.5/s神力回复，化身还原后4秒(not 6)内+1.125/s神力回复", "About +0.3 Might upon roll. +1.5/s Might Recover for 12s upon quiting tranformation.+1.125/s Might Recover in 4s(not 6s) upon quiting vigor."}},//泥塑金装/From Mud to Lotus
+            {901411,new List<string>{ "x0.8毒伤(和抗性效果乘算)", "x0.8 Poison Damage(Multi with Poison Resist effect)"}},//花下死/Poison Ward
+            {901412,new List<string>{ "+20%攻击", "+20% ATK"}},//花下死/Poison Ward
+            //独角仙套 91912 Passive 185
+            {901511,new List<string>{ "+10%灵蕴", "+10% Will"}},//锱铢必较/Every Bit Counts
+            {901611,new List<string>{ "5秒内+10%防御", "+10% DEF in 5s"}},//百折不挠/Unyielding Resolve
+            {901811,new List<string>{ "+50棍势", "+50 Focus"}},//铜心铁胆/Iron Will
+            {901812,new List<string>{ "-5秒冷却", "-5s CD"}},//铜心铁胆/Iron Will
+            {901911,new List<string>{ "+100棍势", "+100 focus"}},//毒魔狠怪/Fuban Strength
+            {901912,new List<string>{ "+20%持续时间", "+20% Duration"}},//毒魔狠怪/Fuban Strength
+            {902011,new List<string>{ "10秒内+8%暴击", "+8% Crit in 10s"}},//试比天高/Heaven's Equal
+            {902012,new List<string>{ "-1秒冷却 per Hit", "-1s CD per Hit"}},//试比天高/Heaven's Equal
+
+
+            {900921,new List<string>{ "+20法力消耗;假身持续时间不变,但不会因破隐而消失", "+20 MP Cost"}},//乘风乱舞/Dance of the Black Wind
+            //Talent 2181 青铜套内部叫黑铁
+            {901712,new List<string>{ "-15秒冷却", "-15s CD"}},//炼魔荡怪/Evil Crasher
+        };
         //精魂(RZD)被动 VIPassiveDesc.OnChangeItemId
         public static DescDict SpiritDesc = new DescDict
         {
