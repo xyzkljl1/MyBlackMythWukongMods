@@ -21,3 +21,7 @@
 /CSharpMods/ProtobufLoader/obj/Release
 *.7z
 /ModsForPack/EffectDetailDescription/EffectDetailDescription.dll
+/ModsForPack/ProtobufLoader/ProtobufLoader.dll
+/CSharpMods/*/bin
+/CSharpMods/*/obj
+/ModsForPack/ProtobufLoader/ProtobufLoader
