@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EffectDetailDescription", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtobufLoader", "ProtobufLoader\ProtobufLoader.csproj", "{2268A84C-7BB1-4A2C-9E29-35798FB6C34E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{C5108BB4-452D-42F1-84FF-C33B4D43D6BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashengMode", "DashengMode\DashengMode.csproj", "{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2268A84C-7BB1-4A2C-9E29-35798FB6C34E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2268A84C-7BB1-4A2C-9E29-35798FB6C34E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2268A84C-7BB1-4A2C-9E29-35798FB6C34E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5108BB4-452D-42F1-84FF-C33B4D43D6BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5108BB4-452D-42F1-84FF-C33B4D43D6BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5108BB4-452D-42F1-84FF-C33B4D43D6BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5108BB4-452D-42F1-84FF-C33B4D43D6BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
