@@ -29,7 +29,7 @@ namespace DashengMode
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.1";
+        public string Version => "1.2";
         // private readonly Harmony harmony;
         public EDaShengStage target=EDaShengStage.DaShengMode;
 
@@ -69,8 +69,8 @@ namespace DashengMode
             Log("MyMod::Init called.Start Timer");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
             //Utils.RegisterKeyBind(ModifierKeys.Control, Key.F7, LoadAllDataFiles);
-            Utils.RegisterKeyBind(ModifierKeys.Control, Key.O, delegate { 
-                switch(target)
+            Utils.RegisterKeyBind(ModifierKeys.Control, Key.O, delegate {
+                switch (target)
                 {
                     case EDaShengStage.DaShengMode:
                         target = EDaShengStage.LittleMonkey;
@@ -85,6 +85,26 @@ namespace DashengMode
                         Log($"Pre Dasheng Mode On");
                         break;
                 }
+                Utils.TryRunOnGameThread(delegate { CheckOnTick(); });
+            });
+            Utils.RegisterKeyBind(ModifierKeys.Shift, Key.O, delegate {
+                //只在pre和dasheng间切换
+                switch (target)
+                {
+                    case EDaShengStage.DaShengMode:
+                        target = EDaShengStage.LittleMonkey;
+                        CheckOnTick();
+                        target = EDaShengStage.PreStage;
+                        CheckOnTick();
+                        Log($"Pre Mode On");
+                        break;
+                    case EDaShengStage.PreStage:
+                    case EDaShengStage.LittleMonkey:
+                        target = EDaShengStage.DaShengMode;
+                        Log($"Dasheng Mode On");
+                        break;
+                }
+                Utils.TryRunOnGameThread(delegate { CheckOnTick(); });
             });
 
             initDescTimer.Start();
