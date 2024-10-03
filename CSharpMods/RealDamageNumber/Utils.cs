@@ -12,12 +12,12 @@ using System;
 using LitJson;
 using ILRuntime.Runtime;
 #nullable enable
-namespace Test
+namespace RealDamageNumber
 {
     public static class MyExten
     {
         private static UWorld? world;
-        public static string Name => "Test";
+        public static string Name => "RealDamageNumber";
         public static FieldType? GetFieldOrProperty<FieldType>(this object obj, String field_name) where FieldType : class
         {
             var t = obj.GetType();
@@ -149,6 +149,10 @@ namespace Test
         {
             var t = obj.GetType();
             var methodInfo = t.GetMethod(method_name, BindingFlags.NonPublic | BindingFlags.Instance);
+            if (methodInfo is null)
+            {
+                methodInfo = t.GetMethod(method_name, BindingFlags.NonPublic | BindingFlags.Static);
+            }
             if (methodInfo is null)
             {
                 Console.WriteLine($"{Name} Fatal Error: Can't Find {method_name}");
@@ -294,34 +298,5 @@ namespace Test
             return BUS_EventCollectionCS.Get(GetControlledPawn());
         }
 
-        public static T LoadAsset<T>(string asset) where T : UObject
-        {
-            return b1.BGW.BGW_PreloadAssetMgr.Get(GetWorld()).TryGetCachedResourceObj<T>(asset, b1.BGW.ELoadResourceType.SyncLoadAndCache, b1.BGW.EAssetPriority.Default, null, -1, -1);
-        }
-
-        public static UClass LoadClass(string asset)
-        {
-            return LoadAsset<UClass>(asset);
-        }
-
-        public static AActor? SpawnActor(string classAsset)
-        {
-            var controlledPawn = GetControlledPawn();
-            FVector actorLocation = controlledPawn.GetActorLocation();
-            FVector b = controlledPawn.GetActorForwardVector() * 1000.0f;
-            FVector start = actorLocation + b;
-            FRotator frotator = UMathLibrary.FindLookAtRotation(start, actorLocation);
-            UClass uClass = LoadClass($"PrefabricatorAsset'{classAsset}'");
-            if (uClass == null)
-            {
-                return null;
-            }
-            return BGUFunctionLibraryCS.BGUSpawnActor(controlledPawn.World, uClass, start, frotator);
-        }
-
-        public static AActor GetActorOfClass(string classAsset)
-        {
-            return UGameplayStatics.GetActorOfClass(GetWorld(), LoadAsset<UClass>(classAsset));
-        }
     }
 }

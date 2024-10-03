@@ -1,0 +1,77 @@
+﻿{
+  "ModConfigMenuVer": "1.0",
+  "ModConfigMenuMaxVer": null,
+  "Config": [
+    {
+      "Name": "Enable",
+      "DisplayName": "启用"
+    },
+    {
+      "Name": "DamageNumbers",
+      "DisplayName": null,
+      "Type": "List<string>",
+      "ToolTip": "默认玩家受伤时候显示的文字",
+      "DefaultValue": [
+        "菜",
+        "鸡",
+        "坤",
+        "菜狗",
+        "弼马温",
+        "海猴",
+        "薯条",
+        "行不行",
+        "Skill Issue",
+        "Noob",
+        "真jb菜",
+        "会不会玩",
+        "杂~鱼~",
+        "杂修",
+        "你退吧,我们能赢",
+        "我奶奶都比你会玩",
+        "让大黄来打都赢了",
+        "别送了",
+        "接着送",
+        "买活送?",
+        "白给",
+        "超鬼了",
+        "就这？",
+        "细狗",
+        "真下饭",
+        "死了个最菜的",
+        "找个厂上班吧",
+        "中路栓条狗都比你守得好",
+        "三打一被反杀会不会玩",
+        "投了吧",
+        "¿",
+        "?",
+        "?¿?¿",
+        "�",
+        "???"
+      ],
+      "CurrentValue": null
+    },
+    {
+      "Name": "BigDamageNumbers",
+      "Type": "List<string>",
+      "ToolTip": "玩家受到大额伤害时显示的文字，为空时使用DamageNumbers",
+      "DefaultValue": [],
+      "CurrentValue": null
+    },
+    {
+      "Name": "BigDamageCap",
+      "Type": "int",
+      "ToolTip": "高于此数字的伤害算作\"大额伤害\"",
+      "DefaultValue": 150,
+      "CurrentValue": null
+    },
+    {
+      "Name": "EnemyDamageNumbers",
+      "Type": "List<string>",
+      "ToolTip": "敌人受伤时候显示的文字,为空时显示原伤害数字",
+      "DefaultValue": [
+      ],
+      "CurrentValue": null
+    }
+
+  ]
+}
