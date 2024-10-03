@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashengMode", "DashengMode\DashengMode.csproj", "{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealDamageNumber", "RealDamageNumber\RealDamageNumber.csproj", "{880B7429-AE3E-4B44-A816-996CA9B8F919}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModConfigMenu", "ModConfigMenu\ModConfigMenu.csproj", "{9E69FDD5-4760-458F-A119-AF40ECA89549}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD3ED646-36DA-450D-99CF-E3F0BFD1FD07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{880B7429-AE3E-4B44-A816-996CA9B8F919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{880B7429-AE3E-4B44-A816-996CA9B8F919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{880B7429-AE3E-4B44-A816-996CA9B8F919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{880B7429-AE3E-4B44-A816-996CA9B8F919}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E69FDD5-4760-458F-A119-AF40ECA89549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E69FDD5-4760-458F-A119-AF40ECA89549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E69FDD5-4760-458F-A119-AF40ECA89549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E69FDD5-4760-458F-A119-AF40ECA89549}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

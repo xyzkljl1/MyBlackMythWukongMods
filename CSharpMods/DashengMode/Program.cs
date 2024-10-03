@@ -95,7 +95,6 @@ namespace DashengMode
                         target = EDaShengStage.LittleMonkey;
                         CheckOnTick();
                         target = EDaShengStage.PreStage;
-                        CheckOnTick();
                         Log($"Pre Mode On");
                         break;
                     case EDaShengStage.PreStage:
