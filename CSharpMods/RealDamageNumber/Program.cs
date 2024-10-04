@@ -87,8 +87,8 @@ namespace RealDamageNumber
                             else
                             {
                                 MyExten.Error($"No Value For {tmp.Name}");
-                                continue;
                             }
+                            continue;
                         }
                         if (fieldInfo.FieldType == typeof(List<string>))
                         {
@@ -111,9 +111,9 @@ namespace RealDamageNumber
                         }
                     }
             }
-            catch (Exception ) 
+            catch (Exception e) 
             {
-                MyExten.Error("Fail to Parse Config File");
+                MyExten.Error($"Fail to Parse Config File{e.Message}");
                 return;
             }
 
@@ -143,8 +143,9 @@ namespace RealDamageNumber
         public void OnShowDamageNumber(DamageNumParam Param)
         {
             DebugLog("Triggered");
-            Utils.TryRunOnGameThread(delegate
-            {
+            //注意RunOnGameThread调用12672次后会导致游戏卡死！！！
+            //Utils.TryRunOnGameThread(delegate
+            //{
                 foreach (object @object in UObject.GetObjects<BUI_BattleInfoCS>())
                 {
                     BUI_BattleInfoCS? bUI_BattleInfoCS = @object as BUI_BattleInfoCS;
@@ -163,7 +164,7 @@ namespace RealDamageNumber
                     }
                     else if(Param.AttackerTeamType==EDmgNumUITeamType.Hero&&Config.EnemyDamageNumbers.Count>0 && Param.DamageNum != 0)
                         text = Config.EnemyDamageNumbers[rnd.Next(Config.EnemyDamageNumbers.Count)];
-                    if(text!="")
+                    if(text!=""&&Config.Enable)
                     {
                         DamageNumShowParam? dmgShowParam = bUI_BattleInfoCS.CallPrivateFunc("GetDmgShowParam", new object[] { Param }) as DamageNumShowParam?;
                         if (dmgShowParam == null || dmgShowParam.Value.DamageType == DamageTypeEnum.NONE) continue;
@@ -185,14 +186,15 @@ namespace RealDamageNumber
 
                     break;
                 }
-            });
+            //});
         }
         public void Init()
         {
             Config.LoadConfig();
             Log("MyMod::Init called.Start Timer");
             initTimer.Start();
-            initTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(HookEvent);
+            initTimer.Elapsed += (Object source, ElapsedEventArgs e) => HookEvent();
+            //initTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { HookEvent(); });
             // hook
             // harmony.PatchAll();
         }
