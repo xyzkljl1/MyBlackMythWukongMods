@@ -29,10 +29,10 @@ namespace DashengMode
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.2";
+        public string Version => "1.3";
         // private readonly Harmony harmony;
         public EDaShengStage target=EDaShengStage.DaShengMode;
-
+        //public int ct=0;
         //not used
         public System.Timers.Timer initDescTimer= new System.Timers.Timer(3000);
 
@@ -85,7 +85,7 @@ namespace DashengMode
                         Log($"Pre Dasheng Mode On");
                         break;
                 }
-                Utils.TryRunOnGameThread(delegate { CheckOnTick(); });
+                CheckOnTick();
             });
             Utils.RegisterKeyBind(ModifierKeys.Shift, Key.O, delegate {
                 //只在pre和dasheng间切换
@@ -103,12 +103,13 @@ namespace DashengMode
                         Log($"Dasheng Mode On");
                         break;
                 }
-                Utils.TryRunOnGameThread(delegate { CheckOnTick(); });
+                CheckOnTick();
             });
 
             initDescTimer.Start();
-            //注意必须在GameThread执行，ToFTextFillPre/GetLocaliztionalFText等函数在Timer.Elapsed线程无法得到正确翻译，在RegisterKeyBind或Init或TryRunOnGameThread线程则可以
-            initDescTimer.Elapsed +=   (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { CheckOnTick(); });
+            initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => CheckOnTick();
+            //注意FThreading.RunOnGameThread和RunOnGameThreadAsync超过12672次后会导致游戏卡死！！！！！！！不要频繁使用！！！
+            //initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { Console.WriteLine($"{ct}");ct++; });
             // hook
             // harmony.PatchAll();
 
