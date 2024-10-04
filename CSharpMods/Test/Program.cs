@@ -58,42 +58,17 @@ namespace Test
             Utils.RegisterKeyBind(Key.O, delegate {
             var t = typeof(EBGUAttrFloat);
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(),EBGUAttrFloat.StaminaRecoverBase,0);
-                //enable = !enable;
+                enable = !enable;
                 //foreach (var pair in BGW_GameDB.GetAllBuffDesc())
                 //    if (pair.Value.BuffActiveCondition.ConditionType == EGSBuffAndSkillEffectActiveCondition.HasTalent)
                 //        if (pair.Value.BuffActiveCondition.ConditionParams=="106025")
                     {
                             //Log($"FFFFuck {pair.Value.ID}");
                     }
+                int ct=0;
+                //1061301,1061401,1021301,1021401,1086301,1086401,1088301,1088401
 
 
-                foreach (object @object in UObject.GetObjects<BUI_MSimNum>())
-                {
-                    BUI_MSimNum? numWidget = @object as BUI_MSimNum;
-                    Log($"Find2 ___ {numWidget == null}");
-                    if(numWidget != null )
-                    {
-                        var map=numWidget.GetFieldOrProperty<Dictionary<DamageTypeEnum, DamageNumUIInfo>>("DamageNumUIInfoMap");
-                        if(map != null )
-                        {
-                         foreach(var dumageNumUIInfo in map.Values)
-                            foreach(var widget in dumageNumUIInfo.Widgets)
-                                {
-                                    UTextBlock uTextBlock = widget as UTextBlock;
-                                    if (uTextBlock != null)
-                                    {
-                                        Log($"TextBlock");
-                                        //uTextBlock.SetText(FText.FromString("菜"));
-                                    }
-                                    else
-                                        Log($"Other Type {widget.GetFullName()}");
-
-                                }
-                            numWidget.CallPrivateFunc("UpdateDamageNum", new object[] { "菜" });
-                        }
-                        //break;
-                    }
-                }
                 //Log($"{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.SpecialEnergy)}/{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(),EBGUAttrFloat.SpecialEnergyMax)}");
             });
 
@@ -102,8 +77,8 @@ namespace Test
             initDescTimer.Elapsed +=   (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate {
                 if(enable)
                 {
-                    Log($"{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.Stamina)}" +
-                        $"/{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.StaminaMax)}");
+                    Log($"{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.CurEnergy)}" +
+                        $"/{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.TransEnergyMax)}");
                 }
             });
             // hook

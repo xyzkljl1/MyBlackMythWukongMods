@@ -32,7 +32,7 @@ namespace DashengMode
         public string Version => "1.3";
         // private readonly Harmony harmony;
         public EDaShengStage target=EDaShengStage.DaShengMode;
-        //public int ct=0;
+        public int _tmpCt=0;
         //not used
         public System.Timers.Timer initDescTimer= new System.Timers.Timer(3000);
 
@@ -108,6 +108,8 @@ namespace DashengMode
 
             initDescTimer.Start();
             initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => CheckOnTick();
+            //initDescTimer.Interval = 1;
+            //initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => Log($"{_tmpCt++}");
             //注意FThreading.RunOnGameThread和RunOnGameThreadAsync超过12672次后会导致游戏卡死！！！！！！！不要频繁使用！！！
             //initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { Console.WriteLine($"{ct}");ct++; });
             // hook

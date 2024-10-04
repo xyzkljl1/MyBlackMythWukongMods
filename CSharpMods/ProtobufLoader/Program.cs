@@ -53,8 +53,6 @@ namespace ProtobufLoader
             //Utils.RegisterKeyBind(Key.O, delegate {});
 
             //initDescTimer.Start();
-            //注意必须在GameThread执行，ToFTextFillPre/GetLocaliztionalFText等函数在Timer.Elapsed线程无法得到正确翻译，在RegisterKeyBind或Init或TryRunOnGameThread线程则可以
-            //initDescTimer.Elapsed +=   (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { LoadAllDataFiles(); });
             // hook
             // harmony.PatchAll();
             LoadAllDataFiles();
