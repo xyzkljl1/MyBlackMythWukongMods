@@ -28,9 +28,9 @@ using b1.Protobuf.DataAPI;
 using Mono.Unix.Native;
 using Google.Protobuf.Collections;
 #nullable enable
-//怎么能在不同文件间共用using语句？？？
 using CommB1;
 using System.Text.RegularExpressions;
+using OssB1;
 namespace EffectDetailDescription
 {
     public static class MyExten
@@ -113,14 +113,18 @@ namespace EffectDetailDescription
                 action(item);
             return source;
         }
-        public static List<T> ToListMy<T>(this T obj) where T: Google.Protobuf.IMessage
+        public static List<T> ToListMy<T>(this T obj) where T : Google.Protobuf.IMessage
         {
             return new List<T> { obj };
+        }
+        public static List<T?> ToListMyNullable<T>(this T obj) where T : Google.Protobuf.IMessage
+        {
+            return new List<T?> { obj };
         }
         public class MyMod : ICSharpMod
         {
             public string Name => MyExten.Name;
-            public string Version => "1.2";
+            public string Version => "1.3";
             // private readonly Harmony harmony;
             //记录上一个bind过的对象的id，防止重复绑定
             public int lastRZDDetailID = -1;
@@ -160,8 +164,10 @@ namespace EffectDetailDescription
                 bindEventTimer.Stop();
                 initDescTimer.Start();
                 //注意必须在GameThread执行，ToFTextFillPre/GetLocaliztionalFText等函数在Timer.Elapsed线程无法得到正确翻译，在RegisterKeyBind或Init或TryRunOnGameThread线程则可以
-                initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { TryInitDesc(); });
-                bindEventTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { TryBindEvent(); });
+                //不要随便用RunOnGameThread!!!!调用累计超过12672次后会导致游戏卡住，只在必要时调用
+                //或创建一个Comp绑定到主角，然后在Comp的tick里执行，需要setTickEnable，reCalTick？
+                initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => TryInitDesc();
+                bindEventTimer.Elapsed += (Object source, ElapsedEventArgs e) =>TryBindEvent();
                 // hook
                 // harmony.PatchAll();
             }
@@ -194,21 +200,22 @@ namespace EffectDetailDescription
 
                 //珍玩和法宝
                 {
+                    
                     int ct = 0;
                     foreach (var descList in new List<DescDict> { Data.EquipDesc, Data.FabaoAttrDesc })
                         foreach (var mydesc in descList.Copy())
                         {
                             var desc = GameDBRuntime.GetEquipDesc(mydesc.Key);
                             if (desc == null) continue;
-                            if (desc.EquipPosition != EquipPosition.Accessory && desc.EquipPosition != EquipPosition.Fabao)
+                            if (!mydesc.Value.IsTrNull())//有一些自动生成效果并不好，原来有值的统统跳过生成
                                 continue;
-                            if (!mydesc.Value.IsTrEmpty())//珍玩里有一些自动生成效果并不好，原来有值的统统跳过生成
-                                continue;
-                            //只考虑仅一个效果的情况，直接赋值不拼接
-                            if (desc.AttrEffectId > 0 && desc.SuitId == 0 && desc.EquipEffectId == 0)
+                            if (desc.EquipPosition == EquipPosition.Accessory || desc.EquipPosition == EquipPosition.Fabao)
                             {
-                                //EquipDesc武器护甲的attrEffect就是面板，葫芦的是酒数量上限，只有珍玩需要写在描述里
-                                //法宝的attreffect也在EquipDesc，但是描述在别处
+                                //只考虑仅一个效果的情况，直接赋值不拼接
+                                if (desc.AttrEffectId > 0 && desc.SuitId == 0 && desc.EquipEffectId == 0)
+                                {
+                                    //EquipDesc武器护甲的attrEffect就是面板，葫芦的是酒数量上限，只有珍玩需要写在描述里
+                                    //法宝的attreffect也在EquipDesc，但是描述在别处
                                     var attrDesc = GameDBRuntime.GetEquipAttrDesc(desc.AttrEffectId);
                                     if (attrDesc != null)
                                     {
@@ -217,15 +224,63 @@ namespace EffectDetailDescription
                                     }
                                     else
                                         Log($"Can't Find Equip Attr For {mydesc.Key}-{desc.AttrEffectId}");
+                                }
+                                else if (desc.EquipEffectId > 0)
+                                {
+                                    var talentDesc = GameDBRuntime.GetTalentSDesc(desc.EquipEffectId);
+                                    descList[mydesc.Key] = talentDesc.ToListMy().ToTr();
+                                    ct++;
+                                }
                             }
-                            else if (desc.EquipEffectId > 0)
+                            else if(desc.EquipPosition != EquipPosition.Hulu&& desc.EquipPosition != EquipPosition.Weapon)
                             {
-                                var talentDesc = GameDBRuntime.GetTalentSDesc(desc.EquipEffectId);                             
-                                descList[mydesc.Key] = talentDesc.ToListMy().ToTr();
-                                ct++;
+                                if (desc.EquipEffectId > 0)
+                                {
+                                    var talentDesc = GameDBRuntime.GetTalentSDesc(desc.EquipEffectId);
+                                    //if(descList[mydesc.Key].IsTrEmpty())
+                                        descList[mydesc.Key] = talentDesc.ToListMy().ToTr();
+                                    //else
+                                    //    descList[mydesc.Key] += "///" + talentDesc.ToListMy().ToTr();
+                                    ct++;
+                                }
                             }
                         }
                     Log($"Generate {ct} Translation For EquipDesc");
+                }
+                //泡酒物
+                {
+                    int ct = 0;
+                    var descList = Data.ItemDesc;
+                    foreach (var mydesc in descList.Copy())
+                    {
+                        var desc = GameDBRuntime.GetConsumeDesc(mydesc.Key);
+                        if (desc == null) continue;
+                        if (!mydesc.Value.IsTrNull())//有一些自动生成效果并不好，原来有值的统统跳过生成
+                            continue;
+                        if (desc.ConsumeEffect.Count == 0)
+                            continue;
+                        //Wine类的回血也是buff，暂不考虑
+                        //丹药类的统统把有条件才触发的buff，如根器的吃药加暴击、套装的吃药加棍势也算进去了,忽略要求hastalent的buff
+                        if (desc.Type == ConsumeType.WinePartner|| desc.Type == ConsumeType.Elixir)
+                        {
+                            foreach(var consumeEffect in desc.ConsumeEffect)
+                                if(consumeEffect.EffectType== ConsumeEffectType.Buff&& consumeEffect.EffectId>0)
+                                {
+                                    FUStBuffDesc? buff = BGW_GameDB.GetOriginalBuffDesc(consumeEffect.EffectId);
+                                    if(buff.ID==21065||buff.ID==21165||buff.ID==21465||buff.ID==21665)//精魂被动吃丹药回血，条件也是always，特殊处理
+                                        continue;
+                                    if (buff == null) continue;
+                                    if (buff.BuffActiveCondition.ConditionType == EGSBuffAndSkillEffectActiveCondition.HasTalent)
+                                        continue;
+                                    //if (descList[mydesc.Key].IsTrNull())
+                                        //descList[mydesc.Key]=Desc.Empty;
+                                    descList[mydesc.Key] = buff.ToListMyNullable().ToTr();
+                                    ct++;
+                                    //Log($" {mydesc.Key} {buff.ID} {descList[mydesc.Key].GetTr(1)}");
+                                }
+                        }
+                    }
+                    Log($"Generate {ct} Translation For ItemDesc");
                 }
                 //精魂
                 {
@@ -263,7 +318,7 @@ namespace EffectDetailDescription
                             {
                                 var talentDescList = new List<TalentSDesc> { GameDBRuntime.GetTalentSDesc(desc.EffectTalentId), GameDBRuntime.GetTalentSDesc(desc2.EffectTalentId), GameDBRuntime.GetTalentSDesc(desc3.EffectTalentId) };
                                 var talentTr = talentDescList.ToTr();
-                                if (!talentTr.IsTrEmpty())
+                                if (!talentTr.IsTrNull())
                                     changed=true;
                                 descList[mydesc.Key].ConcatWith(talentDescList.ToTr(), ",");
                             }
@@ -309,7 +364,7 @@ namespace EffectDetailDescription
                 if (pawn is null) return;
                 //Log($"{pawn.GetFullName()}");
                 initDescTimer.Stop();
-                InitDescProtobufAndLanugage();
+                Utils.TryRunOnGameThread(InitDescProtobufAndLanugage);
                 bindEventTimer.Start();
             }
             private void InitDescProtobufAndLanugage()
@@ -461,23 +516,25 @@ namespace EffectDetailDescription
                 {
                     var dataStore = rzdDetail.GetField<DSRZDDetail>("DataStore");
                     if (dataStore is null) return;
-                    Log($"Bind RZDDetail:{lastRZDDetailID}->{rzdDetail.GetID()}");
-                    lastRZDDetailID = rzdDetail.GetID();
-                    rzdDetail.CallPrivateGenericFunc("BindValueToCustom", new Type[] { typeof(GSUIBiProp<int>), typeof(Action<ChangeReason, int, int>) }, new Type[] { typeof(int) },
-                                new object[] { dataStore.ItemId, (ChangeReason Reason, int OldValue, int NewValue) =>
-                                                                {
-                                                                    if(!Data.SpiritCost.ContainsKey(NewValue)) return;
-                                                                    SoulSkillDesc soulSkillDesc = GameDBRuntime.GetSoulSkillDesc(NewValue);
-                                                                    if(soulSkillDesc is null) return;
-                                                                    var dataStore=rzdDetail.GetField<DSRZDDetail>("DataStore");
-                                                                    if(dataStore is null) return;
-                                                                    //Console.WriteLine($"!!!Set {NewValue} ");
-                                                                    var text=GSB1UIUtil.GetUIWordDescFText((EUIWordID)(1437 + dataStore.GetEnergyLevel(soulSkillDesc.CastEnergy))).ToString()
-                                                                                +$"{Data.SpiritCost[NewValue].GetTr()}";
-                                                                    rzdDetail.GetField<UTextBlock>("TxtCost")!.SetText(FText.FromString(text));
-                                                                }
-                                });
-
+                    Utils.TryRunOnGameThread(() =>
+                                    {
+                                        Log($"Bind RZDDetail:{lastRZDDetailID}->{rzdDetail.GetID()}");
+                                        lastRZDDetailID = rzdDetail.GetID();
+                                        rzdDetail.CallPrivateGenericFunc("BindValueToCustom", new Type[] { typeof(GSUIBiProp<int>), typeof(Action<ChangeReason, int, int>) }, new Type[] { typeof(int) },
+                                                    new object[] { dataStore.ItemId, (ChangeReason Reason, int OldValue, int NewValue) =>
+                                                                                {
+                                                                                    if(!Data.SpiritCost.ContainsKey(NewValue)) return;
+                                                                                    SoulSkillDesc soulSkillDesc = GameDBRuntime.GetSoulSkillDesc(NewValue);
+                                                                                    if(soulSkillDesc is null) return;
+                                                                                    var dataStore=rzdDetail.GetField<DSRZDDetail>("DataStore");
+                                                                                    if(dataStore is null) return;
+                                                                                    //Console.WriteLine($"!!!Set {NewValue} ");
+                                                                                    var text=GSB1UIUtil.GetUIWordDescFText((EUIWordID)(1437 + dataStore.GetEnergyLevel(soulSkillDesc.CastEnergy))).ToString()
+                                                                                                +$"{Data.SpiritCost[NewValue].GetTr()}";
+                                                                                    rzdDetail.GetField<UTextBlock>("TxtCost")!.SetText(FText.FromString(text));
+                                                                                }
+                                                    });
+                                    });
                 }
             }
         }

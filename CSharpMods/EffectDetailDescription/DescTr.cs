@@ -15,11 +15,17 @@ using static Mono.Security.X509.X520;
 #nullable enable
 namespace EffectDetailDescription
 {
+    public enum RemoveDurationOrIntervalConfig
+    {
+        MustRemove = 1,
+        TryAdd = 2,
+        Ignore=3
+    };
     public class Desc:List<string>
     {
         public static Desc Default { get { return Data.DefaultDesc.Copy(); } }
         public static Desc Empty { get { return Data.EmptyDesc.Copy(); } }
-        public bool IsTrEmpty()
+        public bool IsTrNull()
         {
             return GetTr(false) == "";
         }
@@ -282,7 +288,7 @@ namespace EffectDetailDescription
         {
             var ret = Desc.Default;
             //see BGUFunctionLibraryCS.BGUCheckBuffEffectActiveCondition
-            if (desc.ConditionType == EGSBuffAndSkillEffectActiveCondition.ByAttr)//条件
+            if (desc.ConditionType == EGSBuffAndSkillEffectActiveCondition.ByAttr|| desc.ConditionType == EGSBuffAndSkillEffectActiveCondition.TargetByAttr)//条件
             {
                 var conditions = desc.ConditionParams.Split(',').Select(ele => int.Parse(ele)).ToList();
                 if (conditions.Count == 5)
@@ -319,6 +325,11 @@ namespace EffectDetailDescription
                             ret.FormatWith(Data.EBGUAttrFloatDictConst[attr1].FormatWith(""));
                         ret.FormatWith(attr2Format);
                     }
+                    if (desc.ConditionType != EGSBuffAndSkillEffectActiveCondition.TargetByAttr)
+                        ret.RemoveTag("Target", true);
+                    else
+                        ret.RemoveTag("Target", false);
+
                 }
             }
             return ret;
@@ -351,7 +362,7 @@ namespace EffectDetailDescription
                 {
                     var buffIDsList = talentDescList.Select(ele => ele.AddBuffIDs.Split(',').ToList())
                                         .ForEach(ele => ele.Sort()).ToList();
-                    if (buffIDsList.All(ele => ele.Count == 1) && (ret.IsTrEmpty() || true))
+                    if (buffIDsList.All(ele => ele.Count == 1) && (ret.IsTrNull() || true))
                         for (int i = 0; i < buffIDsList[0].Count; i++)//buffIDsList肯定不为空
                         {
                             //用静态的buffdesc
@@ -377,13 +388,18 @@ namespace EffectDetailDescription
             }
             return ret;
         }
-        public static Desc ToTr(this List<FUStBuffEffectAttr> descList, FUStBuffDesc buffDesc,bool isChild = false,bool PlaceHolder=false,bool noDurationOrInterval=false)//isChild:被addbuff类效果触发的子buff
+        public static Desc ToTr(this List<FUStBuffEffectAttr> descList, FUStBuffDesc buffDesc, bool isChild = false, bool PlaceHolder = false)
+        {
+            RemoveDurationOrIntervalConfig tmp = RemoveDurationOrIntervalConfig.Ignore;
+            return descList.ToTr(ref tmp,buffDesc, isChild, PlaceHolder);
+        }
+        public static Desc ToTr(this List<FUStBuffEffectAttr> descList, ref RemoveDurationOrIntervalConfig ForceAddOrRemoveDurationAndIntervalConfigInOut, FUStBuffDesc buffDesc,bool isChild = false,bool PlaceHolder=false)//isChild:被addbuff类效果触发的子buff
         {
             var ret = new Desc();
             bool isParent = false;
             if (descList.Count < 1) return ret;
             var desc = descList.First();
-            bool needDuration = !noDurationOrInterval;
+            bool needDuration = true;
             if (desc.EffectType == EBuffAndSkillEffectType.RecoverAttr)
             {
                 if (desc.EffectParams.Count < 2) return ret;
@@ -432,6 +448,9 @@ namespace EffectDetailDescription
                     //满足条件时持续施加子buff,此时子buff的持续时间没有意义，移除
                     ret.RemoveTag("Duration", ContinousSkillEffectActiveConditionList.ContainsKey(buffDesc.BuffActiveCondition.ConditionType));
                     //Log($"TTT {buffDesc.ID}  {ret.GetTr(1)} ____ {buffDesc.BuffActiveCondition.ToTr().GetTr(1)}");
+                }
+                if (desc.EffectTrigger == EBuffEffectTriggerType.Time||desc.EffectTrigger== EBuffEffectTriggerType.OnSkillDamage)
+                {
                     ret.FormattedBy(buffDesc.BuffActiveCondition.ToTr());
                 }
                 //Log($"2FFFFFFFF{ret.GetTr(1)}");
@@ -487,13 +506,22 @@ namespace EffectDetailDescription
             else
                 ret.RemoveTag("Interval",true);
 
-            if (noDurationOrInterval)
+            if ((buffDesc.Duration <= 1000 && buffDesc.Interval == 0) && desc.EffectTrigger == EBuffEffectTriggerType.Generation)//一次性回复
+                needDuration = false;
+
+            //ForceAddOrRemoveDurationAndIntervalConfigInOut为强制移除时，强制移除所有
+            //为ignore时什么都不做
+            //为尝试添加时，如果该effect添加了Duration，将其重设为MustRemove，否则不改变
+            //这是因为一个buff有多组effect时，可能有的需要duration有的不需要
+            if (ForceAddOrRemoveDurationAndIntervalConfigInOut==RemoveDurationOrIntervalConfig.MustRemove)
                 ret.RemoveTag("Interval", true);
             //然后再添加Duration
-            if (needDuration&&buffDesc.Duration > 0)
+            if ((needDuration&& ForceAddOrRemoveDurationAndIntervalConfigInOut != RemoveDurationOrIntervalConfig.MustRemove) &&buffDesc.Duration > 0)
             {
                 ret.FormattedBy(Data.DurationFormat);
                 ret.FormatWith(buffDesc.Duration / 1000.0f);
+                if(ForceAddOrRemoveDurationAndIntervalConfigInOut==RemoveDurationOrIntervalConfig.TryAdd)
+                    ForceAddOrRemoveDurationAndIntervalConfigInOut= RemoveDurationOrIntervalConfig.MustRemove;
             }
 
             if (!isChild)//如果此buff是顶层buff,返回前移除所有尚未处理的tag
@@ -516,9 +544,10 @@ namespace EffectDetailDescription
             {
                 ret = Desc.Empty;
                 var effectList = desc!.BuffEffects.ToList();
+                RemoveDurationOrIntervalConfig RemoveDuration = RemoveDurationOrIntervalConfig.TryAdd;
                 for(int i = 0 ;i < effectList.Count;++i)
                 {
-                    ret.ConcatWith(effectList[i].ToListMy().ToTr(desc!, isChild,noDurationOrInterval:i!=0),",");
+                    ret.ConcatWith(effectList[i].ToListMy().ToTr(ref RemoveDuration,desc!, isChild),",");
                 }
             }
             return ret;

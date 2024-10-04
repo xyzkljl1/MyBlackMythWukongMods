@@ -35,25 +35,25 @@ namespace EffectDetailDescription
         {
             //消耗品,注意1118等是配方，2118等是丹药
             //鼻根器+10%持续2
-            {2218,new Desc{ "120秒内+60", "+60 in 130s"}},//朝元膏/Essence Decoction
-            {2221,new Desc{ "120秒内+60", "+60 in 130s"}},//益气膏/Tonifying Decoction
-            {2224,new Desc{ "75秒内+10%", "+10% in 75s"}},//倍力丸/Amplification Pellets
-            {2227,new Desc{ "75秒内+8攻击", "+8 ATK in 75s"}},//伏虎丸/Tiger Subduing Pellets
-            {2230,new Desc{ "120秒内+60", "+60 in 130s"}},//延寿膏/Longevity Decoction
+            {2218,new Desc{ }},//朝元膏/Essence Decoction
+            {2221,new Desc{ }},//益气膏/Tonifying Decoction
+            {2224,new Desc{ }},//倍力丸/Amplification Pellets
+            {2227,new Desc{ }},//伏虎丸/Tiger Subduing Pellets
+            {2230,new Desc{ }},//延寿膏/Longevity Decoction
             {2234,new Desc{ "75秒", "75s"}},//坚骨药/Fortifying Medicament
-            {2236,new Desc{ "+60", "+60"}},//镜中丹/Mirage Pill
-            {2245,new Desc{ "75秒内+15攻击15%暴击20%暴伤", "+15 ATK/15% Crit/20% CritDamage in 75s"}},//龙光倍力丸/Loong Aura Amplification Pellets
-            {2247,new Desc{ "75秒内+10%", "+10% in 75s"}},//避凶药/Evil Repelling Medicament
+            {2236,new Desc{ "回复40%", "Recover 40%"}},//镜中丹/Mirage Pill
+            {2245,new Desc{ }},//龙光倍力丸/Loong Aura Amplification Pellets
+            {2247,new Desc{ }},//避凶药/Evil Repelling Medicament
             
-            {2251,new Desc{ "+480", "+480"}},//加味参势丸/Enhanced Ginseng Pellets
-            {2252,new Desc{ "30秒内+10/秒", "+10/s in 30s"}},//参势丸/Ginseng Pellets
-            {2253,new Desc{ "75秒内+15攻击", "+15 ATK in 75s"}},//聚珍伏虎丸/Enhanced Tiger Subduing Pellets
+            {2251,new Desc{ }},//加味参势丸/Enhanced Ginseng Pellets
+            {2252,new Desc{ }},//参势丸/Ginseng Pellets
+            {2253,new Desc{ }},//聚珍伏虎丸/Enhanced Tiger Subduing Pellets
             
-            {2204,new Desc{ "75秒内+30", "+30 in 75s"}},//温里散/Body-Warming Powder
-            {2205,new Desc{ "75秒内+30", "+30 in 75s"}},//度瘴散/Antimiasma Powder
-            {2206,new Desc{ "75秒内+30", "+30 in 75s"}},//神霄散/Shock-Quelling Powder
+            {2204,new Desc{ }},//温里散/Body-Warming Powder
+            {2205,new Desc{ }},//度瘴散/Antimiasma Powder
+            {2206,new Desc{ }},//神霄散/Shock-Quelling Powder
             {2207,new Desc{ "120秒", "+60 in 130s"}},//轻身散/Body-Fleeting Powder
-            {2208,new Desc{ "75秒内+30", "+30 in 75s"}},//清凉散/Body-Cooling Powder
+            {2208,new Desc{ }},//清凉散/Body-Cooling Powder
             {2213,new Desc{ "75秒", "75s"}},//登仙散/Ascension Powder
             //{,new Desc{ "120秒", "130s"}},//九转还魂丹/Tonifying Decoction
 
@@ -83,32 +83,32 @@ namespace EffectDetailDescription
             {2022,new Desc{ "+75.0", "+75.0"}},//松醪/Pinebrew
             {2023,new Desc{ "+15.0元气;+20法宝能量", "+15.0 Qi;+20.0 Treasure Energy"}},//九霞清醑/Sunset of the Nine Skies
     
-            {2303,new Desc{ "满血时+20法力", "+20 when 100% HP"}},//龟泪/Turtle Tear
+            {2303,new Desc{ }},//龟泪/Turtle Tear
             {2304,new Desc{ "10秒内+2秒持续", "+2s Duration in 10s"}},//困龙须/Stranded Loong's Whisker--92304 Passive 192
             {2305,new Desc{ "10秒内+25%持续时间", "25% Duration in 10s"}},//灵台药苗/Moutain Lingtai Seedlings --92305 Passive 193
             //Talent 2100 AtkMul 20% 时间10秒，是10秒内施放隐身还是10秒内打出破隐?
             {2306,new Desc{ "10秒内？+20%攻击", "+20% ATK in 10s?"}},//十二重楼胶/Breath of Fire
             {2307,new Desc{ "5秒内共回复6%上限(1%*6)", "total 6% MaxHP(1%*6) in 5s"}},//瑶池莲子/Celestial Lotus Seeds
-            {2308,new Desc{ "回复33.33%气力上限,15秒内+50%气力回复", "Recover 33.33% MaxSt.+50% Stamina Recover in 15s"}},//不老藤/Undying Vine
-            {2309,new Desc{ "15秒内+5%", "+5% in 15s"}},//虎舍利/Tiger Relic--92306
-            {2310,new Desc{ "15秒内+10% ", "+10% in 15s"}},//梭罗琼芽/Laurel Buds
-            {2311,new Desc{ "15秒内+15", "+15 in 15s"}},//甜雪/Sweet Ice
-            {2312,new Desc{ "15秒内+15", "+15 in 15s"}},//霹雳角/Thunderbolt Horn
+            {2308,new Desc{ }},//不老藤/Undying Vine
+            {2309,new Desc{ }},//虎舍利/Tiger Relic--92306
+            {2310,new Desc{ }},//梭罗琼芽/Laurel Buds
+            {2311,new Desc{ }},//甜雪/Sweet Ice
+            {2312,new Desc{ }},//霹雳角/Thunderbolt Horn
             {2314,new Desc{ "低于20%血量时额外回复+12%生命上限", "+20% MaxHP when under 20% HP"}},//紫纹缃核/Purple-Veined Peach Pit
             {2315,new Desc{ "15%？", "15%？"}},//蜂山石髓/Bee Mountain Stone
-            {2316,new Desc{ "30%减伤", "30% Damage Reduction"}},//铁弹/Iron Pellet
-            {2317,new Desc{ "15秒内踉跄;定身法-2秒，安神法-5秒，聚形散气-3秒，铜头铁臂-2秒，毫毛-8秒", "Stagger in 15s;Immobilize -2s,Ring of Fire -5s,Cloud Step -3s,Rock Solid-2s,A Pluck of Many -8s"}},//瞌睡虫蜕/Slumbering Beetle Husk
+            {2316,new Desc{ }},//铁弹/Iron Pellet
+            {2317,new Desc{ "15秒内踉跄并增加50%气力消耗;定身法-2秒，安神法-5秒，聚形散气-3秒，铜头铁臂-2秒，毫毛-8秒", "Stagger and +50% Stamina Consume in 15s;Immobilize -2s,Ring of Fire -5s,Cloud Step -3s,Rock Solid-2s,A Pluck of Many -8s"}},//瞌睡虫蜕/Slumbering Beetle Husk
             {2318,new Desc{ "10秒", "10s"}},//铜丸/Copper Pill
             {2319,new Desc{ "15秒内+5秒持续", "+5s Duration in 15s"}},//血杞子/Goji Shoots --92319? Passive 198
             {2320,new Desc{ "15秒内+0.066秒无敌，0-3段翻滚基础时间0.4/0.433/0.466/0.5秒", "+0.066s in 15s; 0-3 level roll base immue time:0.4/0.433/0.466/0.5"}},//清虚道果/Fruit of Dao--92320 Passive 199 10105-10109
-            {2321,new Desc{ "15秒内+15", "+15 in 15s"}},//火焰丹头/Flame Mediator
-            {2322,new Desc{ "15秒内+5%暴击,+12%移动速度", "+5% CritRate/+12% Speed in 15s"}},//双冠血/Double-Combed Rooster Blood
-            {2323,new Desc{ "15秒内+15", "+15 in 15s"}},//胆中珠/Gall Gem
-            {2324,new Desc{ "11秒内共回复12%生命上限(1%*12)", "total 12% MaxHP(1%*12) in 11s"}},//蕙性兰/Graceful Orchid
-            {2325,new Desc{ "15秒内+5%防御", "+5% in 15s"}},//嫩玉藕/Tender Jade Lotus
-            {2326,new Desc{ "+30", "+30"}},//铁骨银参/Steel Ginseng
+            {2321,new Desc{ }},//火焰丹头/Flame Mediator
+            {2322,new Desc{ }},//双冠血/Double-Combed Rooster Blood
+            {2323,new Desc{ }},//胆中珠/Gall Gem
+            {2324,new Desc{ "11秒内共回复12%生命上限(1%*12)", "total 12% MaxHP(1%*12) in 11s"}},//蕙性兰/Graceful Orchid，11秒持续间隔1秒
+            {2325,new Desc{ }},//嫩玉藕/Tender Jade Lotus
+            {2326,new Desc{ }},//铁骨银参/Steel Ginseng
             //Item 92317 92327 92328
-            {2327,new Desc{ "30秒内+30生命上限", "+30 in 30s"}},//青山骨/Goat Skull
+            {2327,new Desc{ }},//青山骨/Goat Skull
 
         };
         //\["(.*?)"\]=(".*?"),[ ]*\["(.*?)"\]=(".*?"),
@@ -161,31 +161,29 @@ namespace EffectDetailDescription
 	        {17001,new Desc{ "高于1%血量时每秒-3HP,额外回复+15%生命上限", "-3HP/s when over 1% HP.+15% MaxHP Recover"}},//地灵伞盖/Earth Spirit Cap
             {17002,new Desc{ "饮酒后15秒内+10攻击,20秒后-20攻击", "+10 ATK in 15s;-20 ATK after 20s"}},//长嘴脸/Snout Mask
             {17003,new Desc{ "+2%", "+2%"}},//鳖宝头骨/Skull of Turtle Treasure
-            {17004,new Desc{ "15秒内+40", "+40 in 15s"}},//山珍蓑衣/Ginseng Cape
+            {17004,new Desc{ }},//山珍蓑衣/Ginseng Cape
             //蜢虫头907005 97005、97015 185、186
             {17005,new Desc{ "+15%/20% 动作倍率", "+15%/20% SkillEffect"}},//长须头面/Locust Antennae Mask
             //Talent 2702
-            {17006,new Desc{ "+15%攻击", "+15%ATK"}},//白脸子/Grey Wolf Mask
+            {17006,new Desc{ }},//白脸子/Grey Wolf Mask
             {17008,new Desc{ "阳:+20%伤害减免。阴:20%暴击-30%伤害减免", "Yang:+20% DamageReduction. Yin:+20% Crit,-30% DamageReduction"}},//阴阳法衣/Yin-Yang Daoist Robe
             //Talent 2713/2714
-            {17010,new Desc{ "300秒内+40生命/法力上限", "+40 MaxHP/MP in 300s"}},//南海念珠/Guanyin's Prayer Beads
-            {17011,new Desc{ "-10%", "-10%"}},//金刚护臂/Vajra Armguard
-            
-            //套装
-            {10701,new Desc{ "低于半血时+15攻击", "+15ATK under 50% HP"}},//厌火夜叉面/Yaksha Mask of Outrage
+            {17010,new Desc{ "300秒内+40生命/法力上限", "+40 MaxHP/MP in 300s"}},//南海念珠/Guanyin's Prayer Beads ,类似定颜珠，自动生成的太长了
+            {17011,new Desc{ }},//金刚护臂/Vajra Armguard
+            {10701,new Desc{ }},//厌火夜叉面/Yaksha Mask of Outrage
             {11601,new Desc{ "+10棍势，强硬时+30", "+10 Focus.+30 when Tenacity"}},//大力王面/Bull King's Mask
-            {10302,new Desc{ "低于半血时每秒+1.5%生命上限(水中+2%)", "+1.5%MaxHP/s under 50% MaxHP;+2% MaxHP/s in water"}},//锦鳞战袍/Serpentscale Battlerobe
-            {11001,new Desc{ "+100棍势", "+100"}},//金身怒目面/Golden Mask of Fury
+            {10302,new Desc{ "低于半血时每秒+1.5%生命上限(水中+2%)", "+1.5%MaxHP/s under 50% MaxHP;+2% MaxHP/s in water"}},//锦鳞战袍/Serpentscale Battlerobe，一个buff具有两个效果：回血，施加另一个处于水中回血的buff
+            {11001,new Desc{ "+100棍势", "+100"}},//金身怒目面/Golden Mask of Fury，2111buff触发施加2112，2112没有效果，2113的激活条件是具有2112
             //没有11902，从11912开始
             {11912,new Desc{ "+15", "+15"}},//昆蚑毒敌甲/Venomous Sting Insect Armor
-            {11803,new Desc{ "3秒内+15%攻击", "+15% ATK in 3s"}},//玄铁硬手/Iron-Tough Gauntlets
+            {11803,new Desc{ "3秒内+15%攻击", "+15% ATK in 3s"}},//玄铁硬手/Iron-Tough Gauntlets 把IronBodyBuff覆盖为2171
             {10603,new Desc{ "每消耗一段棍势8秒内+6%暴击", "+6% in 8s for each focus level"}},//赭黄臂甲/Ochre Armguard
             {11304,new Desc{ "10秒", "10s"}},//不净泥足/Non-Pure Greaves
             {11204,new Desc{ "+10", "+10"}},//藏风护腿/Galeguard Greaves
             //Talent 2142
-            {11402,new Desc{ "20秒内+10%攻击", "+10%ATK in 20s"}},//羽士戗金甲/Centipede Qiang-Jin Armor
+            {11402,new Desc{ }},//羽士戗金甲/Centipede Qiang-Jin Armor
             //Talent 2098
-            {10904,new Desc{ "+15%攻击", "+15%ATK"}},//乌金行缠/Ebongold Gaiters
+            {10904,new Desc{ "+15%攻击", "+15%ATK"}},//乌金行缠/Ebongold Gaiters //升满级的10934关联到buff2099/2097不知道有什么效果；2091~2099全是，太复杂了
 
             {15012,new Desc{ "5秒内获得共127.5棍势(2.5+25*5)", "Gain 127.5(2.5+25*5) Focus in 5s"}},//狼牙棒/Spikeshaft Staff
             {15007,new Desc{ "每段棍势+5HP(中毒敌人+40)", "+5 HP(40 for Poisoned enemy) for each focus level"}},//昆棍·百眼/Visionary Centipede Staff
@@ -572,7 +570,7 @@ namespace EffectDetailDescription
             //{(int)EBGUAttrFloat.YangAtkBase,new Desc{ "{0}","{0}" } },
             //{(int)EBGUAttrFloat.YinDefBase,new Desc{ "{0}","{0}" } },
             //{(int)EBGUAttrFloat.YangDefBase,new Desc{ "{0}","{0}" } },
-            {(int)EBGUAttrFloat.StaminaCostMultiperBase,new Desc{ "{0}%耐力消耗倍率","{0}% Stamina Cost MultiperBase" } },
+            {(int)EBGUAttrFloat.StaminaCostMultiperBase,new Desc{ "{0}%气力消耗倍率","{0}% Stamina Cost MultiperBase" } },
             {(int)EBGUAttrFloat.TransEnergyMaxBase,new Desc{ "{0}神力上限","{0} Max Might" } },
             //{(int)EBGUAttrFloat.EnergyMinConsumeBase,new Desc{ "{0}","{0}" } },
             {(int)EBGUAttrFloat.EnergyConsumeSpeedBase,new Desc{ "{0}神力消耗速度","{0} Might Consueme Speed" } },
@@ -586,7 +584,7 @@ namespace EffectDetailDescription
             //{(int)EBGUAttrFloat.Atk,new Desc{ "{0}攻击","{0}ATK" } },
             //{(int)EBGUAttrFloat.Def,new Desc{ "{0}","{0}" } },
             //{(int)EBGUAttrFloat.B1Stun,new Desc{ "{0}","{0}" } },
-            {(int)EBGUAttrFloat.Stamina,new Desc{ "{0}耐力","{0}Stamina" } },
+            {(int)EBGUAttrFloat.Stamina,new Desc{ "{0}气力","{0}Stamina" } },
             //{(int)EBGUAttrFloat.StaminaRecover,new Desc{ "{0}","{0}" } },
             //{(int)EBGUAttrFloat.SkillSuperArmor,new Desc{ "{0}","{0}" } },
             //{(int)EBGUAttrFloat.CritRate,new Desc{ "{0}","{0}" } },
@@ -662,9 +660,9 @@ namespace EffectDetailDescription
         public readonly static Desc DefaultDesc = new Desc() { "{0}", "{0}" };
         public readonly static Desc EmptyDesc = new Desc() { "", "" };
         public readonly static Desc DurationFormat = new Desc(){"<Duration>{1}秒内</Duration>{0}","{0}<Duration> in {1}s</Duration>"};
-        public readonly static Desc GreaterFormat = new Desc() { "{0}高于{1}时{2}", "{2} when {0} under {1}" };
-        public readonly static Desc LesserFormat = new Desc() { "{0}不高于{1}时{2}", "{2} when {0} over {1}" };
-        public readonly static Desc FullFormat = new Desc() { "满{0}时{1}", "{1} when full {0}" };
+        public readonly static Desc GreaterFormat = new Desc() { "<Target>目标</Target>{0}高于{1}时{2}", "{2} when<Target> target</Target> {0} over {1}" };
+        public readonly static Desc LesserFormat = new Desc() { "<Target>目标</Target>{0}不高于{1}时{2}", "{2} when<Target> target</Target> {0} under {1}" };
+        public readonly static Desc FullFormat = new Desc() { "<Target>目标</Target>满{0}时{1}", "{1} when<Target> target</Target> full {0}" };
         public readonly static ConstDescDict SpeedNameDictConst = new ConstDescDict() {
             {0b1,new Desc{ "徐行","Walk" } },
             {0b10,new Desc{ "奔跑","Run" } },
