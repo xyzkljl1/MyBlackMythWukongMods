@@ -53,6 +53,7 @@ namespace PlayerStatus
     public static class Config
     {
         public static bool Enable = true;
+        public static float freq = 1.0f;
         public static FVector2D HPOffset = new FVector2D(0,0);
         public static FVector2D MPOffset = new FVector2D(0, 0);
         public static FVector2D StOffset = new FVector2D(0, 0);
@@ -160,7 +161,7 @@ namespace PlayerStatus
     public class TimerComp: UActorCompBaseCS
     {
         public float sumDelta = 0.0f;
-        static public readonly float targetDelta = 1.0f;
+        static public float targetDelta = 1.0f;
         UTextBlock? HPText = null;
         UTextBlock? MPText = null;
         UTextBlock? StText = null;
@@ -177,6 +178,9 @@ namespace PlayerStatus
         public override void OnAttach()
         {
             SetCanTick(true);
+            if (Config.freq < 0.01f) Config.freq = 0.01f;
+            if (Config.freq > 100.0f) Config.freq = 100.0f;
+            targetDelta = 1 / Config.freq;
             //RecalculateCanTick();
         }
         public override int GetTickGroupMask()

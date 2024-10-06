@@ -12,12 +12,12 @@ using System;
 using LitJson;
 using ILRuntime.Runtime;
 #nullable enable
-namespace Test
+namespace ModConfigMenu
 {
     public static class MyExten
     {
         private static UWorld? world;
-        public static string Name => "Test";
+        public static string Name => "ModConfigMenu";
         public static FieldType? GetFieldOrProperty<FieldType>(this object obj, String field_name) where FieldType : class
         {
             var t = obj.GetType();
