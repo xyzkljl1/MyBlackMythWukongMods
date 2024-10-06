@@ -30,6 +30,9 @@ using UnrealEngine.Engine;
 using static System.Net.Mime.MediaTypeNames;
 using UnrealEngine.UMG;
 using static b1.BGW_UIEventCollection;
+using B1UI.GSUI;
+using GSE.GSUI;
+using b1.UI;
 #nullable enable
 namespace Test
 {
@@ -50,14 +53,25 @@ namespace Test
             // harmony = new Harmony(Name);
             // Harmony.DEBUG = true;
         }
+        UTextBlock tmp;
         public void Init()
         {
 
             Log("MyMod::Init called.Start Timer");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
             Utils.RegisterKeyBind(Key.O, delegate {
-            var t = typeof(EBGUAttrFloat);
-                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(),EBGUAttrFloat.StaminaRecoverBase,0);
+                var world = MyExten.GetWorld();
+                var battlemain=GSUI.UIMgr.FindUIPage(world, (int)EUIPageID.BattleMainCon) as UIBattleMainCon;
+                var panel=battlemain.GetFieldOrProperty<UCanvasPanel>("PlayerStCon");
+                tmp=UObject.NewObject<UTextBlock>();
+                tmp.SetText(FText.FromString("111111"));
+                Log($"{tmp.GetFullName()}");
+                var panelslot=panel.AddChild(tmp) as UCanvasPanelSlot;
+                panelslot.SetPosition(new FVector2D(1000,200));
+                //var slot = UnrealEngine.UMG.UWidgetLayoutLibrary.SlotAsCanvasSlot(textblock!);
+                /*
+                var t = typeof(EBGUAttrFloat);
+                //BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(),EBGUAttrFloat.StaminaRecoverBase,0);
                 enable = !enable;
                 //foreach (var pair in BGW_GameDB.GetAllBuffDesc())
                 //    if (pair.Value.BuffActiveCondition.ConditionType == EGSBuffAndSkillEffectActiveCondition.HasTalent)
@@ -65,10 +79,37 @@ namespace Test
                     {
                             //Log($"FFFFuck {pair.Value.ID}");
                     }
-                int ct=0;
+                //int ct=0;
                 //1061301,1061401,1021301,1021401,1086301,1086401,1088301,1088401
+                var tmpStr = "";
+                foreach(var effect in BGW_GameDB.GetAllSkillEffectDesc())
+                {
+                    var id = effect.Key;
+                    var effectDesc=effect.Value;
+                    if(effectDesc.EffectType== EBuffAndSkillEffectType.SkillDamage)
+                    {
+                        if (effectDesc.EffectParamsStr.Count > 0 && effectDesc.EffectParamsStr[0].Contains("主角"))
+                        {
+                            tmpStr += $"{id} /";
+                            foreach (var str in effectDesc.EffectParamsStr)
+                                tmpStr += $"{str}/";
+                            if (effectDesc.EffectParamsFloat.Count > 2)
+                                tmpStr += $"({effectDesc.EffectParamsFloat[2] / 10000},{effectDesc.EffectParamsFloat[1]})/";
+                            if (effectDesc.EffectActiveCondition.ConditionType != EGSBuffAndSkillEffectActiveCondition.Always)
+                                tmpStr += $" Condition:{effectDesc.EffectActiveCondition.ConditionType.ToString()}/";
+                            if (effectDesc.EffectParamsInt.Count > 5)
+                            {
+                                var ele = (EAbnormalStateType)effectDesc.EffectParamsInt[5];
+                                if(ele!= EAbnormalStateType.None)
+                                    tmpStr += $"{ele.ToString()}";                              
+                            }
+                            tmpStr += "\n";
 
-
+                        }
+                    }
+                }
+                File.WriteAllText("tmp.txt", tmpStr);
+                */
                 //Log($"{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.SpecialEnergy)}/{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(),EBGUAttrFloat.SpecialEnergyMax)}");
             });
 

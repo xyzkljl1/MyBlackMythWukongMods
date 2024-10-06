@@ -61,7 +61,7 @@ namespace Test
                 if (bUI_BattleInfoCS is null) continue;
                 bUI_BattleInfoCS.CallPrivateFunc("ShowHPChangeNum",new object[] { param});
             }
-                foreach (object @object in UObject.GetObjects<BUI_MSimNum>())
+            foreach (object @object in UObject.GetObjects<BUI_MSimNum>())
             {
                 BUI_MSimNum? numWidget = @object as BUI_MSimNum;
                 Log($"Find2 ___ {numWidget == null}");
@@ -108,7 +108,6 @@ namespace Test
                 }
                 if(tmp != null)
                     bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Remove(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, tmp);
-
             }
 
 
