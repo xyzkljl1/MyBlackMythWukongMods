@@ -5,7 +5,7 @@ using BtlShare;
 using CSharpModBase;
 using CSharpModBase.Input;
 using ResB1;
-// using HarmonyLib;
+using HarmonyLib;
 using GSE.GSSdk;
 using System.Reflection;
 using System.Collections.Generic;
@@ -38,6 +38,8 @@ using b1.UI;
 using B1UI.GSUI;
 using System.Numerics;
 using b1.Plugins.GSInput;
+using UnrealEngine.SlateCore;
+using UnrealEngine.Plugins.Niagara;
 #nullable enable
 namespace PlayerStatus
 {
@@ -54,7 +56,8 @@ namespace PlayerStatus
     {
         public static bool Enable = true;
         public static float freq = 1.0f;
-        public static FVector2D HPOffset = new FVector2D(0,0);
+        public static List<float> ColorRGBA = new List<float> { 1f, 1f, 1f, 1f };
+        public static FVector2D HPOffset = new FVector2D(0, 0);
         public static FVector2D MPOffset = new FVector2D(0, 0);
         public static FVector2D StOffset = new FVector2D(0, 0);
         public static FVector2D VigorOffset = new FVector2D(0, 0);
@@ -103,6 +106,16 @@ namespace PlayerStatus
                             if (tmp.Type.ToLower() == "list<string>" && value.IsArray)
                             {
                                 var x = JsonMapper.ToObject<List<string>>(JsonMapper.ToJson(value));
+                                fieldInfo.SetValue(null, x);
+                            }
+                            else
+                                MyExten.Log($"{fieldInfo.FieldType.Name} no match {tmp.Type}");
+                        }
+                        if (fieldInfo.FieldType == typeof(List<float>))
+                        {
+                            if (tmp.Type.ToLower() == "list<float>" && value.IsArray)
+                            {
+                                var x = JsonMapper.ToObject<List<float>>(JsonMapper.ToJson(value));
                                 fieldInfo.SetValue(null, x);
                             }
                             else
@@ -185,12 +198,13 @@ namespace PlayerStatus
         }
         public override int GetTickGroupMask()
         {
-            return 1;
+            return CanTick()?1:0;
         }
-        public void Uninit()
+        public void DeInit()
         {
-            SetCanTick(false);
-            RecalculateCanTick();
+            //this.SetFieldOrProperty("IsCanTickVal", false);
+            if(this.OwnerAsCharacterCS is not null)
+                SetCanTick(false);
             if(HPText!=null)
             {
                 HPText.SetVisibility(ESlateVisibility.Hidden);
@@ -212,11 +226,15 @@ namespace PlayerStatus
             if (battleMain == null)
                 throw new Exception("Fuck");
             var playerCon = battleMain.GetFieldOrProperty<UCanvasPanel>("PlayerStCon");
-            var treasureCon = battleMain.GetFieldOrProperty<UCanvasPanel>("TreasureCon");
             var biTrans = battleMain.GetFieldOrProperty<BI_TransCS>("Trans");
             var ShortcutSpellCon = battleMain.GetFieldOrProperty<UCanvasPanel>("ShortcutSpellCon");
             //var ShortcutSpellCS = battleMain.GetFieldOrProperty<BI_ShortcutSpellCS>("ShortcutSpellCS");
-            var SoulSkillCon = battleMain.GetFieldOrProperty<UCanvasPanel>("SoulSkillCon");
+            //var treasureCon = battleMain.GetFieldOrProperty<UCanvasPanel>("TreasureCon");
+            //var SoulSkillCon = battleMain.GetFieldOrProperty<UCanvasPanel>("SoulSkillCon");
+            //直接往SoulSkillCon或BI_RZDSkill.Root里加东西，设置Position后会把原控件挤跑
+            //var RZDPanel = GSUIUtil.FindChildWidget(battleMain.FindChildWidget("BI_RZDSkill") as BI_SoulSkillCS, "TreasureCon") as UCanvasPanel;
+            var RZDPanel = GSUIUtil.FindChildWidget(battleMain.FindChildWidget("BI_RZDSkill") as BI_SoulSkillCS, "TreasureCon") as UCanvasPanel;
+            var treasurePanel = GSUIUtil.FindChildWidget(battleMain.GetFieldOrProperty<BI_TreasureCS>("Treasure"), "TreasureCon") as UCanvasPanel;
             var StickLevel = battleMain.GetFieldOrProperty<BI_StickLevelCS>("StickLevel");
             HPText = UObject.NewObject<UTextBlock>();
             MPText = UObject.NewObject<UTextBlock>();
@@ -233,37 +251,55 @@ namespace PlayerStatus
                 font.Size = 16;
                 textblock.SetFont(font);
             }
+            if (Config.ColorRGBA.Count == 4)
+            {
+                var color = new FSlateColor();
+                color.SpecifiedColor.R = Config.ColorRGBA[0];
+                color.SpecifiedColor.G = Config.ColorRGBA[1];
+                color.SpecifiedColor.B = Config.ColorRGBA[2];
+                color.SpecifiedColor.A = Config.ColorRGBA[3];
+                foreach (var textblock in CDTexts)
+                    textblock.SetColorAndOpacity(color);
+                HPText.SetColorAndOpacity(color);
+                MPText.SetColorAndOpacity(color);
+                StText.SetColorAndOpacity(color);
+                VigorText.SetColorAndOpacity(color);
+                FabaoText.SetColorAndOpacity(color);
+                TransText.SetColorAndOpacity(color);
+                TransFocusText.SetColorAndOpacity(color);
+            }
+            (RZDPanel!.AddChild(VigorText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(20 + Config.VigorOffset.X, 0 + Config.VigorOffset.Y));
             (playerCon!.AddChild(HPText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(1000 + Config.HPOffset.X, -180 + Config.HPOffset.Y));
             (playerCon!.AddChild(MPText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(1000 + Config.MPOffset.X, -130 + Config.MPOffset.Y));
             (playerCon!.AddChild(StText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(1000 + Config.StOffset.X, -80 + +Config.StOffset.Y));
-            (treasureCon!.AddChild(FabaoText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(0+Config.FabaoOffset.X, 0 + Config.FabaoOffset.Y));
+            (treasurePanel!.AddChild(FabaoText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(0+Config.FabaoOffset.X, 0 + Config.FabaoOffset.Y));
 
             //手柄or键盘
             if(BGW_EnhancedInputMgrV2.GetCurrentInputType() == EGSInputType.Gamepad)
             {
-                (ShortcutSpellCon!.AddChild(TransText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-210 + Config.CDOffset.X, -630 + Config.CDOffset.Y));
+                (ShortcutSpellCon!.AddChild(TransText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-210 + Config.TransOffset.X, -630 + Config.TransOffset.Y));
                 (ShortcutSpellCon!.AddChild(CDTexts[0]) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-440 + Config.CDOffset.X, -630 + Config.CDOffset.Y));
                 (ShortcutSpellCon!.AddChild(CDTexts[1]) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-290 + Config.CDOffset.X, -730 + Config.CDOffset.Y));
                 (ShortcutSpellCon!.AddChild(CDTexts[2]) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-290 + Config.CDOffset.X, -530 + Config.CDOffset.Y));
             }
             else
             {
-                (ShortcutSpellCon!.AddChild(TransText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-200 + Config.CDOffset.X, -600 + Config.CDOffset.Y));
+                (ShortcutSpellCon!.AddChild(TransText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-200 + Config.TransOffset.X, -600 + Config.TransOffset.Y));
                 (ShortcutSpellCon!.AddChild(CDTexts[0]) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-560 + Config.CDOffset.X, -600 + Config.CDOffset.Y));
                 (ShortcutSpellCon!.AddChild(CDTexts[1]) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-420 + Config.CDOffset.X, -600 + Config.CDOffset.Y));
                 (ShortcutSpellCon!.AddChild(CDTexts[2]) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-305 + Config.CDOffset.X, -600 + Config.CDOffset.Y));
             }
-            (SoulSkillCon!.AddChild(VigorText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(20 + Config.VigorOffset.X, 0 + Config.VigorOffset.Y));
             ((GSUIUtil.FindChildWidget(StickLevel, "RootCon") as UCanvasPanel)!.AddChild(FocusText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-340 + Config.FocusOffset.X, -350 + Config.FocusOffset.Y));
             var styleCon = (GSUIUtil.FindChildWidget(biTrans, "TransStyleCon") as UCanvasPanel);
             if(styleCon != null)
-                (styleCon!.AddChild(TransFocusText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-300 + Config.FocusOffset.X, -300 + Config.FocusOffset.Y));
+                (styleCon!.AddChild(TransFocusText) as UCanvasPanelSlot)!.SetPosition(new FVector2D(-340 + Config.FocusOffset.X, -350 + Config.FocusOffset.Y));
             else
                 Error("Can't find Trans Style Con");
             Log($"Init Widgets");
         }
         public override void OnTickWithGroup(float DeltaTime, int TickGroup)
         {
+            //Log("Tick");
             //MyExten.Log($"Tick {DeltaTime}");
             sumDelta += DeltaTime;
             if (sumDelta < targetDelta)
@@ -341,71 +377,79 @@ namespace PlayerStatus
             //MyExten.Log($"Tick {ct++}");
         }
     }
+    [HarmonyPatch(typeof(BGUPlayerCharacterCS), nameof(BGUPlayerCharacterCS.AfterInitAllComp))]
+    class Patch
+    {
+        static void Postfix(BGUPlayerCharacterCS __instance)
+        {
+            MyExten.Log("Start Register Comp");
+            if (__instance.ActorCompContainerCS == null)
+            {
+                MyExten.Error("No Comp Container");
+                return;
+            }
+            MyMod.RegisterComp(__instance);
+        }
+    }
+
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.0";
-        // private readonly Harmony harmony;
-        public uint LastCharacterID = 0;
-        public TimerComp timerComp = new TimerComp();
+        public string Version => "2.1";
+        private readonly Harmony harmony;
+        public static TimerComp timerComp = new TimerComp();
 
         void Log(string i) { MyExten.Log(i); }
         void Error(string i) { MyExten.Error(i); }
         void DebugLog(string i) { MyExten.DebugLog(i); }
 
-        public System.Timers.Timer initTimer = new System.Timers.Timer(3000);
-
         public MyMod()
         {
-            // harmony = new Harmony(Name);
-            // Harmony.DEBUG = true;
+            harmony = new Harmony(Name);
+             //Harmony.DEBUG = true;
         }
         public void Init()
         {
             Config.LoadConfig();
-            Log("MyMod::Init called.Start Timer");
-            initTimer.Start();
-            initTimer.Elapsed += (Object source, ElapsedEventArgs e) => RegisterComp();
+            Log("MyMod::Init called.");
+            //RegisterComp On Reload
+            if (Config.Enable)
+            {
+                var pawn = MyExten.GetBGUPlayerCharacterCS();
+                if (pawn is not null)
+                {
+                    var character = MyExten.GetBGUPlayerCharacterCS();
+                    if (character is not null)
+                        Utils.TryRunOnGameThread(() => RegisterComp(character));
+                }
+            }
             // hook
-            // harmony.PatchAll();
+            harmony.PatchAll();
+            //Log("MyMod::Init:PatchAll Done");
+        }
+        static public void RegisterComp(BGUPlayerCharacterCS character)
+        {
+            var compList = character.ActorCompContainerCS.GetFieldOrProperty<List<UActorCompBaseCS>>("CompCSs");
+            if (compList is null) return;
+            TimerComp? myActorComp = null;
+            foreach (var comp in compList)
+                if (comp.GetType() == typeof(TimerComp))
+                    myActorComp = (comp as TimerComp)!;
+            if (myActorComp == null)
+            {
+                //character.ActorCompContainerCS.AddComp(new MyActorComp());
+                character.ActorCompContainerCS.AddComp(timerComp);
+                MyExten.Log($"Register Comp To {character.GetUniqueID()}");
+                character.ActorCompContainerCS.RecalculateCanTick();
+            }
+            else
+                MyExten.Log($"Already Registered {character.GetUniqueID()}");
         }
         public void DeInit() 
         {
-            initTimer.Dispose();
-            timerComp.Uninit();
+            timerComp.DeInit();
             Log($"DeInit");
-            // harmony.UnpatchAll();
-        }
-        public void RegisterComp()
-        {
-            if (!Config.Enable)
-                return;
-            var pawn=MyExten.GetBGUPlayerCharacterCS();
-            if (pawn == null)
-                return;
-            var character = MyExten.GetBGUPlayerCharacterCS();
-            if (character == null)
-                return;
-            if(character.GetUniqueID()!= LastCharacterID)
-            {
-                var compList = character.ActorCompContainerCS.GetFieldOrProperty<List<UActorCompBaseCS>>("CompCSs");
-                if (compList is null) return;
-                TimerComp? myActorComp = null;
-                foreach (var comp in compList)
-                    if (comp.GetType() == typeof(TimerComp))
-                        myActorComp = (comp as TimerComp)!;
-                if(myActorComp == null)
-                    Utils.TryRunOnGameThread(() =>
-                    {
-                        //character.ActorCompContainerCS.AddComp(new MyActorComp());
-                        character.ActorCompContainerCS.AddComp(timerComp);
-                        Log($"Register Comp To {character.GetUniqueID()}");
-                        character.ActorCompContainerCS.RecalculateCanTick();
-                    });
-                else
-                    Log($"Already Registered {character.GetUniqueID()}");
-                LastCharacterID =character.GetUniqueID();
-            }
+            harmony.UnpatchAll();
         }
     }
 }
