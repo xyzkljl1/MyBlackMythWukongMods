@@ -545,7 +545,7 @@ namespace EffectDetailDescription
             //{(int)EBGUAttrFloat.CritRateDefBase,new Desc{ "{0}","{0}" } },
             //{(int)EBGUAttrFloat.CritDmgMulDefBase,new Desc{ "{0}","{0}" } },
             {(int)EBGUAttrFloat.DmgAdditionBase,new Desc{ "{0}%伤害加成","{0}% Damage Bonus" } },
-            {(int)EBGUAttrFloat.DmgDefBase,new Desc{ "{0}%减伤","{0}% Damage Bonus" } },
+            {(int)EBGUAttrFloat.DmgDefBase,new Desc{ "{0}%减伤","{0}% Damage Reduction" } },
             //{(int)EBGUAttrFloat.BlockCollapseArmorMaxBase,new Desc{ "{0}","{0}" } },
             {(int)EBGUAttrFloat.DingshenDefAdditionBase,new Desc{ "{0}定身抗性","{0} Immobilize Resist" } },
             //{(int)EBGUAttrFloat.FreezeAbnormalAccMaxBase,new Desc{ "{0}","{0}" } },

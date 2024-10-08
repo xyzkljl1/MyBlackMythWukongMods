@@ -14,6 +14,25 @@ using ILRuntime.Runtime;
 #nullable enable
 namespace ModConfigMenu
 {
+    public class MyCSharpMod : CSharpModBase.ICSharpMod
+    {
+        public string Name => MyExten.Name;
+        public string Version => "1.0";
+
+        public void Log(string i) { MyExten.Log(i); }
+        public void Error(string i) { MyExten.Error(i); }
+        public void DebugLog(string i) { MyExten.DebugLog(i); }
+        public virtual void Init()
+        {
+            Log("MyMod::Init.");
+            // hook
+            // harmony.PatchAll();
+        }
+        public virtual void DeInit()
+        {
+            Log("MyMod::DeInit.");
+        }
+    }
     public static class MyExten
     {
         private static UWorld? world;
