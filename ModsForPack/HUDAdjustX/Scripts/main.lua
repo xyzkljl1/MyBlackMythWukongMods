@@ -3,9 +3,10 @@ local ModName="[HUDAdjustX] "
 --version:1.2
 local config = require("hudadjustx-config")
 local WidgetLib=nil
-local hooked=false
+--local hooked=false
 
 RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context,pawn)
+	--[[
 	if not hooked then
 		--变身有好几种，用到时才会加载
 		NotifyOnNewObject("/Script/b1-Managed.BI_TransStyleCS", function(ConstructedObject)
@@ -24,13 +25,14 @@ RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context,p
 					panel["Slots"]:ForEach(function(index,elem)
 						--print(tostring(index))
 						--print(tostring(elem:get():GetFullName()))
-						elem:get():SetPosition({X=config.fpbar_x+400,Y=config.fpbar_y+80})
+						--elem:get():SetPosition({X=config.fpbar_x+400,Y=config.fpbar_y+80})
 					end)
 				end
 			end)
 		end)
 		hooked=true
 	end
+	]]--
 
     if not pawn:get():GetFullName():find("Unit_Player_Wukong_C") then return end
 	ExecuteWithDelay(config.init_delay*1000, function()
@@ -99,6 +101,7 @@ function SetParam(message)
 	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.HPBar"),config.hpbar_x-110-16,config.hpbar_y+200-3)
 	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.EnergyBar"),config.hpbar_x-110-14,config.hpbar_y+200+43)--神力条,即变身持续时间
 	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.BI_ShortcutSkill"),config.skill_x,config.skill_y)
+	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.TransStyleCon"),config.fpbar_x,config.fpbar_y)
 	
 	--变身相关 BI_TransStyle_14_C 寅虎 13石双双
 		--[[transStyle=FindFirstOf("BI_TransStyle_14_C")
