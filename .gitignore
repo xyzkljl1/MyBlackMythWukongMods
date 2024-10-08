@@ -25,3 +25,5 @@
 /CSharpMods/*/bin
 /CSharpMods/*/obj
 /ModsForPack
+/CSharpMods/Test/.vs
+/CSharpMods/DashengMode/.vs
