@@ -5,7 +5,7 @@ using BtlShare;
 using CSharpModBase;
 using CSharpModBase.Input;
 using ResB1;
-// using HarmonyLib;
+using HarmonyLib;
 using GSE.GSSdk;
 using System.Reflection;
 using System.Collections.Generic;
@@ -33,6 +33,7 @@ using static b1.BGW_UIEventCollection;
 using System.Text.Json.Serialization;
 using ILRuntime.CLR.Utils;
 using b1.BGW;
+using Novell.Directory.Ldap.Utilclass;
 #nullable enable
 namespace RealDamageNumber
 {
@@ -120,140 +121,50 @@ namespace RealDamageNumber
             MyExten.Log($"Load Config Done :{DamageNumbers.Count} {BigDamageNumbers.Count} {EnemyDamageNumbers.Count}");
         }
     }
+    [HarmonyPatch(typeof(BUI_MSimNum), nameof(BUI_MSimNum.SetDamageNumParam))]
+    class Patch
+    {
+        static public Random rnd = new Random();
+        static void Postfix(BUI_MSimNum __instance,DamageNumShowParam ShowParam, DamageNumParam Param, BGWDataAsset_DamageNumConfig DamageNumConfig)
+        {
+            string text = "";
+            if (Param.AttackerTeamType == EDmgNumUITeamType.Enemy && Param.DamageNum != 0)
+            {
+                //注意DamagenNum是负数
+                if ((-Param.DamageNum) > Config.BigDamageCap && Config.BigDamageNumbers.Count > 0)
+                    text = Config.BigDamageNumbers[rnd.Next(Config.BigDamageNumbers.Count)];
+                else if (Config.DamageNumbers.Count > 0)
+                    text = Config.DamageNumbers[rnd.Next(Config.DamageNumbers.Count)];
+            }
+            else if (Param.AttackerTeamType == EDmgNumUITeamType.Hero && Config.EnemyDamageNumbers.Count > 0 && Param.DamageNum != 0)
+                text = Config.EnemyDamageNumbers[rnd.Next(Config.EnemyDamageNumbers.Count)];
+            if (text != "" && Config.Enable)
+                __instance.CallPrivateFunc("UpdateDamageNum", new object[] { text });
+        }
+    }
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.0";
-        // private readonly Harmony harmony;
-        public uint LastBattleInfoID = 0;
-        public Delegate? LastRemovedDelegate = null;
-        public Random rnd=new Random();
+        public string Version => "1.1";
+        private readonly Harmony harmony;
 
         void Log(string i) { MyExten.Log(i); }
         void Error(string i) { MyExten.Error(i); }
         void DebugLog(string i) { MyExten.DebugLog(i); }
 
-        public System.Timers.Timer initTimer = new System.Timers.Timer(5000);
-
         public MyMod()
         {
-            // harmony = new Harmony(Name);
-            // Harmony.DEBUG = true;
-        }
-        public void OnShowDamageNumber(DamageNumParam Param)
-        {
-            DebugLog("Triggered");
-            //注意RunOnGameThread调用12672次后会导致游戏卡死！！！
-            //Utils.TryRunOnGameThread(delegate
-            //{
-                foreach (object @object in UObject.GetObjects<BUI_BattleInfoCS>())
-                {
-                    BUI_BattleInfoCS? bUI_BattleInfoCS = @object as BUI_BattleInfoCS;
-                    if (bUI_BattleInfoCS is null) continue;
-
-                    if (!bUI_BattleInfoCS.GetFieldOrProperty<GSBindProp<bool>>("IsDamageNumEnabled")!.Value)
-                        continue;
-                    string text = "";
-                    if (Param.AttackerTeamType == EDmgNumUITeamType.Enemy&& Param.DamageNum!=0)
-                    {
-                        //注意DamagenNum是负数
-                        if((-Param.DamageNum) > Config.BigDamageCap && Config.BigDamageNumbers.Count>0)
-                            text = Config.BigDamageNumbers[rnd.Next(Config.BigDamageNumbers.Count)];
-                        else if(Config.DamageNumbers.Count > 0)
-                            text = Config.DamageNumbers[rnd.Next(Config.DamageNumbers.Count)];
-                    }
-                    else if(Param.AttackerTeamType==EDmgNumUITeamType.Hero&&Config.EnemyDamageNumbers.Count>0 && Param.DamageNum != 0)
-                        text = Config.EnemyDamageNumbers[rnd.Next(Config.EnemyDamageNumbers.Count)];
-                    if(text!=""&&Config.Enable)
-                    {
-                        DamageNumShowParam? dmgShowParam = bUI_BattleInfoCS.CallPrivateFunc("GetDmgShowParam", new object[] { Param }) as DamageNumShowParam?;
-                        if (dmgShowParam == null || dmgShowParam.Value.DamageType == DamageTypeEnum.NONE) continue;
-                        BUI_MSimNum? bUI_MSimNum = bUI_BattleInfoCS.ReuseWidget(17) as BUI_MSimNum;
-                        if (bUI_MSimNum is null) continue;
-                        bUI_MSimNum.Reset();
-                        if (BGW_PreloadAssetMgr.Get(bUI_BattleInfoCS).DamageNumConfig != null)
-                        {
-                            bUI_MSimNum.SetDamageNumParam(dmgShowParam.Value, Param, BGW_PreloadAssetMgr.Get(bUI_BattleInfoCS).DamageNumConfig);
-                            bUI_MSimNum.CallPrivateFunc("UpdateDamageNum", new object[] { text });
-                            var projInfo = bUI_BattleInfoCS.CallPrivateFunc("CreateDamageProjInfo", new object[] { bUI_MSimNum }) as ProjWidgetInfo;
-                            bUI_BattleInfoCS.CallPrivateFunc("CacheProjWidgetScrPosUpdating", new object[] { bUI_MSimNum, projInfo!, true });
-                            bUI_MSimNum.Play();
-                            DebugLog($"Set Text {text}");
-                        }
-                    }
-                    else
-                        bUI_BattleInfoCS.CallPrivateFunc("ShowHPChangeNum", new object[] { Param });
-
-                    break;
-                }
-            //});
+            harmony = new Harmony(Name);
+            //harmony.DEBUG = true;
         }
         public void Init()
         {
             Config.LoadConfig();
-            Log("MyMod::Init called.Start Timer");
-            initTimer.Start();
-            initTimer.Elapsed += (Object source, ElapsedEventArgs e) => HookEvent();
-            //initTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { HookEvent(); });
-            // hook
-            // harmony.PatchAll();
+            harmony.PatchAll();
         }
         public void DeInit() 
         {
-            initTimer.Dispose();
-            UnHookEvent();
-            Log($"DeInit");
-            // harmony.UnpatchAll();
-        }
-
-        public void HookEvent()
-        {
-            if (!Config.Enable) return;
-            BUI_BattleInfoCS? bUI_BattleInfoCS = null;
-            foreach (var obj in UObject.GetObjects<BUI_BattleInfoCS>())
-                if(obj as BUI_BattleInfoCS is not null)
-                {
-                    bUI_BattleInfoCS=obj as BUI_BattleInfoCS;
-                    break;
-                }
-            if (bUI_BattleInfoCS == null)
-                return;
-            if (LastBattleInfoID!=bUI_BattleInfoCS.GetUniqueID())
-            {
-                LastRemovedDelegate = null;
-                LastBattleInfoID=bUI_BattleInfoCS.GetUniqueID();
-                Log($"Start Hook Battle Info: {LastBattleInfoID}");
-                BGW_UIEventCollection bGW_UIEventCollection = BGW_UIEventCollection.Get(bUI_BattleInfoCS);
-                //删掉原来的Delegate用我的代替
-                bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Combine(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, new BGW_UIEventCollection.Del_UI_ShowHPChangeNum(OnShowDamageNumber));
-                foreach (var func in bGW_UIEventCollection.Evt_UI_ShowHPChangeNum.GetInvocationList())
-                    if (func.Method.Name == "ShowHPChangeNum")
-                    {
-                        Log($"Start Replace Delegate {func.Method.Name}");
-                        LastRemovedDelegate = func;
-                        bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Remove(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, LastRemovedDelegate);
-                        break;
-                    }
-            }
-        }
-        public void UnHookEvent()
-        {
-            if (LastBattleInfoID == 0) return;
-            foreach (object @object in UObject.GetObjects<BUI_BattleInfoCS>())
-            {
-                BUI_BattleInfoCS? bUI_BattleInfoCS = @object as BUI_BattleInfoCS;
-                if (bUI_BattleInfoCS is null) continue;
-                if (bUI_BattleInfoCS.GetUniqueID() != LastBattleInfoID) continue;
-                BGW_UIEventCollection bGW_UIEventCollection = BGW_UIEventCollection.Get(bUI_BattleInfoCS);
-                Log($"Start Unhook:{LastBattleInfoID}");
-                if(LastRemovedDelegate != null)
-                {
-                    bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Combine(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, LastRemovedDelegate);
-                    LastRemovedDelegate = null;
-                    Log($"Give Delegate Back:{LastBattleInfoID}");
-                }
-                bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Remove(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, new BGW_UIEventCollection.Del_UI_ShowHPChangeNum(OnShowDamageNumber));
-            }
+            harmony.UnpatchAll();
         }
     }
 }
