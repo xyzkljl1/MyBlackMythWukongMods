@@ -108,6 +108,10 @@ namespace NoRandomDamage
                             {
                                 fieldInfo.SetValue(null, (float)(double)value);
                             }
+                            else if (tmp.Type.ToLower() == "float" && value.IsInt)
+                            {
+                                fieldInfo.SetValue(null, (float)(int)value);
+                            }
                             else
                                 MyExten.Log($"{fieldInfo.FieldType.Name} no match {tmp.Type}");
                         }
