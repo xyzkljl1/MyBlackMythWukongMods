@@ -190,12 +190,19 @@ namespace ProtobufLoader
             return null;
         }
 
-        public static void Log(string msg)
+        public static void Log(string msg,int verLevel = 0)
         {
+            if (verLevel >= 2 && Config.ShutUp)
+                return;
+            if (verLevel >= 1 && Config.ShuutUp)
+                return;
+            if (Config.ShuuutUp)
+                return;
             Console.WriteLine($"[{Name}]: {msg}");
         }
-        public static void Error(string msg)
+        public static void Error(string msg, int verLevel = 0)
         {
+            //Error永远输出
             Console.WriteLine($"Error! [{Name}]: {msg}");
         }
         public static void DebugLog(string msg)
