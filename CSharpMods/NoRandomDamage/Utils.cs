@@ -1,4 +1,4 @@
-﻿
+﻿using HarmonyLib;
 using b1;
 using UnrealEngine.Engine;
 using UnrealEngine.Runtime;
@@ -14,6 +14,7 @@ using ILRuntime.Runtime;
 #nullable enable
 namespace NoRandomDamage
 {
+
     public static class MyExten
     {
         private static UWorld? world;
@@ -268,35 +269,5 @@ namespace NoRandomDamage
             }
             return ret;
         }
-        public static UWorld? GetWorld()
-        {
-            if (world == null)
-            {
-                UObjectRef uobjectRef = GCHelper.FindRef(FGlobals.GWorld);
-                world = uobjectRef?.Managed as UWorld;
-            }
-            return world;
-        }
-
-        public static APawn GetControlledPawn()
-        {
-            return UGSE_EngineFuncLib.GetFirstLocalPlayerController(GetWorld()).GetControlledPawn();
-        }
-
-        public static BGUPlayerCharacterCS GetBGUPlayerCharacterCS()
-        {
-            return (GetControlledPawn() as BGUPlayerCharacterCS)!;
-        }
-
-        public static BGP_PlayerControllerB1 GetPlayerController()
-        {
-            return (BGP_PlayerControllerB1)UGSE_EngineFuncLib.GetFirstLocalPlayerController(GetWorld());
-        }
-
-        public static BUS_GSEventCollection GetBUS_GSEventCollection()
-        {
-            return BUS_EventCollectionCS.Get(GetControlledPawn());
-        }
-
     }
 }

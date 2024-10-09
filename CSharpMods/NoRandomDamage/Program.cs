@@ -33,6 +33,7 @@ using static b1.BGW_UIEventCollection;
 using System.Text.Json.Serialization;
 using ILRuntime.CLR.Utils;
 using b1.BGW;
+using HarmonyLib;
 #nullable enable
 namespace NoRandomDamage
 {
@@ -47,10 +48,8 @@ namespace NoRandomDamage
     }
     public static class Config
     {
-        public static bool Enable=true;
         public static float Min = 1.0f;
         public static float Max = 1.0f;
-        public static float ReverseChance = 1.0f;
 
         public static void LoadConfig()
         {
@@ -81,10 +80,7 @@ namespace NoRandomDamage
                             value = jsonFieldObject["DefaultValue"];
                         if (value == null)
                         {
-                            if (tmp.Name == "Enable")
-                                Config.Enable = true;
-                            else
-                                MyExten.Error($"No Value For {tmp.Name}");
+                            MyExten.Error($"No Value For {tmp.Name}");
                             continue;
                         }
                         if (fieldInfo.FieldType == typeof(List<string>))
@@ -122,99 +118,44 @@ namespace NoRandomDamage
                 MyExten.Error("Fail to Parse Config File");
                 return;
             }
-
-            MyExten.Log($"Load Config.Random Range {Min}~{Max}");
+            if (Min < 0) Min = 0;
+            if (Max < Min) Max = Min;
+            MyExten.Log($"Load Config.Random Range {Min} ~ {Max}");
         }
     }
-    public class MyMod : ICSharpMod
+    [HarmonyPatch(typeof(BUS_BeAttackedComp), "GetDmgNoiseMultiplier")]
+    class Patch
+    {
+        static public Random rnd = new Random();
+        static bool Prefix(ref float __result)
+        {
+            __result =(float)(MyMod.rnd.NextDouble()*(Config.Max-Config.Min)+Config.Min);
+            //MyExten.Log($"Hook {__result:F2} {Config.Max} {Config.Min}");
+            return false;
+        }
+    }
+    public class MyMod : CSharpModBase.ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.0";
-        // private readonly Harmony harmony;
-        public uint LastBattleInfoID = 0;
-        public Delegate? LastRemovedDelegate = null;
-        public Random rnd=new Random();
+        public virtual string Version => "1.0";
+        protected readonly Harmony harmony;
+        static public Random rnd = new Random();
 
-        void Log(string i) { MyExten.Log(i); }
-        void Error(string i) { MyExten.Error(i); }
-        void DebugLog(string i) { MyExten.DebugLog(i); }
-
-        public System.Timers.Timer initTimer = new System.Timers.Timer(5000);
-
-        public MyMod()
-        {
-            // harmony = new Harmony(Name);
-            // Harmony.DEBUG = true;
-        }
-        public void OnShowDamageNumber(DamageNumParam Param)
-        {
-            DebugLog("Triggered");
-        }
-        public void Init()
+        static public void Log(string i) { MyExten.Log(i); }
+        static public void Error(string i) { MyExten.Error(i); }
+        static public void DebugLog(string i) { MyExten.DebugLog(i); }
+        public MyMod() { harmony = new Harmony(Name); }
+        public virtual void Init()
         {
             Config.LoadConfig();
-            Log("MyMod::Init called.Start Timer");
-            initTimer.Start();
-            initTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(HookEvent);
+            Log("MyMod::Init.");
             // hook
-            // harmony.PatchAll();
+            harmony.PatchAll();
         }
-        public void DeInit() 
+        public virtual void DeInit()
         {
-            initTimer.Dispose();
-            UnHookEvent();
-            Log($"DeInit");
-            // harmony.UnpatchAll();
-        }
-
-        public void HookEvent()
-        {
-            if (!Config.Enable) return;
-            BUI_BattleInfoCS? bUI_BattleInfoCS = null;
-            foreach (var obj in UObject.GetObjects<BUI_BattleInfoCS>())
-                if(obj as BUI_BattleInfoCS is not null)
-                {
-                    bUI_BattleInfoCS=obj as BUI_BattleInfoCS;
-                    break;
-                }
-            if (bUI_BattleInfoCS == null)
-                return;
-            if (LastBattleInfoID!=bUI_BattleInfoCS.GetUniqueID())
-            {
-                LastRemovedDelegate = null;
-                LastBattleInfoID=bUI_BattleInfoCS.GetUniqueID();
-                Log($"Start Hook Battle Info: {LastBattleInfoID}");
-                BGW_UIEventCollection bGW_UIEventCollection = BGW_UIEventCollection.Get(bUI_BattleInfoCS);
-                //删掉原来的Delegate用我的代替
-                bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Combine(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, new BGW_UIEventCollection.Del_UI_ShowHPChangeNum(OnShowDamageNumber));
-                foreach (var func in bGW_UIEventCollection.Evt_UI_ShowHPChangeNum.GetInvocationList())
-                    if (func.Method.Name == "ShowHPChangeNum")
-                    {
-                        Log($"Start Replace Delegate {func.Method.Name}");
-                        LastRemovedDelegate = func;
-                        bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Remove(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, LastRemovedDelegate);
-                        break;
-                    }
-            }
-        }
-        public void UnHookEvent()
-        {
-            if (LastBattleInfoID == 0) return;
-            foreach (object @object in UObject.GetObjects<BUI_BattleInfoCS>())
-            {
-                BUI_BattleInfoCS? bUI_BattleInfoCS = @object as BUI_BattleInfoCS;
-                if (bUI_BattleInfoCS is null) continue;
-                if (bUI_BattleInfoCS.GetUniqueID() != LastBattleInfoID) continue;
-                BGW_UIEventCollection bGW_UIEventCollection = BGW_UIEventCollection.Get(bUI_BattleInfoCS);
-                Log($"Start Unhook:{LastBattleInfoID}");
-                if(LastRemovedDelegate != null)
-                {
-                    bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Combine(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, LastRemovedDelegate);
-                    LastRemovedDelegate = null;
-                    Log($"Give Delegate Back:{LastBattleInfoID}");
-                }
-                bGW_UIEventCollection.Evt_UI_ShowHPChangeNum = (BGW_UIEventCollection.Del_UI_ShowHPChangeNum)Delegate.Remove(bGW_UIEventCollection.Evt_UI_ShowHPChangeNum, new BGW_UIEventCollection.Del_UI_ShowHPChangeNum(OnShowDamageNumber));
-            }
+            Log("MyMod::DeInit.");
+            harmony.UnpatchAll();
         }
     }
 }

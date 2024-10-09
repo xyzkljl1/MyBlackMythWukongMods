@@ -347,7 +347,7 @@ namespace EffectDetailDescription
             //{,new Desc{ "+12", "+12"}},//阳燧珠/Spread the Word
             {200403,new Desc{ "每个增加+4%生命上限的回复量", "+4% MaxHP recover each"}},//遍尝百草/Tongue of A Connoisseur
 
-            {200501,new Desc{ "0-4级棍势气力消耗-20/25/37.5/60,令熟谙天赋效果减半", "0-4 Focus-Level heavy-attack cost :-20/25/37.5/60. Reduce Instinct(talent) effect by half"}},//身轻体快/Nimble Body
+            {200501,new Desc{ "0-4级棍势气力消耗-20/-25/-37.5/-60,令熟谙天赋效果减半", "0-4 Focus-Level heavy-attack cost :-20/-25/-37.5/-60. Reduce Instinct(talent) effect by half"}},//身轻体快/Nimble Body
             {200502,new Desc{ "+60", "+60"}},//福寿长臻/Everlasting Vitality
             {200503,new Desc{ "+15", "+15"}},//灾愆不侵/Divine Safeguard
 
