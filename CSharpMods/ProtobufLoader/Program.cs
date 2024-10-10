@@ -26,6 +26,8 @@ using OssB1;
 using LitJson;
 using System.Collections;
 using static b1.AutoQA.QASimulateWindowsOperations;
+using ILRuntime.Mono.Cecil.Cil;
+using Google.Protobuf.Collections;
 #nullable enable
 namespace ProtobufLoader
 {
@@ -114,7 +116,7 @@ namespace ProtobufLoader
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.1";
+        public string Version => "1.2";
         // private readonly Harmony harmony;
         public Dictionary<Type,Dictionary<int, Google.Protobuf.IMessage?>> RecordBackup = new Dictionary<Type, Dictionary<int, IMessage?>>();
 
@@ -131,7 +133,8 @@ namespace ProtobufLoader
             Config.LoadConfig();
             Log("MyMod::Init called.Start Timer");
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F7, ResetAndLoadAllDataFiles);
-            Utils.RegisterKeyBind(ModifierKeys.Control, Key.F8, ()=>ResetAll(true));
+            Utils.RegisterKeyBind(ModifierKeys.Control, Key.F8, () => ResetAll(true));
+            Utils.RegisterKeyBind(ModifierKeys.Control, Key.F9, SuperReset);
             ResetAndLoadAllDataFiles();
             /*
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F9, () =>
@@ -209,6 +212,12 @@ namespace ProtobufLoader
             ResetAll();
             Log($"DeInit");
             // harmony.UnpatchAll();
+        }
+        public void SuperReset()
+        {
+            //直接重新从pak里读所有数据，包含了Static和Dynamic
+            BGUFunctionLibraryCS.RefreshGameDB();
+            Log("Super Reset Done");
         }
         public void ResetAndLoadAllDataFiles()
         {
@@ -657,7 +666,7 @@ namespace ProtobufLoader
             }
             return false;
         }
-        public bool LoadRuntimeDataImp<TB,T>(string filepath,string filename, bool isInsertMode) where TB : Google.Protobuf.IMessage, new() where T : Google.Protobuf.IMessage
+        public bool LoadRuntimeDataImp<TB,T>(string filepath,string filename, bool isInsertMode) where TB : Google.Protobuf.IMessage, Google.Protobuf.IMessage<TB>, new() where T : Google.Protobuf.IMessage
         {
             try
             {
@@ -669,23 +678,23 @@ namespace ProtobufLoader
 
                     var apiInstance = GSProtobufRuntimeAPI<TB, T>.Get();
                     var _dataDict = apiInstance.GetFieldOrProperty<Dictionary<int, T>>("_dataDict");
-                    if (_dataDict == null)
+                    var _tbList=apiInstance.GetTBList();
+                    if (_dataDict == null||_tbList==null)
                     {
-                        Error($"Can't Find dataDict in {typeof(TB).Name}-{typename}");
+                        Error($"Can't Find dataDict or tblist in {typeof(TB).Name}-{typename}");
                         return false;
                     }
                     var idPropertyName = apiInstance.GetFieldOrProperty<string>("_propertyID");
-                    var _messageTBList = new TB();
-                    //TBList仅用于GSDevStringTableGenerater中生成desc字符串
-                    //暂定不修改原TBList
-                    _messageTBList.MergeFrom(input);
-                    var parseResult= typeof(TB).GetProperty("List").GetValue(_messageTBList) as IEnumerable<T>;
+                    var _tmpTBList = new TB();
+                    _tmpTBList.MergeFrom(input);
+                    var parseResult= typeof(TB).GetProperty("List").GetValue(_tmpTBList) as IEnumerable<T>;
                     if(parseResult == null)
                     {
                         Error($"Fail to Parse {filepath}");
                         return false;
                     }
                     if (idPropertyName != "")
+                    {
                         foreach (T item in parseResult)
                         {
                             object? _id = item.GetType().GetProperty(idPropertyName, BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public)?.GetValue(item);
@@ -705,25 +714,51 @@ namespace ProtobufLoader
                                     while (_dataDict.ContainsKey(id)) id++;
                                     if (idPropertyName != null)
                                         item.SetFieldOrProperty(idPropertyName!, id);
-                                    Log($"Insert {(int)id} in {typename}",2);
+                                    Log($"Insert {(int)id} in {typename}", 2);
                                     RecordBackup[typeof(T)].Add(id, null);
+
                                 }
                                 else//Override
                                 {
                                     if (typeof(T).GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDeepCloneable<>)))//是否可以Clone
                                         RecordBackup[typeof(T)].Add(id, ((_dataDict[id]) as IDeepCloneable<T>)!.Clone());
                                     else
-                                        Log($"Override a record not clonable in {typename}.It won't be reset.",2);
-                                    Log($"Override {(int)id} in {typename}",2);
+                                        Log($"Override a record not clonable in {typename}.It won't be reset.", 2);
+                                    Log($"Override {(int)id} in {typename}", 2);
                                 }
                             }
                             else
                             {
                                 RecordBackup[typeof(T)].Add(id, null);
-                                Log($"Add {(int)id} in {typename}",2);
+                                Log($"Add {(int)id} in {typename}", 2);
                             }
                             _dataDict[(int)id] = item;
                         }
+                        //TBList也要修改，有些初始化例如InitTalentSUnitMap是从TBList里取值的
+                        if(true)
+                        {
+                            //从LoadDataFromFile/TryAddToDictionary来看，一定具有名为List的Property且List的内容dataDict严格一一对应
+                            var list = _tbList.GetFieldOrProperty<RepeatedField<T>>("List");
+                            if (list == null)
+                            {
+                                Error($"Can't Find tbList.List in {typename}");
+                                return false;
+                            }
+                            list.Clear();
+                            //根据dict重建list
+                            foreach (var item in _dataDict!)
+                                list.Add(item.Value);
+                            Log($"Rebuild {typename} TBList: {list.Count}", 2);
+                        }
+                        else
+                        {
+                            //也可以直接merge,T是引用类型，此时id的修改已经反映到tmpTBList上
+                            //Log($"Before Merge {_tbList.CalculateSize()} {_tmpTBList.CalculateSize()}");
+                            _tbList!.MergeFrom(_tmpTBList);
+                            Log($"Merge {typename} TBList: {_tbList.CalculateSize()}", 2);
+                            //Log($"After Merge {_tbList.CalculateSize()}");
+                        }
+                    }
                     else
                     {
                         Error($"Can't find id property name for type {typename}");
@@ -1050,7 +1085,7 @@ namespace ProtobufLoader
                         }
                     }
                 }
-                Log($"Reset {type.Name} Done",2);
+                Log($"Reset {type.Name} Dict Done",2);
                 return true;
             }
             catch (Exception e)
@@ -1084,13 +1119,36 @@ namespace ProtobufLoader
             }
             //return false;
         }
-        public bool ResetTableRuntimeImp<TB,T>() where TB : Google.Protobuf.IMessage, new() where T : class, Google.Protobuf.IMessage, new()
+        public bool ResetTableRuntimeImp<TB,T>() where TB : Google.Protobuf.IMessage, Google.Protobuf.IMessage<TB>, new() where T : class, Google.Protobuf.IMessage, new()
         {
             try
             {
                 var apiInstance = GSProtobufRuntimeAPI<TB, T>.Get();
                 var _dataDict = apiInstance.GetFieldOrProperty<Dictionary<int, T>>("_dataDict");
-                return ResetDataDictImp(_dataDict);
+                if (!ResetDataDictImp(_dataDict))
+                    return false;
+                {
+                    var type = typeof(T);
+                    var tbList=apiInstance.GetTBList();
+                    if (tbList == null)
+                    {
+                        Error($"Can't Find tbList in {type.Name}");
+                        return false;
+                    }
+                    var list = tbList.GetFieldOrProperty<RepeatedField<T>>("List");
+                    if (list == null)
+                    {
+                        Error($"Can't Find tbList.List in {type.Name}");
+                        return false;
+                    }
+                    list.Clear();
+                    //根据dict重建list
+                    //从TryAddToDictionary来看，Dict和List是严格一一对应的
+                    foreach (var item in _dataDict!)
+                        list.Add(item.Value);
+                    Log($"Reset {type.Name} TBList Done: {list.Count}", 2);
+                }
+                return true;
             }
             catch (Exception e)
             {
