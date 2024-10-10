@@ -97,9 +97,11 @@ function SetParam(message)
 	rzdshortcut=StaticFindObject(prefix.."BI_RZDSkill")
 
 	--变身后UI
-	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.ImgHPBar"),config.hpbar_x,config.hpbar_y+200)
-	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.HPBar"),config.hpbar_x-110-16,config.hpbar_y+200-3)
-	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.EnergyBar"),config.hpbar_x-110-14,config.hpbar_y+200+43)--神力条,即变身持续时间
+	--变身hp条和普通hp条的缩放不一样，用同一个偏移量无法对齐
+	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.ImgHPBar"),config.transhpbar_x+110-110,config.transhpbar_y+2-2)
+	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.HPBar"),config.transhpbar_x-16-110,config.transhpbar_y+2-5)
+	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.EnergyBar"),config.transhpbar_x-110-14,config.transhpbar_y+2+41)--神力条,即变身持续时间
+
 	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.BI_ShortcutSkill"),config.skill_x,config.skill_y)
 	SetCanvasSlotPosition(StaticFindObject(prefix.."BI_Trans.WidgetTree.TransStyleCon"),config.fpbar_x,config.fpbar_y)
 	
