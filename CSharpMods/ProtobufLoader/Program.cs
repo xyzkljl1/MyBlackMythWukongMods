@@ -116,7 +116,7 @@ namespace ProtobufLoader
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.2";
+        public string Version => "1.2.5";
         // private readonly Harmony harmony;
         public Dictionary<Type,Dictionary<int, Google.Protobuf.IMessage?>> RecordBackup = new Dictionary<Type, Dictionary<int, IMessage?>>();
 
@@ -619,8 +619,6 @@ namespace ProtobufLoader
                                 Error($"Can't find id.Ignore item ");
                                 continue;
                             }
-                            if (!RecordBackup.ContainsKey(typeof(T)))
-                                RecordBackup.Add(typeof(T), new Dictionary<int, IMessage?>());
                             if (_dataDict.ContainsKey(id.Value))
                             {
                                 if (isInsertMode)//Change id to insert to end.
@@ -629,13 +627,14 @@ namespace ProtobufLoader
                                     while (_dataDict.ContainsKey(id.Value)) id++;
                                     if(idPropertyName!=null)//修改item成员的id
                                         item.SetFieldOrProperty(idPropertyName!,id);
-                                    RecordBackup[typeof(T)].Add(id.Value,null);
+                                    RecordBackup.AddOrIgnore(typeof(T),id.Value,null);
                                     Log($"Insert {(int)id} in {typename}",2);
                                 }
                                 else//Override
                                 {
                                     if(typeof(T).GetInterfaces().Any(x =>x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDeepCloneable<>)))//是否可以Clone
-                                        RecordBackup[typeof(T)].Add(id.Value, ((_dataDict[(int)id]) as IDeepCloneable<T>)!.Clone());
+                                        //如果已有则忽略，因为要记录最初的状态，多个data文件修改同一条时，只记录第一次修改前的状态
+                                        RecordBackup.AddOrIgnore(typeof(T), id.Value, ((_dataDict[(int)id]) as IDeepCloneable<T>)!.Clone());
                                     else
                                     {
                                         Log($"Override a record not clonable in {typename}.It won't be reset.",2);
@@ -645,15 +644,13 @@ namespace ProtobufLoader
                             }
                             else
                             {
-                                RecordBackup[typeof(T)].Add(id.Value, null);
+                                RecordBackup.AddOrIgnore(typeof(T), id.Value, null);
                                 Log($"Add {(int)id} in {typename}",2);
                             }
                             _dataDict[(int)id] = item;
                         }
                     }
                     Log($"{filename} Done",1);
-                    if (RecordBackup.ContainsKey(typeof(T)) && RecordBackup[typeof(T)].Count == 0)
-                        RecordBackup.Remove(typeof(T));
                     return true;
                 }
                 else
@@ -704,8 +701,6 @@ namespace ProtobufLoader
                                 continue;
                             }
                             int id = Convert.ToInt32(_id);
-                            if (!RecordBackup.ContainsKey(typeof(T)))
-                                RecordBackup.Add(typeof(T), new Dictionary<int, IMessage?>());
                             if (_dataDict.ContainsKey((int)id))
                             {
                                 if (isInsertMode)//Change id to insert to end.
@@ -715,13 +710,13 @@ namespace ProtobufLoader
                                     if (idPropertyName != null)
                                         item.SetFieldOrProperty(idPropertyName!, id);
                                     Log($"Insert {(int)id} in {typename}", 2);
-                                    RecordBackup[typeof(T)].Add(id, null);
-
+                                    RecordBackup.AddOrIgnore(typeof(T), id, null);
                                 }
                                 else//Override
                                 {
                                     if (typeof(T).GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDeepCloneable<>)))//是否可以Clone
-                                        RecordBackup[typeof(T)].Add(id, ((_dataDict[id]) as IDeepCloneable<T>)!.Clone());
+                                        //如果已有则忽略，因为要记录最初的状态，多个data文件修改同一条时，只记录第一次修改前的状态
+                                        RecordBackup.AddOrIgnore(typeof(T), id, ((_dataDict[id]) as IDeepCloneable<T>)!.Clone());
                                     else
                                         Log($"Override a record not clonable in {typename}.It won't be reset.", 2);
                                     Log($"Override {(int)id} in {typename}", 2);
@@ -729,7 +724,7 @@ namespace ProtobufLoader
                             }
                             else
                             {
-                                RecordBackup[typeof(T)].Add(id, null);
+                                RecordBackup.AddOrIgnore(typeof(T), id, null);
                                 Log($"Add {(int)id} in {typename}", 2);
                             }
                             _dataDict[(int)id] = item;
@@ -764,8 +759,6 @@ namespace ProtobufLoader
                         Error($"Can't find id property name for type {typename}");
                         return false;
                     }
-                    if (RecordBackup.ContainsKey(typeof(T)) && RecordBackup[typeof(T)].Count == 0)
-                        RecordBackup.Remove(typeof(T));
                     return true;
                 }
                 else

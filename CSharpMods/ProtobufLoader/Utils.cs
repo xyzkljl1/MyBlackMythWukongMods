@@ -11,6 +11,7 @@ using System.Reflection;
 using System;
 using LitJson;
 using ILRuntime.Runtime;
+using System.Collections.Generic;
 #nullable enable
 namespace ProtobufLoader
 {
@@ -18,6 +19,14 @@ namespace ProtobufLoader
     {
         private static UWorld? world;
         public static string Name => "ProtobufLoader";
+        ///如果没有则添加，如果有则忽略
+        public static void AddOrIgnore(this Dictionary<Type, Dictionary<int, Google.Protobuf.IMessage?>> obj,Type t,int id, Google.Protobuf.IMessage? value)
+        {
+            if (!obj.ContainsKey(t))
+                obj.Add(t, new Dictionary<int, Google.Protobuf.IMessage?>());
+            if(!obj[t].ContainsKey(id))                
+                obj[t].Add(id, value);
+        }
         public static FieldType? GetFieldOrProperty<FieldType>(this object obj, String field_name) where FieldType : class
         {
             var t = obj.GetType();
