@@ -39,9 +39,11 @@ using B1UI.GSUI;
 using GSE.GSUI;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 #nullable enable
 namespace BattleLog
 {
+
     public class JsonField
     {
         public string Name="";
@@ -53,6 +55,7 @@ namespace BattleLog
     {
         public static bool LogOnScreen=true;
         public static bool LogOnFile = true;
+        public static bool LogOnConsole = true;
         public static bool LogEverything = false;
 
         public static void LoadConfig()
@@ -131,10 +134,11 @@ namespace BattleLog
         static void Postfix(AActor ContextActor, EBattleInfoType BattleInfoType, string BattleInfoLog, int BattleInfoLogOptions, EBGULogVerbosity BGULogVerbosity)
         {
             if(Config.LogEverything||BattleInfoType== EBattleInfoType.DamageCalc)
+            //if(BattleInfoType== EBattleInfoType.AddBuff)
             {
                 //MyExten.Log($"{BattleInfoType.ToString()}");
                 //MyExten.Log($"{BattleInfoLog}");
-                if(Config.LogOnScreen)
+                if (Config.LogOnScreen)
                 {
                     var widget = MyMod.GetLogWidget();
                     if (widget != null)
@@ -153,10 +157,15 @@ namespace BattleLog
                         widget.SetText(FText.FromString(text));
                     }
                 }
-                if(Config.LogOnFile)
+                if (Config.LogOnFile)
                 {
                     var log = Regex.Replace(BattleInfoLog, $"<.*?>", "");
                     File.AppendAllText(MyMod.LogFilePath, $"{BattleInfoType.ToString()}\n{log}\n\n");
+                }
+                if (Config.LogOnConsole)
+                {
+                    var log = Regex.Replace(BattleInfoLog, $"<.*?>", "");
+                    MyExten.Log($"{BattleInfoType.ToString()}\n{log}\n\n");
                 }
             }
         }
@@ -247,6 +256,11 @@ namespace BattleLog
     }*/
     public class MyMod : CSharpModBase.ICSharpMod
     {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleOutputCP(uint wCodePageID);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleCP(uint wCodePageID);
+
         public string Name => MyExten.Name;
         public virtual string Version => "1.0";
         protected readonly Harmony harmony;
@@ -284,6 +298,12 @@ namespace BattleLog
             //var eventCollection=MyExten.GetBUS_GSEventCollection();
             //eventCollection.Evt_AddBattleInfoLog += Del_AddBattleInfoLog;
             Config.LoadConfig();
+            if (Config.LogOnConsole)
+            {
+                SetConsoleCP(65001);
+                SetConsoleOutputCP(65001);
+                Log("将控制台代码页设置为UTF8!! 开启控制台中文输出");
+            }
             DebugConfig.IsOpenBattleInfoTool = true;
             File.WriteAllText(LogFilePath, "");
             Log("MyMod::Init.");
