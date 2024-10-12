@@ -5,7 +5,7 @@ using BtlShare;
 using CSharpModBase;
 using CSharpModBase.Input;
 using ResB1;
-// using HarmonyLib;
+using HarmonyLib;
 using GSE.GSSdk;
 using System.Reflection;
 using System.Collections.Generic;
@@ -28,6 +28,11 @@ using System.Collections;
 using static b1.AutoQA.QASimulateWindowsOperations;
 using ILRuntime.Mono.Cecil.Cil;
 using Google.Protobuf.Collections;
+using System.Threading;
+using b1.UI.Comm;
+using Diana.Common;
+using System.Text.RegularExpressions;
+using UnrealEngine.Engine;
 #nullable enable
 namespace ProtobufLoader
 {
@@ -43,6 +48,7 @@ namespace ProtobufLoader
         public static bool ShutUp = false;
         public static bool ShuutUp = false;
         public static bool ShuuutUp = false;
+        public static bool EnableChineseConsoleLog = true;
         public static void LoadConfig()
         {
             var filepath = $"CSharpLoader\\Mods\\{MyExten.Name}\\config.json";
@@ -113,29 +119,58 @@ namespace ProtobufLoader
             }
         }
     }
+    [HarmonyPatch(typeof(BGWGameInstanceCS), "ReceiveInit_Implementation")]
+    class PatchGameInstanceInit
+    {
+        static void Postfix()
+        {
+            if (MyMod.FirstInitCalled == false)
+            {
+                MyExten.Log("Init upon game instance init");
+                //MyMod.FirstInitCalled=true //redun
+                MyMod.ResetAndLoadAllDataFiles();
+            }
+        }
+
+    }
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.2.5";
-        // private readonly Harmony harmony;
-        public Dictionary<Type,Dictionary<int, Google.Protobuf.IMessage?>> RecordBackup = new Dictionary<Type, Dictionary<int, IMessage?>>();
+        public string Version => "1.3";
+        private readonly Harmony harmony;
+        public static Dictionary<Type,Dictionary<int, Google.Protobuf.IMessage?>> RecordBackup = new Dictionary<Type, Dictionary<int, IMessage?>>();
+        //是否被初始化了至少一次
+        //可以手动初始化多次，仅有Hook调用的初次初始化需要判断FirstInitCalled
+        public static bool FirstInitCalled = false;
 
-        void Log(string i,int verLevel=0) { MyExten.Log(i,verLevel); }
-        void Error(string i, int verLevel=0) { MyExten.Error(i,verLevel); }
-        void DebugLog(string i) { MyExten.DebugLog(i); }
+        static void Log(string i,int verLevel=0) { MyExten.Log(i,verLevel); }
+        static void Error(string i, int verLevel=0) { MyExten.Error(i,verLevel); }
+        static void DebugLog(string i) { MyExten.DebugLog(i); }
         public MyMod()
         {
-            // harmony = new Harmony(Name);
+            harmony = new Harmony(Name);
             // Harmony.DEBUG = true;
         }
         public void Init()
         {
             Config.LoadConfig();
+            if (Config.EnableChineseConsoleLog)
+                MyExten.EnableCNInConsole();
             Log("MyMod::Init called.Start Timer");
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F7, ResetAndLoadAllDataFiles);
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F8, () => ResetAll(true));
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F9, SuperReset);
-            ResetAndLoadAllDataFiles();
+
+            if(MyExten.GetWorld() is null)
+            {
+                //如果此时gameinstance尚未初始化，通过hook调用初始化
+                Log("World Not Ready.Skip Init");
+            }
+            else
+            {   //CSharpLoader0.0.8后，初次加载时可能World还没有加载完成，需要延迟加载
+                Log("init upon load");
+                ResetAndLoadAllDataFiles();
+            }
             /*
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F9, () =>
             {
@@ -166,52 +201,13 @@ namespace ProtobufLoader
             });*/
 
             // hook
-            // harmony.PatchAll();
-            /*
-             * Fuck encoding
-            foreach (var i in Encoding.GetEncodings())
-                Log($"{i.Name}");
-                Log($"{Encoding.Default.CodePage}");
-            {
-                var enc = Encoding.GetEncoding("GB18030");
-                //var encb = Encoding.GetEncoding(936);
-                foreach(var i in Encoding.GetEncodings())
-                {
-                    try
-                    {
-                        var encb = i.GetEncoding();
-                        var bytes = Encoding.Convert(encb, enc, enc.GetBytes("啦啦啦"));
-                        var bytes2 = Encoding.Convert(enc, encb, enc.GetBytes("啦啦啦"));
-                        var bytes3 = Encoding.Convert(encb, enc, encb.GetBytes("啦啦啦"));
-                        var bytes4 = Encoding.Convert(enc, encb, encb.GetBytes("啦啦啦"));
-                        var bytes5 = encb.GetBytes("啦啦啦");
-                        var bytes6 = encb.GetBytes("啦啦啦");
-                        Log(enc.GetString(bytes));
-                        Log(encb.GetString(bytes));
-                        Log(enc.GetString(bytes2));
-                        Log(encb.GetString(bytes2));
-                        Log(enc.GetString(bytes3));
-                        Log(encb.GetString(bytes3));
-                        Log(enc.GetString(bytes4));
-                        Log(encb.GetString(bytes4));
-                        Log(enc.GetString(bytes5));
-                        Log(encb.GetString(bytes5));
-                        Log(enc.GetString(bytes6));
-                        Log(encb.GetString(bytes6));
-                        Log($"{encb.CodePage} --- {bytes.Length} {bytes[0]}");
-                    }
-                    catch (Exception ex) 
-                    {
-                    }
-                }
-            }
-            */
+            harmony.PatchAll();          
         }
-        public void DeInit() 
+        public void DeInit()
         {
             ResetAll();
             Log($"DeInit");
-            // harmony.UnpatchAll();
+            harmony.UnpatchAll();
         }
         public void SuperReset()
         {
@@ -219,8 +215,9 @@ namespace ProtobufLoader
             BGUFunctionLibraryCS.RefreshGameDB();
             Log("Super Reset Done");
         }
-        public void ResetAndLoadAllDataFiles()
+        public static void ResetAndLoadAllDataFiles()
         {
+            FirstInitCalled = true;
             ResetAll(false);
             int success_ct = 0;
             int total_ct = 0;
@@ -234,7 +231,7 @@ namespace ProtobufLoader
                 Log($"Load {success_ct}/{total_ct} Folders Successfully");
             RefreshDBCache();
         }
-        public void RefreshDBCache()
+        public static void RefreshDBCache()
         {
             Log("Refresh DBCache",1);
             {//Static要在前
@@ -263,7 +260,7 @@ namespace ProtobufLoader
                     Error($"Can't Invoke BuildAllDescToDict");
             }
         }
-        public bool LoadDataFilesInDir(string dir)
+        public static bool LoadDataFilesInDir(string dir)
         {
             //load *.data
             int totalFileCount = 0;
@@ -302,7 +299,7 @@ namespace ProtobufLoader
                 Log($"Load {success_ct}/{totalFileCount} successfully in Dir {dir}",0);
             return success_ct == totalFileCount;//空文件夹算成功
         }
-        public bool LoadDataFile(string filepath, bool isInsertMode)
+        public static bool LoadDataFile(string filepath, bool isInsertMode)
         {
             var fileInfo = new FileInfo(filepath);
             var filename = fileInfo.Name;
@@ -564,7 +561,7 @@ namespace ProtobufLoader
             Error($"Not Supported Table {typename}");
             return false;
         }
-        public bool LoadNoneRuntimeDataImp<T>(string filepath,string filename,string typename, bool isInsertMode) where T : class, Google.Protobuf.IMessage,new()
+        public static bool LoadNoneRuntimeDataImp<T>(string filepath,string filename,string typename, bool isInsertMode) where T : class, Google.Protobuf.IMessage,new()
         {
             bool WithOutId = false;//决定载入到list还是dict里，根据BGW_GameDB.LoadRes中的参数设置
             if (typeof(T) == typeof(FUStCollectionSpawnInfoDesc))//目前只有这一个表用的list
@@ -663,7 +660,7 @@ namespace ProtobufLoader
             }
             return false;
         }
-        public bool LoadRuntimeDataImp<TB,T>(string filepath,string filename, bool isInsertMode) where TB : Google.Protobuf.IMessage, Google.Protobuf.IMessage<TB>, new() where T : Google.Protobuf.IMessage
+        public static bool LoadRuntimeDataImp<TB,T>(string filepath,string filename, bool isInsertMode) where TB : Google.Protobuf.IMessage, Google.Protobuf.IMessage<TB>, new() where T : Google.Protobuf.IMessage
         {
             try
             {
@@ -770,7 +767,7 @@ namespace ProtobufLoader
             }
             return false;
         }
-        public void ResetAll(bool refreshCache=true)
+        public static void ResetAll(bool refreshCache=true)
         {
             if (RecordBackup.Count == 0) return;
             int success_ct = 0;
@@ -785,7 +782,7 @@ namespace ProtobufLoader
             if(refreshCache)
                 RefreshDBCache();
         }
-        public bool ResetTable(string typename)
+        public static bool ResetTable(string typename)
         {
             Log($"Start Reset Table {typename}",1);
             //NonRuntime
@@ -1045,7 +1042,7 @@ namespace ProtobufLoader
             Error($"Unsupported Table {typename}");
             return false;
         }
-        public bool ResetDataDictImp<T>(Dictionary<int, T>? _dataDict) where T : class, Google.Protobuf.IMessage, new()
+        public static bool ResetDataDictImp<T>(Dictionary<int, T>? _dataDict) where T : class, Google.Protobuf.IMessage, new()
         {
             try
             {
@@ -1088,7 +1085,7 @@ namespace ProtobufLoader
             }
             
         }
-        public bool ResetTableNonRuntimeImp<T>() where T : class, Google.Protobuf.IMessage, new()
+        public static bool ResetTableNonRuntimeImp<T>() where T : class, Google.Protobuf.IMessage, new()
         {
             bool WithOutId = false;
             if (typeof(T) == typeof(FUStCollectionSpawnInfoDesc))
@@ -1112,7 +1109,7 @@ namespace ProtobufLoader
             }
             //return false;
         }
-        public bool ResetTableRuntimeImp<TB,T>() where TB : Google.Protobuf.IMessage, Google.Protobuf.IMessage<TB>, new() where T : class, Google.Protobuf.IMessage, new()
+        public static bool ResetTableRuntimeImp<TB,T>() where TB : Google.Protobuf.IMessage, Google.Protobuf.IMessage<TB>, new() where T : class, Google.Protobuf.IMessage, new()
         {
             try
             {

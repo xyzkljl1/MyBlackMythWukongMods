@@ -5,7 +5,7 @@ using BtlShare;
 using CSharpModBase;
 using CSharpModBase.Input;
 using ResB1;
-// using HarmonyLib;
+using HarmonyLib;
 using GSE.GSSdk;
 using System.Reflection;
 using System.Collections.Generic;
@@ -36,11 +36,31 @@ using b1.UI;
 #nullable enable
 namespace Test
 {
+    /*
+    [HarmonyPatch(typeof(BGUFunctionLibraryCS), nameof(BGUFunctionLibraryCS.BGUAddBuff))]
+    class Patch_Init
+    {
+        static void Postfix(AActor Caster, AActor Target, int BuffID, EBuffSourceType BuffSourceType, float BuffDurationTimer)
+        {
+            MyExten.Log($"Add Buff {BuffID}");
+        }
+    }
+    [HarmonyPatch(typeof(BUS_TalentComp), "OnActivateTalent")]
+    class Patch_Init2
+    {
+        static void Postfix(BUS_TalentComp __instance,int TalentID, int ChangeLevel)
+        {
+            MyExten.Log($"Talent Change {TalentID} {ChangeLevel}");
+            int actorResID = __instance.GetActorResID();
+            TalentSDesc talentSDescByUnitResIDInMapCache = GameDBRuntime.GetTalentSDescByUnitResIDInMapCache(TalentID, actorResID);
+            MyExten.Log($"{talentSDescByUnitResIDInMapCache.Id} {talentSDescByUnitResIDInMapCache.AddBuffIDs} end");
+        }
+    }*/
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
         public string Version => "1.0";
-        // private readonly Harmony harmony;
+        private readonly Harmony harmony;
         public bool enable=false;
 
         public System.Timers.Timer initDescTimer= new System.Timers.Timer(1000);
@@ -50,67 +70,39 @@ namespace Test
         void DebugLog(string i) { MyExten.DebugLog(i); }
         public MyMod()
         {
-            // harmony = new Harmony(Name);
+            harmony = new Harmony(Name);
             // Harmony.DEBUG = true;
         }
-        UTextBlock tmp;
+       
         public void Init()
         {
 
             Log("MyMod::Init called.Start Timer");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
             Utils.RegisterKeyBind(Key.O, delegate {
-                var world = MyExten.GetWorld();
-                var battlemain=GSUI.UIMgr.FindUIPage(world, (int)EUIPageID.BattleMainCon) as UIBattleMainCon;
-                var panel=battlemain.GetFieldOrProperty<UCanvasPanel>("PlayerStCon");
-                tmp=UObject.NewObject<UTextBlock>();
-                tmp.SetText(FText.FromString("111111"));
-                Log($"{tmp.GetFullName()}");
-                var panelslot=panel.AddChild(tmp) as UCanvasPanelSlot;
-                panelslot.SetPosition(new FVector2D(1000,200));
-                //var slot = UnrealEngine.UMG.UWidgetLayoutLibrary.SlotAsCanvasSlot(textblock!);
-                /*
-                var t = typeof(EBGUAttrFloat);
-                //BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(),EBGUAttrFloat.StaminaRecoverBase,0);
-                enable = !enable;
-                //foreach (var pair in BGW_GameDB.GetAllBuffDesc())
-                //    if (pair.Value.BuffActiveCondition.ConditionType == EGSBuffAndSkillEffectActiveCondition.HasTalent)
-                //        if (pair.Value.BuffActiveCondition.ConditionParams=="106025")
-                    {
-                            //Log($"FFFFuck {pair.Value.ID}");
-                    }
-                //int ct=0;
-                //1061301,1061401,1021301,1021401,1086301,1086401,1088301,1088401
-                var tmpStr = "";
-                foreach(var effect in BGW_GameDB.GetAllSkillEffectDesc())
                 {
-                    var id = effect.Key;
-                    var effectDesc=effect.Value;
-                    if(effectDesc.EffectType== EBuffAndSkillEffectType.SkillDamage)
+                    var t = typeof(GameDBRuntime);
+                    var methodInfo = t.GetMethod("InitTalentSUnitMap", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+                    if (methodInfo != null)
                     {
-                        if (effectDesc.EffectParamsStr.Count > 0 && effectDesc.EffectParamsStr[0].Contains("主角"))
-                        {
-                            tmpStr += $"{id} /";
-                            foreach (var str in effectDesc.EffectParamsStr)
-                                tmpStr += $"{str}/";
-                            if (effectDesc.EffectParamsFloat.Count > 2)
-                                tmpStr += $"({effectDesc.EffectParamsFloat[2] / 10000},{effectDesc.EffectParamsFloat[1]})/";
-                            if (effectDesc.EffectActiveCondition.ConditionType != EGSBuffAndSkillEffectActiveCondition.Always)
-                                tmpStr += $" Condition:{effectDesc.EffectActiveCondition.ConditionType.ToString()}/";
-                            if (effectDesc.EffectParamsInt.Count > 5)
-                            {
-                                var ele = (EAbnormalStateType)effectDesc.EffectParamsInt[5];
-                                if(ele!= EAbnormalStateType.None)
-                                    tmpStr += $"{ele.ToString()}";                              
-                            }
-                            tmpStr += "\n";
-
-                        }
+                        methodInfo.Invoke(null, new object[] { });
+                        Log($"Invoke {methodInfo.Name}");
                     }
+                    else
+                        Error($"Can't Invoke BuildAllDescToDict");
                 }
-                File.WriteAllText("tmp.txt", tmpStr);
-                */
-                //Log($"{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.SpecialEnergy)}/{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(),EBGUAttrFloat.SpecialEnergyMax)}");
+                {
+                    var desc = GameDBRuntime.GetTalentSDesc(106026);
+                    MyExten.Log($"{desc.AddBuffIDs}");
+                }
+                {
+                    var desc = GameDBRuntime.GetTalentSDesc(106035);
+                    MyExten.Log($"{desc.AddBuffIDs} /{desc.PassiveSkillIDs}/");
+                }
+                {
+                    //var desc = GameDBRuntime.GetFUStBuffDesc(96037);
+                    //Log($"Buff {desc.BuffEffects.Count}");
+                }
             });
 
             initDescTimer.Start();
@@ -123,13 +115,13 @@ namespace Test
                 }
             });
             // hook
-            // harmony.PatchAll();
+            harmony.PatchAll();
         }
         public void DeInit() 
         {
             initDescTimer.Dispose();
             Log($"DeInit");
-            // harmony.UnpatchAll();
+            harmony.UnpatchAll();
         }
         //unused
     }

@@ -12,6 +12,7 @@ using System;
 using LitJson;
 using ILRuntime.Runtime;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 #nullable enable
 namespace ProtobufLoader
 {
@@ -19,6 +20,17 @@ namespace ProtobufLoader
     {
         private static UWorld? world;
         public static string Name => "ProtobufLoader";
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleOutputCP(uint wCodePageID);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleCP(uint wCodePageID);
+        public static void EnableCNInConsole()
+        {
+            SetConsoleCP(65001);
+            SetConsoleOutputCP(65001);
+            Log("将控制台代码页设置为UTF8!! 开启控制台中文输出");
+        }
         ///如果没有则添加，如果有则忽略
         public static void AddOrIgnore(this Dictionary<Type, Dictionary<int, Google.Protobuf.IMessage?>> obj,Type t,int id, Google.Protobuf.IMessage? value)
         {
