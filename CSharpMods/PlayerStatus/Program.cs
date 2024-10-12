@@ -395,7 +395,7 @@ namespace PlayerStatus
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "2.1";
+        public string Version => "2.1.1";
         private readonly Harmony harmony;
         public static TimerComp timerComp = new TimerComp();
 
@@ -413,7 +413,7 @@ namespace PlayerStatus
             Config.LoadConfig();
             Log("MyMod::Init called.");
             //RegisterComp On Reload
-            if (Config.Enable)
+            if (Config.Enable&&MyExten.GetPlayerController()!=null)
             {
                 var pawn = MyExten.GetBGUPlayerCharacterCS();
                 if (pawn is not null)
