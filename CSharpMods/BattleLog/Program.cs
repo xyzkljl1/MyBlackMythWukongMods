@@ -40,6 +40,8 @@ using GSE.GSUI;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using System.Threading;
+using Timer = System.Timers.Timer;
 #nullable enable
 namespace BattleLog
 {
@@ -119,7 +121,7 @@ namespace BattleLog
                                 MyExten.Log($"{fieldInfo.FieldType.Name} no match {tmp.Type}");
                         }
                     }
-                MyExten.Log($"Config loaded {Config.LogOnScreen} {Config.LogOnFile} {Config.LogEverything}");
+                MyExten.Log($"Config loaded {Config.LogOnScreen} {Config.LogOnFile} {Config.LogOnConsole} {Config.LogEverything}");
             }
             catch (Exception ) 
             {
@@ -169,7 +171,14 @@ namespace BattleLog
                 }
             }
         }
-
+    }
+    [HarmonyPatch(typeof(BGWGameInstanceCS), "ReceiveInit_Implementation")]
+    class PatchGameInstanceInit
+    {
+        static void Postfix()
+        {
+            DebugConfig.IsOpenBattleInfoTool = true;
+        }
     }
     /*
     [HarmonyPatch(typeof(BUS_BeAttackedComp), "DoDmg_B1_V2")]
@@ -262,7 +271,7 @@ namespace BattleLog
         private static extern bool SetConsoleCP(uint wCodePageID);
 
         public string Name => MyExten.Name;
-        public virtual string Version => "1.0";
+        public virtual string Version => "1.0.1";
         protected readonly Harmony harmony;
         static public Random rnd = new Random();
         static public UTextBlock? LogTextblock=null;
@@ -272,11 +281,11 @@ namespace BattleLog
         static public void Error(string i) { MyExten.Error(i); }
         static public void DebugLog(string i) { MyExten.DebugLog(i); }
         public MyMod() { harmony = new Harmony(Name); }
-        public void Del_AddBattleInfoLog(EBattleInfoType BattleInfoType, string BattleInfoLog, int BattleInfoLogOptions, EBGULogVerbosity BGULogVerbosity)
-        {
-            Console.WriteLine(BattleInfoLog);
-        }
-        public static UTextBlock GetLogWidget()
+        //public void Del_AddBattleInfoLog(EBattleInfoType BattleInfoType, string BattleInfoLog, int BattleInfoLogOptions, EBGULogVerbosity BGULogVerbosity)
+        //{
+        //    Console.WriteLine(BattleInfoLog);
+        //}
+        public static UTextBlock? GetLogWidget()
         {
             if(LogTextblock!=null&& LogTextblock.IsValidLowLevel()) return LogTextblock;
             var world = MyExten.GetWorld();

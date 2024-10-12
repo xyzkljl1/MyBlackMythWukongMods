@@ -56,6 +56,90 @@ namespace Test
             MyExten.Log($"{talentSDescByUnitResIDInMapCache.Id} {talentSDescByUnitResIDInMapCache.AddBuffIDs} end");
         }
     }*/
+
+    
+    [HarmonyPatch(typeof(BUS_BeAttackedComp), "DoDmg_B1_V2")]
+    class Patch
+    {
+        static public void Log(string i) { MyExten.Log(i); }
+        static void Postfix(BUS_BeAttackedComp __instance,AActor Attacker, bool IsCrit, float DmgNoiseMul, object DamageDynamicParam, object DamageDescParam,
+            FSkillDamageConfig SkillDamageConfig, FBattleAttrSnapShot Attacker_AttrMemData, float FinalDamageValue, float FinalDmgForPart, float FinalElementDmgValue, bool bPrintLog)
+        {
+            Log("=================================");
+            Log($"Final NormalDamage/PartDamage/ElementDamage: {FinalDamageValue} /{FinalDmgForPart}/{FinalElementDmgValue}");
+            Log($"Attacker {Attacker.GetFullName()}");
+
+            var VictimAttrCon = __instance.GetFieldOrProperty<IBUC_AttrContainer>("VictimAttrCon")!;
+
+            var ActionRate = DamageDescParam.GetFieldOrProperty2<float>("BaseDamageRatio")!.Value;
+            var FixDamage = DamageDescParam.GetFieldOrProperty2<float>("BaseDamage")!.Value/100;
+            var BaseDamage = Attacker_AttrMemData.Attr_Atk * ActionRate / 10000 + FixDamage;
+            Log($"Base Damage = {BaseDamage} = (FinalAttack {Attacker_AttrMemData.Attr_Atk} * ActionRate {ActionRate / 100}% + FixDamage {FixDamage}) ");
+
+            var def = VictimAttrCon.GetFloatValue(EBGUAttrFloat.Def);
+            var defDamageReducion = 1 - 0.48f * def / (90f + 0.52f * Math.Abs(def));
+            var DamageBonusAndReduction = Math.Max(0.2f,(1- VictimAttrCon.GetFloatValue(EBGUAttrFloat.DmgDef)/10000)*(1+ Attacker_AttrMemData.Attr_DmgAddition/10000));
+            Log($"Damage Bonus/Reduction Factor = {DamageBonusAndReduction} = Max(0.2,(1 - EnemyDamageReduction {VictimAttrCon.GetFloatValue(EBGUAttrFloat.DmgDef) / 100}%) * (1 + DamageBonus {Attacker_AttrMemData.Attr_DmgAddition/100}%) )");
+
+            var YinYangMulti = (float)__instance.CallPrivateFunc("CalcYinYangDmgMultiplier", new object[] { Attacker, __instance.GetOwner() })!;
+            BaseDamage *= DamageBonusAndReduction*YinYangMulti;
+            Log($"Total Damage = {BaseDamage} = BaseDamage * Damage Bonus/Reduction Factor * YinYangMulti {YinYangMulti} ");
+
+
+            float TrueDamageRatio = 0f;
+            FUStUnitBattleInfoExtendDesc unitBattleInfoExtendDesc = BGW_GameDB.GetUnitBattleInfoExtendDesc(BGU_DataUtil.GetFinalBattleInfoExtendID(Attacker));
+            if (unitBattleInfoExtendDesc != null)
+                TrueDamageRatio = unitBattleInfoExtendDesc.TrueDamageRatio;
+            Log($"True Damage Ratio = {TrueDamageRatio}");
+
+            var ElementDamageLevel = DamageDescParam.GetFieldOrProperty2<int>("ElementDmgLevel")!.Value;
+            var ElementDamageRatio = BGW_GameDB.GetElementDmgRatio(ElementDamageLevel) * (1f - TrueDamageRatio);
+            Log($"Element Damage Ratio = {ElementDamageLevel} = FUStElementDmgRatioLevelDesc[ ElementDamageLevel {ElementDamageLevel}] * (1 - TrueDamageRatio)");
+            if(false)
+            {
+                var EleType = (EAbnormalStateType)DamageDescParam.GetFieldOrProperty2<int>("ElemAtkType")!.Value;
+                if(EleType!=EAbnormalStateType.None)
+                {
+                    float EleAtk = .0f;
+                    float EleDef = .0f;
+                    switch (EleType)
+                    {
+                        case EAbnormalStateType.Abnormal_Freeze:
+                            EleDef = VictimAttrCon.GetFloatValue(EBGUAttrFloat.FreezeDef);
+                            EleAtk = Attacker_AttrMemData.Attr_FreezeAtk;
+                            break;
+                        case EAbnormalStateType.Abnormal_Burn:
+                            EleDef = VictimAttrCon.GetFloatValue(EBGUAttrFloat.BurnDef);
+                            EleAtk = Attacker_AttrMemData.Attr_BurnAtk;
+                            break;
+                        case EAbnormalStateType.Abnormal_Poison:
+                            EleDef = VictimAttrCon.GetFloatValue(EBGUAttrFloat.PoisonDef);
+                            EleAtk = Attacker_AttrMemData.Attr_PoisonAtk;
+                            break;
+                        case EAbnormalStateType.Abnormal_Thunder:
+                            EleDef = VictimAttrCon.GetFloatValue(EBGUAttrFloat.ThunderDef);
+                            EleAtk = Attacker_AttrMemData.Attr_ThunderAtk;
+                            break;
+                        case EAbnormalStateType.Abnormal_Yin:
+                            EleDef = VictimAttrCon.GetFloatValue(EBGUAttrFloat.YinDef);
+                            break;
+                        case EAbnormalStateType.Abnormal_Yang:
+                            EleDef = VictimAttrCon.GetFloatValue(EBGUAttrFloat.YangDef);
+                            break;
+                    }
+                    if (Attacker_AttrMemData.Attr_IgnoreTargetElemDef)
+                        EleDef = .0f;
+                    float FinalEleDef = EleDef-EleAtk;
+                    Log($"ElementResist = {FinalEleDef} = EnemyElementResist {EleDef} - ElementAtk {EleAtk}");
+                }
+            }
+            DebugConfig.IsOpenBattleInfoTool = true;
+
+            Log($"Defense Factor = {defDamageReducion} = 1-0.48* DEF {def} /(90+0.52*abs(DEF {def})) ");
+
+            Log("=================================");
+        }
+    }
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
@@ -107,13 +191,14 @@ namespace Test
 
             initDescTimer.Start();
             //注意必须在GameThread执行，ToFTextFillPre/GetLocaliztionalFText等函数在Timer.Elapsed线程无法得到正确翻译，在RegisterKeyBind或Init或TryRunOnGameThread线程则可以
-            initDescTimer.Elapsed +=   (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate {
+            /*initDescTimer.Elapsed +=   (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate {
                 if(enable)
                 {
                     Log($"{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.CurEnergy)}" +
                         $"/{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.TransEnergyMax)}");
                 }
             });
+            */
             // hook
             harmony.PatchAll();
         }

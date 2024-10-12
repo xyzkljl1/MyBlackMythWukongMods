@@ -17,7 +17,38 @@ namespace Test
     public static class MyExten
     {
         private static UWorld? world;
-        public static string Name => "Test";
+        public static string Name => "Test"; public static FieldType? GetFieldOrProperty2<FieldType>(this object obj, String field_name) where FieldType : unmanaged
+        {
+            var t = obj.GetType();
+            {
+                var field = t.GetField(field_name, BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field is null)
+                    field = t.GetField(field_name, BindingFlags.Public | BindingFlags.Instance);
+                if (field is null)
+                    field = t.GetField(field_name, BindingFlags.NonPublic | BindingFlags.Static);
+                if (field is null)
+                    field = t.GetField(field_name, BindingFlags.Public | BindingFlags.Static);
+                if (field is not null)
+                    return (FieldType)field.GetValue(obj);
+            }
+            {
+                var field = t.GetProperty(field_name, BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field is null)
+                    field = t.GetProperty(field_name, BindingFlags.Public | BindingFlags.Instance);
+                if (field is null)
+                    field = t.GetProperty(field_name, BindingFlags.NonPublic | BindingFlags.Static);
+                if (field is null)
+                    field = t.GetProperty(field_name, BindingFlags.Public | BindingFlags.Static);
+                if (field is not null)
+                    return (FieldType)field.GetValue(obj);
+            }
+
+            {
+                Console.WriteLine($"{Name} Fatal Error: Can't Find {field_name}");
+                return null;
+            }
+        }
+
         public static FieldType? GetFieldOrProperty<FieldType>(this object obj, String field_name) where FieldType : class
         {
             var t = obj.GetType();
