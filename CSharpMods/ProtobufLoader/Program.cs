@@ -33,6 +33,7 @@ using b1.UI.Comm;
 using Diana.Common;
 using System.Text.RegularExpressions;
 using UnrealEngine.Engine;
+using b1.Localization;
 #nullable enable
 namespace ProtobufLoader
 {
@@ -119,14 +120,32 @@ namespace ProtobufLoader
             }
         }
     }
+    /*
     [HarmonyPatch(typeof(BGWGameInstanceCS), "ReceiveInit_Implementation")]
     class PatchGameInstanceInit
     {
         static void Postfix()
         {
+            //MyExten.Log("Hook1");
             if (MyMod.FirstInitCalled == false)
             {
                 MyExten.Log("Init upon game instance init");
+                //MyMod.FirstInitCalled=true //redun
+                MyMod.ResetAndLoadAllDataFiles();
+            }
+        }
+    }*/
+    //GenLocalStringTable在BGWGameInstanceCS.ReceiveInit_Implementation之后，此时会把各种desc替换成形如TalentSDesc.{item.Id}.Name的形式
+    //所以需要在此之后初始化
+    [HarmonyPatch("GSDevStringTableGenerater", "GenLocalStringTable")]
+    class PatchGameInstanceInit2
+    {
+        static void Postfix()
+        {
+            //MyExten.Log("Hook2");
+            if (MyMod.FirstInitCalled == false)
+            {
+                MyExten.Log("Init upon GSLocalization init");
                 //MyMod.FirstInitCalled=true //redun
                 MyMod.ResetAndLoadAllDataFiles();
             }
@@ -136,7 +155,7 @@ namespace ProtobufLoader
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.3";
+        public string Version => "1.3.1";
         private readonly Harmony harmony;
         public static Dictionary<Type,Dictionary<int, Google.Protobuf.IMessage?>> RecordBackup = new Dictionary<Type, Dictionary<int, IMessage?>>();
         //是否被初始化了至少一次
@@ -156,14 +175,14 @@ namespace ProtobufLoader
             Config.LoadConfig();
             if (Config.EnableChineseConsoleLog)
                 MyExten.EnableCNInConsole();
-            Log("MyMod::Init called.Start Timer");
+            Log("MyMod::Init called.");
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F7, ResetAndLoadAllDataFiles);
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F8, () => ResetAll(true));
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F9, SuperReset);
 
-            if(MyExten.GetWorld() is null)
+            if(MyExten.GetWorld() is null || GSLocalization.IsInit==false)
             {
-                //如果此时gameinstance尚未初始化，通过hook调用初始化
+                //如果此时gameinstance尚未初始化或GSlocalization尚未初始化静态表，先不初始化，之后通过hook调用初始化
                 Log("World Not Ready.Skip Init");
             }
             else
