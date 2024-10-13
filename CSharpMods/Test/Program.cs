@@ -55,9 +55,22 @@ namespace Test
             TalentSDesc talentSDescByUnitResIDInMapCache = GameDBRuntime.GetTalentSDescByUnitResIDInMapCache(TalentID, actorResID);
             MyExten.Log($"{talentSDescByUnitResIDInMapCache.Id} {talentSDescByUnitResIDInMapCache.AddBuffIDs} end");
         }
-    }*/
+    }
 
-    
+    [HarmonyPatch(typeof(BUS_BeAttackedComp), "IsAttackCrit")]
+    class Patch2
+    {
+        static public void Log(string i) { MyExten.Log(i); }
+        static void Postfix(BUS_BeAttackedComp __instance, AActor Attacker, object DamageDescParam, FBattleAttrSnapShot Attacker_AttrMemData)
+        {
+            var a = Attacker_AttrMemData.Attr_CritRate;
+            var b= DamageDescParam.GetFieldOrProperty2<float>("CritRateAddition")!.Value;
+            var VictimAttrCon = __instance.GetFieldOrProperty<IBUC_AttrContainer>("VictimAttrCon")!;
+            var c = VictimAttrCon.GetFloatValue(EBGUAttrFloat.CritRateDef);
+            var d= GSGameplayCVar.CVar_DmgCacl.GetValueInGameThread();
+            Log($"On Crit {a} {b} {c} {d}");
+        }
+    }*/
     [HarmonyPatch(typeof(BUS_BeAttackedComp), "DoDmg_B1_V2")]
     class Patch
     {
@@ -65,36 +78,39 @@ namespace Test
         static void Postfix(BUS_BeAttackedComp __instance,AActor Attacker, bool IsCrit, float DmgNoiseMul, object DamageDynamicParam, object DamageDescParam,
             FSkillDamageConfig SkillDamageConfig, FBattleAttrSnapShot Attacker_AttrMemData, float FinalDamageValue, float FinalDmgForPart, float FinalElementDmgValue, bool bPrintLog)
         {
+            if (!Attacker.GetFullName().Contains("Unit_Player_Wukong_C"))
+                return;
             Log("=================================");
-            Log($"Final NormalDamage/PartDamage/ElementDamage: {FinalDamageValue} /{FinalDmgForPart}/{FinalElementDmgValue}");
+            //Log($"Final NormalDamage/PartDamage/ElementDamage: {FinalDamageValue} /{FinalDmgForPart}/{FinalElementDmgValue}");
             Log($"Attacker {Attacker.GetFullName()}");
-
+            //FSkillDamageConfig
             var VictimAttrCon = __instance.GetFieldOrProperty<IBUC_AttrContainer>("VictimAttrCon")!;
 
             var ActionRate = DamageDescParam.GetFieldOrProperty2<float>("BaseDamageRatio")!.Value;
             var FixDamage = DamageDescParam.GetFieldOrProperty2<float>("BaseDamage")!.Value/100;
             var BaseDamage = Attacker_AttrMemData.Attr_Atk * ActionRate / 10000 + FixDamage;
-            Log($"Base Damage = {BaseDamage} = (FinalAttack {Attacker_AttrMemData.Attr_Atk} * ActionRate {ActionRate / 100}% + FixDamage {FixDamage}) ");
+            //Log($"Base Damage = {BaseDamage} = (FinalAttack {Attacker_AttrMemData.Attr_Atk} * ActionRate {ActionRate / 100}% + FixDamage {FixDamage}) ");
+            Log($"AR {ActionRate} FixDamage {FixDamage}) ");
 
             var def = VictimAttrCon.GetFloatValue(EBGUAttrFloat.Def);
             var defDamageReducion = 1 - 0.48f * def / (90f + 0.52f * Math.Abs(def));
             var DamageBonusAndReduction = Math.Max(0.2f,(1- VictimAttrCon.GetFloatValue(EBGUAttrFloat.DmgDef)/10000)*(1+ Attacker_AttrMemData.Attr_DmgAddition/10000));
-            Log($"Damage Bonus/Reduction Factor = {DamageBonusAndReduction} = Max(0.2,(1 - EnemyDamageReduction {VictimAttrCon.GetFloatValue(EBGUAttrFloat.DmgDef) / 100}%) * (1 + DamageBonus {Attacker_AttrMemData.Attr_DmgAddition/100}%) )");
+            //Log($"Damage Bonus/Reduction Factor = {DamageBonusAndReduction} = Max(0.2,(1 - EnemyDamageReduction {VictimAttrCon.GetFloatValue(EBGUAttrFloat.DmgDef) / 100}%) * (1 + DamageBonus {Attacker_AttrMemData.Attr_DmgAddition/100}%) )");
 
             var YinYangMulti = (float)__instance.CallPrivateFunc("CalcYinYangDmgMultiplier", new object[] { Attacker, __instance.GetOwner() })!;
             BaseDamage *= DamageBonusAndReduction*YinYangMulti;
-            Log($"Total Damage = {BaseDamage} = BaseDamage * Damage Bonus/Reduction Factor * YinYangMulti {YinYangMulti} ");
+            //Log($"Total Damage = {BaseDamage} = BaseDamage * Damage Bonus/Reduction Factor * YinYangMulti {YinYangMulti} ");
 
 
             float TrueDamageRatio = 0f;
             FUStUnitBattleInfoExtendDesc unitBattleInfoExtendDesc = BGW_GameDB.GetUnitBattleInfoExtendDesc(BGU_DataUtil.GetFinalBattleInfoExtendID(Attacker));
             if (unitBattleInfoExtendDesc != null)
                 TrueDamageRatio = unitBattleInfoExtendDesc.TrueDamageRatio;
-            Log($"True Damage Ratio = {TrueDamageRatio}");
+            //Log($"True Damage Ratio = {TrueDamageRatio}");
 
             var ElementDamageLevel = DamageDescParam.GetFieldOrProperty2<int>("ElementDmgLevel")!.Value;
             var ElementDamageRatio = BGW_GameDB.GetElementDmgRatio(ElementDamageLevel) * (1f - TrueDamageRatio);
-            Log($"Element Damage Ratio = {ElementDamageLevel} = FUStElementDmgRatioLevelDesc[ ElementDamageLevel {ElementDamageLevel}] * (1 - TrueDamageRatio)");
+            //Log($"Element Damage Ratio = {ElementDamageLevel} = FUStElementDmgRatioLevelDesc[ ElementDamageLevel {ElementDamageLevel}] * (1 - TrueDamageRatio)");
             if(false)
             {
                 var EleType = (EAbnormalStateType)DamageDescParam.GetFieldOrProperty2<int>("ElemAtkType")!.Value;
@@ -135,7 +151,7 @@ namespace Test
             }
             DebugConfig.IsOpenBattleInfoTool = true;
 
-            Log($"Defense Factor = {defDamageReducion} = 1-0.48* DEF {def} /(90+0.52*abs(DEF {def})) ");
+            //Log($"Defense Factor = {defDamageReducion} = 1-0.48* DEF {def} /(90+0.52*abs(DEF {def})) ");
 
             Log("=================================");
         }

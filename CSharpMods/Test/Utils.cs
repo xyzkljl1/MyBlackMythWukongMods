@@ -17,7 +17,8 @@ namespace Test
     public static class MyExten
     {
         private static UWorld? world;
-        public static string Name => "Test"; public static FieldType? GetFieldOrProperty2<FieldType>(this object obj, String field_name) where FieldType : unmanaged
+        public static string Name => "Test"; 
+        public static FieldType? GetFieldOrProperty2<FieldType>(this object obj, String field_name) where FieldType : unmanaged
         {
             var t = obj.GetType();
             {
