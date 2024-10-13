@@ -165,7 +165,7 @@ namespace EffectDetailDescription
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.4";
+        public string Version => "1.5";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
         public static Boolean inited=false;
@@ -325,7 +325,8 @@ namespace EffectDetailDescription
                 var descList = Data.SpiritDesc;
                 var generalFormat = descList[-1];
                 foreach (var mydesc in descList.Copy())
-                    if (mydesc.Key >= 0)
+                    if (mydesc.Key >= 0
+                        &&mydesc.Key!=8076)//巡山鬼特殊处理
                     {
                         //假定精魂各等级只有value不一样，格式都一样,假定只有1/4/6级产生变化
                         var desc = GameDBRuntime.GetSoulSkillDesc(mydesc.Key);
