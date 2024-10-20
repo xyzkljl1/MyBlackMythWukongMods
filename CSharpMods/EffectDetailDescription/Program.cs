@@ -35,6 +35,7 @@ namespace EffectDetailDescription
 {
     public static class MyExten
     {
+        public static UWorld? world;
         public static string Name => "EffectDetailDescription";
         public static Data.LanguageIndex currentLanguage = Data.LanguageIndex.SimpleCN;
         public static void Log(string msg)
@@ -121,6 +122,15 @@ namespace EffectDetailDescription
         {
             return new List<T?> { obj };
         }
+        public static UWorld? GetWorld()
+        {
+            if (world == null)
+            {
+                UObjectRef uobjectRef = GCHelper.FindRef(FGlobals.GWorld);
+                world = uobjectRef?.Managed as UWorld;
+            }
+            return world;
+        }
     }
     [HarmonyPatch(typeof(VITreasureDetail), "OnEquipIdChange")]
     class Patch_Fabao_Cost
@@ -150,26 +160,36 @@ namespace EffectDetailDescription
                     textCost.SetText(FText.FromString(textCost.GetText() + Data.SpiritCost[NewValue].GetTr()));
             }
             //else
-                //MyExten.Log($"NotFind{NewValue}");
+            //MyExten.Log($"NotFind{NewValue}");
         }
     }
     [HarmonyPatch(typeof(BGUPlayerCharacterCS), nameof(BGUPlayerCharacterCS.AfterInitAllComp))]
     class Patch_Init
     {
-        static void Postfix()
+        static void Postfix(BGUPlayerCharacterCS __instance)
         {
-            MyMod.InitDescProtobufAndLanugage();
+            try
+            {
+                MyMod.PreFillDict();
+                MyMod.InitDescProtobufAndLanugage();
+            }
+            catch (Exception e) 
+            {
+                MyExten.Error(e.Message);
+                MyExten.Error(e.InnerException.Message);
+            }
         }
     }
 
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.5";
+        public string Version => "1.6";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
-        public static Boolean inited=false;
-        
+        public static Boolean inited = false;//InitDescProtobufAndLanugage called
+        public static Boolean preInited = false;//prefilldict called
+
         public MyMod()
         {
             harmony = new Harmony(Name);
@@ -192,13 +212,16 @@ namespace EffectDetailDescription
 
         public void Init()
         {
-            Log("MyMod::Init called.Start Timer");
+            Log("MyMod::Init called");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
-            //Utils.RegisterKeyBind(ModifierKeys.Control, Key.ENTER, FindPlayer);
+            //Utils.RegisterKeyBind(ModifierKeys.Control, Key.ENTER, () => { PreFillDict();InitDescProtobufAndLanugage(); });
 
-            PreFillDict();//对Data.XXXDict的预处理
+            //如果此时游戏已经初始化完成(以GSLocalization.IsInit为准)则立刻进行预处理，否则在InitDescProtobufAndLanugage前进行
+            if (MyExten.GetWorld() != null && GSLocalization.IsInit)
+                PreFillDict();//对Data.XXXDict的预处理
+            else
+                Log("Not Ready.Delay Pre Init");
 
-            //initDescTimer.Start();
             //注意必须在GameThread执行，ToFTextFillPre/GetLocaliztionalFText等函数在Timer.Elapsed线程无法得到正确翻译，在RegisterKeyBind或Init或TryRunOnGameThread线程则可以
             //不要随便用RunOnGameThread!!!!调用累计超过12672次后会导致游戏卡住，只在必要时调用
             //或创建一个Comp绑定到主角，然后在Comp的tick里执行，需要setTickEnable，reCalTick？
@@ -206,8 +229,15 @@ namespace EffectDetailDescription
             // hook
             harmony.PatchAll();
         }
+
+
         static public void PreFillDict()
         {
+            if (preInited)
+            {
+                Log("Skip Dup preInit");
+                return;
+            }
             //精魂和法宝消耗
             {
                 var cost = new List<int> { 0, 0, 0, 0, 0, 0 };
@@ -234,7 +264,6 @@ namespace EffectDetailDescription
                     Data.SpiritCost.Add(desc.Id, new Desc { $"{desc.CastEnergy:F1}" });
                 Log($"Init Vigor And Treasure Cost Dict {Data.SpiritCost.Count}");
             }
-
             //珍玩和法宝
             {
 
@@ -319,7 +348,7 @@ namespace EffectDetailDescription
                 }
                 Log($"Generate {ct} Translation For ItemDesc");
             }
-            //精魂
+            //精魂被动
             {
                 int ct = 0;
                 var descList = Data.SpiritDesc;
@@ -364,8 +393,68 @@ namespace EffectDetailDescription
                         for (int i = 0; i < generalFormat.Count && i < descList[mydesc.Key].Count; i++)
                             descList[mydesc.Key][i] = String.Format(generalFormat[i], descList[mydesc.Key][i]);
                     }
+                preInited = true;
                 Log($"Generate {ct} Translation For Vigor Passive");
             }
+            //精魂变身期间buff
+            {
+                int ct = 0;
+                var descList = Data.ItemDesc;
+                var generalFormat = descList[-1];
+                foreach (var mydesc in descList.Copy())
+                    if (mydesc.Key >= 8000&&mydesc.Key<9000)
+                    {
+                        var souskillDescList = new List<SoulSkillDesc?>
+                                { GameDBRuntime.GetSoulSkillDesc(mydesc.Key),
+                                    GameDBRuntime.GetSoulSkillDesc(mydesc.Key+300),
+                                    GameDBRuntime.GetSoulSkillDesc(mydesc.Key+500) };
+                        if (souskillDescList.Any(ele=>ele==null)) continue;
+                        var buffDescList = souskillDescList.Select(ele => ele!.BuffId > 0 ? GameDBRuntime.GetFUStBuffDesc(ele.BuffId) : null).ToList();
+                        //目前看来只有一种0/20810/20820,由于1级是0不太好处理,替换成一个自建临时buff
+                        if (buffDescList[0] is null&& buffDescList[1] != null && buffDescList[2] != null 
+                            && buffDescList[1]!.ID == 20810 && buffDescList[2]!.ID==20820)
+                        {
+                            var tmpBuff = buffDescList[2].Copy();
+                            foreach (var buffEffect in tmpBuff!.BuffEffects)
+                                if(buffEffect.EffectParams.Count>1)
+                                    buffEffect.EffectParams[1] = 0;//将效果数值设为0;
+                            buffDescList[0] = tmpBuff;
+                            descList[mydesc.Key] += buffDescList.ToTr().FormattedBy(generalFormat);
+                            ct++;
+                        }
+                        //else//其他情况暂不处理
+                    }
+                Log($"Generate {ct} Vigor trasformation buff");
+            }
+            //精魂动作值
+            {
+                int ct = 0;
+                var descList = Data.ItemDesc;
+                var generalFormat = descList[-2];
+                foreach (var mydesc in descList.Copy())
+                    if (mydesc.Key >= 8000 && mydesc.Key < 9000)
+                    {
+                        //只考虑满级，SpiritActiveSkillId里用的是1级的精魂id，技能id写的是满级的
+                        if (!Data.SpiritActiveSkillId.ContainsKey(mydesc.Key)) continue;
+                        Desc tmp = Desc.Empty;
+                        foreach(var pair in Data.SpiritActiveSkillId[mydesc.Key])
+                        {
+                            var skillDesc =BGW_GameDB.GetOriginalSkillEffectDesc(pair.Key);
+                            if (skillDesc is null)
+                            {
+                                Error($"Can't Find Skill Effect {pair.Key}");
+                                continue;
+                            }
+                            var hitCount = pair.Value;
+                            tmp.ConcatWith(skillDesc.ToTr(hitCount),Data.ThenConnection);
+                        }
+//                        Log(tmp.GetTr());
+                        descList[mydesc.Key] += tmp.FormattedBy(generalFormat);
+                        ct++;
+                    }
+                Log($"Generate {ct} Vigor action rate");
+            }
+
 
 
             //补充Desc,因为不同等级id不同,共用描述，在Data里只写1级的id，其它等级在此处补上
@@ -374,7 +463,7 @@ namespace EffectDetailDescription
                     for (int i = 10; i <= 40; i += 10)
                         Data.EquipDesc.Add(desc.Key + i, desc.Value);
             foreach (var desc in Data.SpiritDesc.Copy())
-                if (desc.Key >= 8000 && desc.Key < 9000)//精魂
+                if (desc.Key >= 8000 && desc.Key < 9000)//精魂被动描述
                 {
                     var base_str = desc.Value;
                     var levelStrList = desc.Value.Remove2in3Bracket();
@@ -385,6 +474,29 @@ namespace EffectDetailDescription
                     Data.SpiritDesc.Add(desc.Key + 400, levelStrList[1]);
                     Data.SpiritDesc.Add(desc.Key + 500, levelStrList[2]);
                 }
+            foreach (var desc in Data.ItemDesc.Copy())
+                if (desc.Key >= 8000 && desc.Key < 9000)//精魂主动描述
+                {
+                    var base_str = desc.Value;
+                    var levelStrList = desc.Value.Remove2in3Bracket();
+                    Data.ItemDesc[desc.Key] = levelStrList[0];
+                    Data.ItemDesc.Add(desc.Key + 100, levelStrList[0]);
+                    Data.ItemDesc.Add(desc.Key + 200, levelStrList[0]);
+                    Data.ItemDesc.Add(desc.Key + 300, levelStrList[1]);
+                    Data.ItemDesc.Add(desc.Key + 400, levelStrList[1]);
+                    Data.ItemDesc.Add(desc.Key + 500, levelStrList[2]);
+                }
+            /*
+            foreach (var desc in Data.ItemDesc.Copy())
+                if (desc.Key >= 8000 && desc.Key < 9000)//精魂主动描述
+                {
+                    var base_str = desc.Value;
+                    Data.ItemDesc.Add(desc.Key + 100, base_str);
+                    Data.ItemDesc.Add(desc.Key + 200, base_str);
+                    Data.ItemDesc.Add(desc.Key + 300, base_str);
+                    Data.ItemDesc.Add(desc.Key + 400, base_str);
+                    Data.ItemDesc.Add(desc.Key + 500, base_str);
+                }*/
             DebugLog("Fill Dict Done");
         }
         public void DeInit()

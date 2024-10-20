@@ -134,13 +134,22 @@ namespace EffectDetailDescription
                 this[i] = this[i].Replace(Data.PlaceHolder, "{0}");
         }
         //使用该分隔符拼接
-        public Desc ConcatWith(Desc r,string connectionStr)
+        public Desc ConcatWith(Desc r, string connectionStr = ",")
         {
             for (int i = 0; i < Count && i < r.Count; ++i)
                 if (this[i] == "")
                     this[i] += r[i];
-                else if (r[i]!="")
+                else if (r[i] != "")
                     this[i] += connectionStr + r[i];
+            return this;
+        }
+        public Desc ConcatWith(Desc r, Desc connectionStr)
+        {
+            for (int i = 0; i < Count && i < r.Count; ++i)
+                if (this[i] == "")
+                    this[i] += r[i];
+                else if (r[i] != "")
+                    this[i] += connectionStr[i] + r[i];
             return this;
         }
     }
@@ -391,7 +400,45 @@ namespace EffectDetailDescription
         public static Desc ToTr(this List<FUStBuffEffectAttr> descList, FUStBuffDesc buffDesc, bool isChild = false, bool PlaceHolder = false)
         {
             RemoveDurationOrIntervalConfig tmp = RemoveDurationOrIntervalConfig.Ignore;
-            return descList.ToTr(ref tmp,buffDesc, isChild, PlaceHolder);
+            return descList.ToTr(ref tmp, buffDesc, isChild, PlaceHolder);
+        }
+        //技能伤害描述
+        public static Desc ToTr(this FUStSkillEffectDesc desc,int hitCount)
+        {
+            var ret = new Desc();
+            if (desc.EffectType != EBuffAndSkillEffectType.SkillDamage)
+                return ret;
+            //see PackageDamageDescParam
+            if (desc.EffectParamsFloat.Count < 4 || desc.EffectParamsInt.Count < 4)
+                return ret;
+            ret = Desc.Empty;
+            int FixDamage = (int)desc.EffectParamsFloat[1];//万分比
+            int ActionRate= (int)desc.EffectParamsFloat[2];
+            //ESkillDamageType SkillDamageType = (ESkillDamageType)desc.EffectParamsInt[2];
+            var ElementDmgLevel = ((desc.EffectParamsInt.Count > 4) ? desc.EffectParamsInt[4] : 0);
+            var ElementRatio = BGW_GameDB.GetElementDmgRatio(ElementDmgLevel);
+            //desc.EffectParamsInt[5]影响伤害计算时使用哪个抗性，EffectParamsInt[2]用途暂不明确
+            var ElemAtkType = ((desc.EffectParamsInt.Count > 5) ? ((EAbnormalStateType)desc.EffectParamsInt[5]) : EAbnormalStateType.None);
+            ret += Data.ActionRateFormat;
+            ret.FormatWith(F2Str(ActionRate/100.0f,div100:true,noSign:true));
+            if (FixDamage != 0)
+                ret.FormatWith(F2Str(FixDamage, false));
+            else
+                ret.FormatWith("");
+            if (hitCount == -1)
+                ret.FormatWith("N");
+            else if (hitCount > 1)
+                ret.FormatWith(hitCount);
+            else//1次
+                ret.FormatWith(hitCount);
+                //ret.RemoveTag("HitCount");
+            if(Data.EAbnormalStateTypeDesc.ContainsKey((int)ElemAtkType))
+            {
+                ret.ConcatWith(Data.EAbnormalStateTypeDesc[(int)ElemAtkType]);
+                ret.FormatWith(F2Str(ElementRatio*100.0f, div100:false,noSign:true));
+            }
+            ret.RemoveAllTag(false);
+            return ret;
         }
         public static Desc ToTr(this List<FUStBuffEffectAttr> descList, ref RemoveDurationOrIntervalConfig ForceAddOrRemoveDurationAndIntervalConfigInOut, FUStBuffDesc buffDesc,bool isChild = false,bool PlaceHolder=false)//isChild:被addbuff类效果触发的子buff
         {

@@ -74,5 +74,6 @@ namespace EffectDetailDescription
         {
             return UGameplayStatics.GetActorOfClass(GetWorld(), LoadAsset<UClass>(classAsset));
         }
+
     }
 }

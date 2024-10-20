@@ -78,8 +78,8 @@ namespace Test
         static void Postfix(BUS_BeAttackedComp __instance,AActor Attacker, bool IsCrit, float DmgNoiseMul, object DamageDynamicParam, object DamageDescParam,
             FSkillDamageConfig SkillDamageConfig, FBattleAttrSnapShot Attacker_AttrMemData, float FinalDamageValue, float FinalDmgForPart, float FinalElementDmgValue, bool bPrintLog)
         {
-            if (!Attacker.GetFullName().Contains("Unit_Player_Wukong_C"))
-                return;
+            //if (!Attacker.GetFullName().Contains("Unit_Player_Wukong_C"))
+                //return;
             Log("=================================");
             //Log($"Final NormalDamage/PartDamage/ElementDamage: {FinalDamageValue} /{FinalDmgForPart}/{FinalElementDmgValue}");
             Log($"Attacker {Attacker.GetFullName()}");
@@ -90,7 +90,8 @@ namespace Test
             var FixDamage = DamageDescParam.GetFieldOrProperty2<float>("BaseDamage")!.Value/100;
             var BaseDamage = Attacker_AttrMemData.Attr_Atk * ActionRate / 10000 + FixDamage;
             //Log($"Base Damage = {BaseDamage} = (FinalAttack {Attacker_AttrMemData.Attr_Atk} * ActionRate {ActionRate / 100}% + FixDamage {FixDamage}) ");
-            Log($"AR {ActionRate} FixDamage {FixDamage}) ");
+            Log($"AR {ActionRate} FixDamage {FixDamage} -> {FinalDamageValue}");
+            Log($"Id {SkillDamageConfig.DmgReasonEffectID}");
 
             var def = VictimAttrCon.GetFloatValue(EBGUAttrFloat.Def);
             var defDamageReducion = 1 - 0.48f * def / (90f + 0.52f * Math.Abs(def));
@@ -165,7 +166,7 @@ namespace Test
 
         public System.Timers.Timer initDescTimer= new System.Timers.Timer(1000);
 
-        void Log(string i) { MyExten.Log(i); }
+        public static void Log(string i) { MyExten.Log(i); }
         void Error(string i) { MyExten.Error(i); }
         void DebugLog(string i) { MyExten.DebugLog(i); }
         public MyMod()
@@ -173,13 +174,24 @@ namespace Test
             harmony = new Harmony(Name);
             // Harmony.DEBUG = true;
         }
-       
+        static public void OnIncreaseAttr(EBGUAttrFloat AttrID, float IncreaseValue)
+        {
+            //Log($" {AttrID.ToString()} += {IncreaseValue} ");
+        }
+        static public void OnAddBuff(int BuffID, AActor Caster, AActor RootCaster, float Duration, EBuffSourceType BuffSourceType, bool bRecursed , FBattleAttrSnapShot BattleAttrSnapShot)
+        {
+            //Log($"AddBuff {BuffID} += {Duration} ");
+        }
+
         public void Init()
         {
 
             Log("MyMod::Init called.Start Timer");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
             Utils.RegisterKeyBind(Key.O, delegate {
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.AtkBase, 10.0f);
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.VigorEnergy, 200.0f);
+                return;
                 {
                     var t = typeof(GameDBRuntime);
                     var methodInfo = t.GetMethod("InitTalentSUnitMap", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
@@ -217,12 +229,17 @@ namespace Test
             */
             // hook
             harmony.PatchAll();
+            MyExten.GetBUS_GSEventCollection().Evt_IncreaseAttrFloat += OnIncreaseAttr;
+            MyExten.GetBUS_GSEventCollection().Evt_BuffAdd += OnAddBuff;
         }
         public void DeInit() 
         {
             initDescTimer.Dispose();
             Log($"DeInit");
             harmony.UnpatchAll();
+            MyExten.GetBUS_GSEventCollection().Evt_IncreaseAttrFloat -= OnIncreaseAttr;
+            MyExten.GetBUS_GSEventCollection().Evt_BuffAdd -= OnAddBuff;
+
         }
         //unused
     }

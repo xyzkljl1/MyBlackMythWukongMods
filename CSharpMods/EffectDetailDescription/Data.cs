@@ -30,9 +30,78 @@ namespace EffectDetailDescription
             {19001,new Desc{ "40秒内+600火抗，每秒获得5棍势", "+600 FireResist,+5 Focus/s in 40s"}},
             {19002,new Desc{ "20秒内+50%伤害减免", "+50% DamageReduction in 20s"}},
         };
-
+        //精魂id->(skill id->hit数的map)
+        //-1=*N
+        public static Dictionary<int, List<KeyValuePair<int, int>>> SpiritActiveSkillId = new Dictionary<int, List<KeyValuePair<int, int>>>
+        {
+            {8011,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 10380101, -1 ) }}, //"广谋"
+            {8013,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1011361, 1 ) }}, //"幽魂"
+            {8014,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1011401, 7 ) }}, //"鼠司空"
+            {8015,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1011501, 1 ) }}, //"百目真人"
+            {8017,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1011761, 1 ) }}, //"虎伥"
+            {8022,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1012261, 2 ) }}, //"无量蝠"
+            {8024,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1012401, 4 ),new KeyValuePair<int,int>(1012402,1) }}, //"不净"
+            {8025,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1012501, 1 ),new KeyValuePair<int,int>( 1012502, -1 ) }}, //"不白
+            //{8026,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1012601, 1 ),new KeyValuePair<int,int>(1012602,2 ),{ } }}, //"不能"
+            {8027,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1012701, 1 ) }}, //"虫总兵"
+            {8028,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 43010501, -1 ),new KeyValuePair<int,int>( 43010601,-1)  }}, //"儡蜱士",小蜘蛛平A和自爆伤害，平A有43010301/43010401/43010501三种
+            //{8029,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( , -1 ) }}, //"青冉冉"
+            {8030,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1013001, 1 ),new KeyValuePair<int,int>( 1013002,1) }}, //"蝎太子"
+            {8031,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1013101, -1 ) }}, //"百足虫"
+            {8032,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1013201, 2 ),new KeyValuePair<int,int>( 1013261, 1 ) }}, //"兴烘掀·掀烘兴"
+            {8033,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1013301, 1 ),new KeyValuePair<int,int>( 1013302,1) }}, //"石父"
+            {8034,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1013401, 1 ) }}, //"地罗刹"
+            {8035,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1013503, 1 ),new KeyValuePair<int,int>( 1013501,1) }}, //"鳖宝",1013503在前
+            //{8036,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( , -1 ) }}, //"燧统领"
+            {8037,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1013701, 4 ),new KeyValuePair<int,int>( 1013702, 1 ),new KeyValuePair<int,int>( 1013703, 1 ) }}, //"燧先锋"
+            {8038,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1013803, -1 ) }}, //"琴螂仙"
+            {8039,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 40220101, -1 ) }}, //"火灵元母"
+            {8040,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 50060401, 1 ),new KeyValuePair<int,int>( 50060402, 1 ),new KeyValuePair<int,int>( 50060403, 1 ),new KeyValuePair<int,int>( 50060404, 1 ) }}, //"老人参精"
+            {8041,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1014104, 1 ) }}, //"蘑女",还有若干无伤害的孢子
+            {8042,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1014201, -1 ) }}, //"菇男"
+            
+            {8061,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016101, -1 ) }}, //"狼刺客"
+            {8062,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016201, 1 ),new KeyValuePair<int,int>( 1016263, 1 )}}, //"疯虎"
+            {8063,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016302, 2 ) }}, //"沙二郎"
+            {8064,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016401, 1 ),new KeyValuePair<int,int>( 1016402,1) }}, //"鼠禁卫"
+            {8065,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016502, 1 ),new KeyValuePair<int,int>( 1016501,7),new KeyValuePair<int,int>( 1016502,1) }}, //"骨悚然"，起手吼和收尾砸都是1016502
+            {8066,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016601, 2 ) }}, //"狸侍长"
+            {8067,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016761, 2 ) }}, //"疾蝠"
+            {8068,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016801, 1 ),new KeyValuePair<int,int>(1016802,1) }}, //"石双双" 
+            //
+            {8069,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1016901, 11 ) }}, //"鼠弩手"
+            {8070,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1017001, 3 ),new KeyValuePair<int,int>(1017002,1 ) }}, //"地狼"
+            //{8071,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( , -1 ) }}, //"隼居士",有ar但没伤害
+            {8072,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1017261, 1 ) }}, //"赤发鬼"
+            {8073,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1017301, 2 ),new KeyValuePair<int,int>(1017302,1) }}, //"戒刀僧"
+            {8074,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1017402,1) }}, //"泥塑金刚"new KeyValuePair<int,int>( 1017401, 4 )没有伤害
+            {8075,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1017501, 1 ) }}, //"夜叉奴"
+            {8076,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1017601, 1 ),new KeyValuePair<int,int>( 1017602,2) }}, //"巡山鬼"
+            //{8077,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( , -1 ) }}, //"鸦香客"
+            {8078,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1017801, 2 ) }}, //"虫校尉"
+            {8079,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1017961, 1 ) }}, //"蜻蜓精"
+            {8081,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>(1018101,4) } },//"傀蜱士"
+            {8083,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1018301, 1 ),new KeyValuePair<int,int>( 1018302,1) }}, //"蛇捕头"
+            {8084,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1018401, -1 ) }}, //"蛇司药"
+            {8085,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1018502, 6 ) }}, //"幽灯鬼"
+            {8086,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1018602, 1 ) }}, //"黑脸鬼"
+            {8087,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1018701, 3 ),new KeyValuePair<int,int>( 1018702,1) }}, //"牯都督"
+            {8088,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1018802, 2 ),new KeyValuePair<int,int>( 1018803, 3 ) }}, //"雾里云·云里雾"
+            {8092,new List<KeyValuePair<int, int>>{ new KeyValuePair<int,int>( 1019201, -1 ) }}, //"九叶灵芝精"
+        };
+        public static DescDict EAbnormalStateTypeDesc = new DescDict
+        {
+            { (int)EAbnormalStateType.Abnormal_Burn,new Desc{"其中{0}%为火属性","{0}% is Fire Damage" } },
+            { (int)EAbnormalStateType.Abnormal_Poison,new Desc{"其中{0}%为毒属性","{0}% is Posion Damage" } },
+            { (int)EAbnormalStateType.Abnormal_Freeze,new Desc{"其中{0}%为冰属性","{0}% is Ice Damage" } },
+            { (int)EAbnormalStateType.Abnormal_Thunder,new Desc{"其中{0}%为雷属性","{0}% is Thunder Damage" } },
+            { (int)EAbnormalStateType.Abnormal_Yang,new Desc{"其中{0}%为阳属性","{0}% is Yang Damage" } },
+            { (int)EAbnormalStateType.Abnormal_Yin,new Desc{"其中{0}%为阴属性","{0}% is Yin Damage" } },
+        };
         public static DescDict ItemDesc = new DescDict
         {
+            {-2,new Desc{ "满级时,{0}", "LvMax:{0}"}},
+            {-1,new Desc{ "变身期间根据等级{0};", "{0} by Lv when active."}},
             //消耗品,注意1118等是配方，2118等是丹药
             //鼻根器+10%持续2
             {2218,new Desc{ }},//朝元膏/Essence Decoction
@@ -110,6 +179,60 @@ namespace EffectDetailDescription
             //Item 92317 92327 92328
             {2327,new Desc{ }},//青山骨/Goat Skull
 
+            //精魂主动技能倍率
+            {8011,new Desc{ "", ""}}, //"广谋"
+            {8013,new Desc{ "", ""}}, //"幽魂"
+            {8014,new Desc{ "", ""}}, //"鼠司空"
+            {8015,new Desc{ "满级时，60秒内+35%攻击;", "LvMax:+35%ATK in 60s;"}}, //"百目真人"
+            {8017,new Desc{ "", ""}}, //"虎伥"
+            {8022,new Desc{ "", ""}}, //无量蝠
+            {8024,new Desc{ "", ""}}, //"不净"
+            {8025,new Desc{ "", ""}}, //"不白"
+            {8026,new Desc{ "轻棍0~4段派生分别造成x0.916*1/x0.916*2/x0.916*2/x0.916*2+x1.1/x0.916+x2.8416伤害;", "x0.916*1/x0.916*2/x0.916*2/x0.916*2+x1.1/x0.916+x2.8416 After Light Attack Lv0~4;"}}, //"不能",根据轻棍段数不同
+            {8027,new Desc{ "",""}}, //"虫总兵"
+            {8028,new Desc{ "", ""}}, //"儡蜱士"
+            //{8029,new Desc{ "", ""}}, //"青冉冉"
+            {8030,new Desc{ "", ""}}, //"蝎太子"
+            {8031,new Desc{ "", ""}}, //"百足虫"
+            {8032,new Desc{ "",""}}, //"兴烘掀·掀烘兴"
+            {8033,new Desc{ "",""}}, //"石父"
+            {8034,new Desc{ "", ""}}, //"地罗刹"
+            {8035,new Desc{ "", ""}}, //"鳖宝"
+            //{8036,new Desc{ "",""}}, //"燧统领"，无攻击
+            {8037,new Desc{ "",""}}, //"燧先锋"
+            {8038,new Desc{ "", ""}}, //"琴螂仙"
+            {8039,new Desc{ "", ""}}, //"火灵元母"
+            {8040,new Desc{ "", ""}}, //"老人参精"
+            {8041,new Desc{ "", ""}}, //"蘑女"
+            {8042,new Desc{ "", ""}}, //"菇男"
+            
+            {8061,new Desc{ "", ""}}, //"狼刺客"
+            {8062,new Desc{ "", ""}}, //"疯虎"
+            {8063,new Desc{ "", ""}}, //"沙二郎"
+            {8064,new Desc{ "", ""}}, //"鼠禁卫"
+            {8065,new Desc{ "", ""}}, //"骨悚然"
+            {8066,new Desc{ "", ""}}, //"狸侍长"
+            {8067,new Desc{ "", ""}}, //"疾蝠"
+            {8068,new Desc{ "", ""}}, //"石双双" 
+            {8069,new Desc{ "", ""}}, //"鼠弩手"
+            {8070,new Desc{ "", ""}}, //"地狼"
+            //{8071,new Desc{ "", ""}}, //"隼居士"
+            {8072,new Desc{ "", ""}}, //"赤发鬼"
+            {8073,new Desc{ "", ""}}, //"戒刀僧"
+            {8074,new Desc{ "", ""}}, //"泥塑金刚"
+            {8075,new Desc{ "", ""}}, //"夜叉奴"
+            {8076,new Desc{ "", ""}}, //"巡山鬼"
+            //{8077,new Desc{ "", ""}}, //"鸦香客"
+            {8078,new Desc{ "", ""}}, //"虫校尉"
+            {8079,new Desc{ "", ""}}, //"蜻蜓精"
+            {8081,new Desc{ "", ""}}, //"傀蛛士"
+            {8083,new Desc{ "", ""}}, //"蛇捕头"
+            {8084,new Desc{ "", ""}}, //"蛇司药"
+            {8085,new Desc{ "", ""}}, //"幽灯鬼"
+            {8086,new Desc{ "", ""}}, //"黑脸鬼"
+            {8087,new Desc{ "", ""}}, //"牯都督"
+            {8088,new Desc{ "", ""}}, //"雾里云·云里雾"
+            {8092,new Desc{ "", ""}}, //"九叶灵芝精"
         };
         //\["(.*?)"\]=(".*?"),[ ]*\["(.*?)"\]=(".*?"),
         //{,new Desc{ $2, $4}},//$1/$3
@@ -163,7 +286,7 @@ namespace EffectDetailDescription
             {17003,new Desc{ "+2%", "+2%"}},//鳖宝头骨/Skull of Turtle Treasure
             {17004,new Desc{ }},//山珍蓑衣/Ginseng Cape
             //蜢虫头907005 97005、97015 185、186
-            {17005,new Desc{ "+15%/20% 动作倍率", "+15%/20% SkillEffect"}},//长须头面/Locust Antennae Mask
+            {17005,new Desc{ "+15%/20% 动作倍率", "+15%/20% ActionRate"}},//长须头面/Locust Antennae Mask
             //Talent 2702
             {17006,new Desc{ }},//白脸子/Grey Wolf Mask
             {17008,new Desc{ "阳:+20%伤害减免。阴:20%暴击-30%伤害减免", "Yang:+20% DamageReduction. Yin:+20% Crit,-30% DamageReduction"}},//阴阳法衣/Yin-Yang Daoist Robe
@@ -191,8 +314,8 @@ namespace EffectDetailDescription
             //{,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍/Chitin Staff
             {15018,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍·通天/Adept Spine-Shooting Fuban Staff
             {15016,new Desc{ "每点防御+0.15攻击", "+0.15ATK per DEF"}},//混铁棍/Dark Iron Staff
-            {15015,new Desc{ "+20% 动作倍率", "+20% SkillEffect"}},//飞龙宝杖/Golden Loong Staff//15015 145
-            {15101,new Desc{ "+15% 动作倍率", "+15% SkillEffect"}},//三尖两刃枪/Tri-Point Double-Edged Spear//15015 145
+            {15015,new Desc{ "+20% 动作倍率", "+20% ActionRate"}},//飞龙宝杖/Golden Loong Staff//15015 145
+            {15101,new Desc{ "+15% 动作倍率", "+15% ActionRate"}},//三尖两刃枪/Tri-Point Double-Edged Spear//15015 145
         };
         //天赋
         public static DescDict TalentDisplayDesc = new DescDict
@@ -209,8 +332,8 @@ namespace EffectDetailDescription
             //{,new Desc{ "",}},//任翻腾//第一段翻滚由SkillDesc 10301变为10305
 
             //武艺
-            {100201,new Desc{ "+100/lv,基础800/900/1000;\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875",
-                "+100/lv,Base 800/900/1000;\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//直取/Switft Engage//Passive 13/14 SkillCtrlDesc 10701,10798-10801
+            {100201,new Desc{ "+100/lv,基础800/900/1000;\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875\n跳跃轻棍:x1.0",
+                "+100/lv,Base 800/900/1000;\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875\nLight Attack(Jump):x1.0"}},//直取/Switft Engage//Passive 13/14 SkillCtrlDesc 10701,10798-10801
             {100202,new Desc{ "18->23 per Hit",}},//接力
             //10508 46/47 SkillEffectDamageExpand
             //{,new Desc{ "Lv1-2:+100/150", "Lv1-2:+100/150"}},//断筋/TODO
@@ -234,9 +357,9 @@ namespace EffectDetailDescription
             {100309,new Desc{ "+3/lv",}},//四灾忍耐
             {100310,new Desc{ "+4%/lv",}},//威能凶猛
             //棍法
-            {100501,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThe other: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//二段棍势
-            {100503,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThe other: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//三段棍势
-            {100505,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThe other: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//四段棍势
+            {100501,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThrust: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//二段棍势
+            {100503,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThrust: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//三段棍势
+            {100505,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThrust: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//四段棍势
             {100701,new Desc{ "Lv0~4重击动作值:x1.75/3.75/5.75/7.25/11", "Lv0~4 heavy attack Action Rate:x1.75/3.75/5.75/7.25/11"}},//立棍
             {100801,new Desc{ "Lv0~4重击动作值:x2/4/6.25/8/12", "Lv0~4 heavy attack Action Rate:x2/4/6.25/8/12"}},//戳棍
             {100502,new Desc{ "回复+2%/3%/4%(Lv1/Lv2/Lv3) 最大生命","Heal +2%/3%/4%(Lv1/Lv2/Lv3) MaxHP"}},//壮怀
@@ -248,14 +371,16 @@ namespace EffectDetailDescription
             //劈棍原地重击消耗10+55/65/90/115/115，立棍10+40/65/75/100/100，戳棍47.5/57.5/82.5/107.5，跳劈(三种棍势一样)50/75/100/125/125,
             //3级天赋劈棍43/50/67.5/85，立棍28/50/53/70，戳棍35.5/42.5/60/77.5
             //不影响跳劈,不影响蓄力起手(三种风格起手消耗10/10/15)
-            {100504,new Desc{ "每级令0-4级重棍-4/-5/-7.5/-10/-10气力消耗，有身轻体快(根器)时效果减半，0-4级重棍基础消耗:劈棍55/65/90/115/115,立棍40/65/75/100/100,戳棍47.5/57.5/82.5/107.5;不影响蓄力起手式和跳跃重击", "Each level reduce 0-4 Focus-Level heavy-attack cost: -4/-5/-7.5/-10/-10. Only have 50% effect when having Nimble Body(body relic).Base cost of each focus-level:Smash 55/65/90/115/115,Pillar 40/65/75/100/100,The other 47.5/57.5/82.5/107.5;Not affect charging and jump heavy attack cost"}},//熟谙
+            //基础重击消耗是40/50/75/100,每种风格在其上附加固定气力消耗，附加的气力消耗不受天赋和根器影响， 劈棍15/15/15/15/15，立棍附加0/15/0/0/0,戳棍附加7.5/7.5/7.5/7.5
+            {100504,new Desc{ "-10%/lv基础气力消耗，和身轻体快(根器)乘算，不影响劈/立/戳附加的气力消耗，不影响蓄力起手式和跳跃重击; 0-4级重棍基础消耗：40/50/75/90/90, 劈棍:附加+15消耗,立棍:仅Lv1附加15消耗,戳棍:附加+7.5消耗", 
+                            "-10%/lv heavy-attack Base Stamina Cost.Multi with Nimble Body(Relic) effect.Not affect addition cost of Smash/Pillar/Thrust.Not affect charge/jump-heavy-attack. Base cost of 0~4 focus-level:40/50/75/100/100. Smash:additional +15 Cost.Pillar:(Lv1 only) additional +15 Cost.Thrust:additional +7.5 Cost."}},//熟谙
             //10506 PassiveSkillDesc 39-41
-            {100506,new Desc{ "+4%/lv 动作倍率", "+4%/lv SkillEffect"}},//通变/Versatility
+            {100506,new Desc{ "+4%/lv 动作倍率", "+4%/lv ActionRate"}},//通变/Versatility
             {100507,new Desc{ "+5%/lv,基础55点棍势/秒","+5%/lv,Base 55 Focus/s"}},//精壮
             {100508,new Desc{ "Lv1~2:额外造成目标当前生命值1%/1.5%的真实伤害;此伤害无视防御和减伤,与消耗棍势数量无关","Lv1~2: Deal extra true damage which equals to 1%/1.5% of target current HP.Ignore damage reduction&Defense.Not related to consumed Focus."}},//精壮
             {100602,new Desc{ "Lv1:+20%/Lv2:+30%",}},//克刚
             //10603 51/52 SkillEffectFloat
-            {100603,new Desc{ "Lv1-2:+5%/8% 动作倍率", "Lv1-2:+5%/8% SkillEffect"}},//压溃/Smashing Force
+            {100603,new Desc{ "Lv1-2:+5%/8% 动作倍率", "Lv1-2:+5%/8% ActionRate"}},//压溃/Smashing Force
             {100607,new Desc{ "动作值:x1.75", "ActionRate:x1.75"}},//识破
             {100609,new Desc{ "动作值:x4", "ActionRate:x4"}},//斩棍势
             {100610,new Desc{ "+100",}},//抖擞
@@ -362,11 +487,14 @@ namespace EffectDetailDescription
             //{,new Desc{ "+12", "+12"}},//阳燧珠/Spread the Word
             {200403,new Desc{ "每个增加+4%生命上限的回复量", "+4% MaxHP recover each"}},//遍尝百草/Tongue of A Connoisseur
 
-            {200501,new Desc{ "0-4级棍势气力消耗-20/-25/-37.5/-60,令熟谙天赋效果减半", "0-4 Focus-Level heavy-attack cost :-20/-25/-37.5/-60. Reduce Instinct(talent) effect by half"}},//身轻体快/Nimble Body
+            //劈棍原地重击消耗10+55/65/90/115/115，立棍10+40/65/75/100/100，戳棍47.5/57.5/82.5/107.5，跳劈(三种棍势一样)50/75/100/125/125,
+            //根器效果是气力消耗-50，基础重击消耗是40/50/75/90,每种风格在其上附加固定气力消耗，附加的气力消耗不受天赋和根器
+            //实际劈棍附加15/15/15/15/15，立棍附加0/15/0/0/0,戳棍附加7.5/7.5/7.5/7.5
+            {200501,new Desc{ "重击基础气力消耗减半，0~4级基础消耗40/50/75/90/100，和熟谙(天赋)乘算，不影响劈/立/戳附加的气力消耗，不影响重击起手式/蓄力/跳跃重击消耗", "-50% heavy-attack Base Cost.Lv0~4 Base Cost:40/50/75/90/100.Multi with Instinct(talent) effect.Not affect the additional Stamina Cost of Smash/Pillar/Thrust.Not affect cost of charging or jump-heavy-attack."}},//身轻体快/Nimble Body
             {200502,new Desc{ "+60", "+60"}},//福寿长臻/Everlasting Vitality
             {200503,new Desc{ "+15", "+15"}},//灾愆不侵/Divine Safeguard
 
-            {200601,new Desc{ "+5%/10% 动作倍率", "+5%/10% SkillEffect"}},//万相归真/Elegance in Simplicity
+            {200601,new Desc{ "+5%/10% 动作倍率", "+5%/10% ActionRate"}},//万相归真/Elegance in Simplicity
             {200603,new Desc{ "30秒内+30%伤害加成", "+30% Damage in 30s"}},//不生不灭/Unbegotten, Undying
         };
         //套装效果
@@ -387,7 +515,7 @@ namespace EffectDetailDescription
             {900511,new Desc{ "每个天赋+24防御", "+24 DEF per Relic Talent"}},//心灵福至/Fortune's Favor
             //Talent 2063
             {900611,new Desc{ "20%减伤", "20% Damage Reduction"}},//走石飞砂/Raging Sandstorm
-            {900711,new Desc{ "+20% 动作倍率", "+20% SkillEffect"}},//离火入魔/Outrage
+            {900711,new Desc{ "+20% 动作倍率", "+20% ActionRate"}},//离火入魔/Outrage
             {705,new Desc{ "+25%伤害 -30%伤害减免", "+25% Damage.-30% DamageReduction"}},//离火入魔/Outrage
             {900811,new Desc{ "+10赋雷攻击", "+10 Thunder ATK"}},//龙血玄黄/Thunder Veins
             {900821,new Desc{ "+10赋雷攻击", "+10 Thunder ATK"}},//龙血玄黄/Thunder Veins
@@ -461,7 +589,7 @@ namespace EffectDetailDescription
             {8065,new Desc{ "", ""}}, //"骨悚然"
             {8066,new Desc{ "", ""}}, //"狸侍长"
             {8067,new Desc{ "", ""}}, //"疾蝠"
-            {8068,new Desc{ "[-6%]/[8%]/[10%]气力消耗,[+10%]/[12%]/[15%] 跳跃轻击动作倍率", "[-6%]/[8%]/[10%] Stamina Cost,[+10%]/[12%]/[15%] SkillEffect"}}, //"石双双" --33681/33581 [247]/[267]/[287]
+            {8068,new Desc{ "[-6%]/[8%]/[10%]气力消耗,[+10%]/[12%]/[15%] 跳跃轻击动作倍率", "[-6%]/[8%]/[10%] Stamina Cost,[+10%]/[12%]/[15%] ActionRate"}}, //"石双双" --33681/33581 [247]/[267]/[287]
             //--26/[24.5]/[24]/[23.5]
             {8069,new Desc{ "减少每秒消耗[-1.5]/[2]/[2.5]，基础消耗26/s(移步48/s)", "[-1.5]/[2]/[2.5] cost per second(Base Cost:26/s.Base Cost When moving:48/s)"}}, //"鼠弩手"
             {8070,new Desc{ "", ""}}, //"地狼"
@@ -674,7 +802,9 @@ namespace EffectDetailDescription
         };
         public readonly static Desc DefaultDesc = new Desc() { "{0}", "{0}" };
         public readonly static Desc EmptyDesc = new Desc() { "", "" };
-        public readonly static Desc DurationFormat = new Desc(){"<Duration>{1}秒内</Duration>{0}","{0}<Duration> in {1}s</Duration>"};
+        public readonly static Desc ThenConnection = new Desc() { ",再", ".Then " };
+        public readonly static Desc ActionRateFormat = new Desc() { "造成<HitCount>{2}次</HitCount>x{0}{1}伤害", "Deal x{0}{1} Damage<HitCount> {2} times</HitCount>" };
+        public readonly static Desc DurationFormat = new Desc() { "<Duration>{1}秒内</Duration>{0}", "{0}<Duration> in {1}s</Duration>" };
         public readonly static Desc GreaterFormat = new Desc() { "<Target>目标</Target>{0}高于{1}时{2}", "{2} when<Target> target</Target> {0} over {1}" };
         public readonly static Desc LesserFormat = new Desc() { "<Target>目标</Target>{0}不高于{1}时{2}", "{2} when<Target> target</Target> {0} under {1}" };
         public readonly static Desc FullFormat = new Desc() { "<Target>目标</Target>满{0}时{1}", "{1} when<Target> target</Target> full {0}" };
