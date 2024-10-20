@@ -155,7 +155,7 @@ namespace ProtobufLoader
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.3.1";
+        public string Version => "1.3.2";
         private readonly Harmony harmony;
         public static Dictionary<Type,Dictionary<int, Google.Protobuf.IMessage?>> RecordBackup = new Dictionary<Type, Dictionary<int, IMessage?>>();
         //是否被初始化了至少一次
@@ -186,9 +186,13 @@ namespace ProtobufLoader
                 Log("World Not Ready.Skip Init");
             }
             else
-            {   //CSharpLoader0.0.8后，初次加载时可能World还没有加载完成，需要延迟加载
-                Log("init upon load");
-                ResetAndLoadAllDataFiles();
+            {   //CSharpLoader0.0.8后，初次加载时可能World还没有加载完成，需要延迟加载                
+                //由于init不是在游戏线程里,加载巨量数据时，可能？会加载太慢导致加载某些mod的时间晚于存档校验，而存档校验时如果发现存档里有不存在的物品就会显示存档损坏
+                //因此需要把加载移动到游戏线程执行，这样init和hook里的初始化至少有一个会保证在存档校验前执行
+                Utils.TryRunOnGameThread(()=> {
+                    Log("try init upon load"); 
+                    ResetAndLoadAllDataFiles();
+                });
             }
             /*
             Utils.RegisterKeyBind(ModifierKeys.Control, Key.F9, () =>
