@@ -330,12 +330,15 @@ namespace EffectDetailDescription
             {100106,new Desc{ "-2.5/lv,基础消耗 20","-2.5/lv,BaseCost 20"}},//猿捷
             {100108,new Desc{ "+10/lv,基础 40","+10/lv,Base 40"}},//走险
             {100109,new Desc{ "15%,持续2秒","15% in 2s"}},//绝念
+            {100110,new Desc{ "x1.0伤害","x1.0 Damage"}},//梦幻泡影
             //{,new Desc{ "",}},//任翻腾//第一段翻滚由SkillDesc 10301变为10305
 
             //武艺
-            {100201,new Desc{ "+100/lv,基础800/900/1000;\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875\n跳跃轻棍:x1.0",
-                "+100/lv,Base 800/900/1000;\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875\nLight Attack(Jump):x1.0"}},//直取/Switft Engage//Passive 13/14 SkillCtrlDesc 10701,10798-10801
+            {100201,new Desc{ "+100/lv,基础800/900/1000;\n轻棍1~5段动作值: x0.9/1.25/1*2/0.5*4+1/3\n轻棍1~5段(枪):x1.25/0.5/0.75/0.5*5/2.75\n跳跃轻棍:x1.0",
+                "+100/lv,Base 800/900/1000;\nLight Attack 1~5 Action Rate: x0.9/1.25/1*2/0.5*4+1/3\nLight Attack(Spear):x1.25/0.5/0.75/0.5*5/2.75\nLight Attack(Jump):x1.0"}},//直取/Switft Engage//Passive 13/14 SkillCtrlDesc 10701,10798-10801
             {100202,new Desc{ "18->23 per Hit",}},//接力
+            {100203,new Desc{ "动作倍率x0.9->x2.0","ActionRate:x0.9->x2.0"}},//冲霄
+            {100204,new Desc{ "x1.25 伤害","x1.25 Damage"}},//捣蒜打
             //10508 46/47 SkillEffectDamageExpand
             //{,new Desc{ "Lv1-2:+100/150", "Lv1-2:+100/150"}},//断筋/TODO
             {100205,new Desc{ "30%",}},//筋节
@@ -429,6 +432,7 @@ namespace EffectDetailDescription
             //Talent 11006 Passive 74/75
             {101006,new Desc{ "+15%/lv", "+15%/lv"}},//捣虚/Ruse
             
+            {101104,new Desc{ "x0.9 -> x2.0",}},//先发
             {101105,new Desc{ "15s->13s",}},//频频//11105 85 -2s
             {101106,new Desc{ "+15%,持续15秒","+15% in 15s"}},//巩固
             {101102,new Desc{ "+75",}},//知机
@@ -495,7 +499,7 @@ namespace EffectDetailDescription
             {200502,new Desc{ "+60", "+60"}},//福寿长臻/Everlasting Vitality
             {200503,new Desc{ "+15", "+15"}},//灾愆不侵/Divine Safeguard
 
-            {200601,new Desc{ "+5%/10% 动作倍率", "+5%/10% ActionRate"}},//万相归真/Elegance in Simplicity
+            {200601,new Desc{ "1~4段+10%动作倍率，5段+5%动作倍率，不影响跳跃轻击", "1~5 Light Attack:+10/10/10/10/5 ActionRate.Not affect Jump light attack."}},//万相归真/Elegance in Simplicity
             {200603,new Desc{ "30秒内+30%伤害加成", "+30% Damage in 30s"}},//不生不灭/Unbegotten, Undying
         };
         //套装效果
