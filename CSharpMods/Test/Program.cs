@@ -90,7 +90,7 @@ namespace Test
             var FixDamage = DamageDescParam.GetFieldOrProperty2<float>("BaseDamage")!.Value/100;
             var BaseDamage = Attacker_AttrMemData.Attr_Atk * ActionRate / 10000 + FixDamage;
             //Log($"Base Damage = {BaseDamage} = (FinalAttack {Attacker_AttrMemData.Attr_Atk} * ActionRate {ActionRate / 100}% + FixDamage {FixDamage}) ");
-            Log($"AR {ActionRate} FixDamage {FixDamage} -> {FinalDamageValue}");
+            Log($"Lv {BGW_GameDB.GetElementDmgRatio(DamageDescParam.GetFieldOrProperty2<int>("ElementDmgLevel")!.Value)} AR {ActionRate} FixDamage {FixDamage} -> {FinalDamageValue}");
             Log($"Id {SkillDamageConfig.DmgReasonEffectID}");
 
             var def = VictimAttrCon.GetFloatValue(EBGUAttrFloat.Def);

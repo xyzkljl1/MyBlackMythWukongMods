@@ -184,7 +184,7 @@ namespace EffectDetailDescription
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.6";
+        public string Version => "1.6.1";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
         public static Boolean inited = false;//InitDescProtobufAndLanugage called
@@ -214,11 +214,18 @@ namespace EffectDetailDescription
         {
             Log("MyMod::Init called");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
-            //Utils.RegisterKeyBind(ModifierKeys.Control, Key.ENTER, () => { PreFillDict();InitDescProtobufAndLanugage(); });
+            //Utils.RegisterKeyBind(ModifierKeys.Control, Key.F12, () => {
+            //    MyExten.Log("Manually Init"); 
+            //    PreFillDict();
+            //    InitDescProtobufAndLanugage(); 
+            //});
 
             //如果此时游戏已经初始化完成(以GSLocalization.IsInit为准)则立刻进行预处理，否则在InitDescProtobufAndLanugage前进行
             if (MyExten.GetWorld() != null && GSLocalization.IsInit)
+            {
                 PreFillDict();//对Data.XXXDict的预处理
+                InitDescProtobufAndLanugage();
+            }
             else
                 Log("Not Ready.Delay Pre Init");
 
@@ -585,6 +592,7 @@ namespace EffectDetailDescription
                     }
                 }
                 //RedQualityInfo即升到神珍解锁的效果
+                if(suitDesc.RedQualityInfo!=null)
                 {
                     var id = suitDesc.RedQualityInfo.AttrEffectID;
                     //分别查找attrEffectId\TalentID\SuitEffectID

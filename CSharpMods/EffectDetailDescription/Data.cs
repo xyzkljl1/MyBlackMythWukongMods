@@ -312,10 +312,11 @@ namespace EffectDetailDescription
             {15007,new Desc{ "每段棍势+5HP(中毒敌人+40)", "+5 HP(40 for Poisoned enemy) for each focus level"}},//昆棍·百眼/Visionary Centipede Staff
             {15013,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍·蛛仙/Spider Celestial Staff
             //{,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍/Chitin Staff
-            {15018,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍·通天/Adept Spine-Shooting Fuban Staff
+            {15018,new Desc{ "每段棍势:+5HP并造成x1.0伤害", "+5 HP and deal x1.0 Damage for each focus level"}},//昆棍·通天/Adept Spine-Shooting Fuban Staff
             {15016,new Desc{ "每点防御+0.15攻击", "+0.15ATK per DEF"}},//混铁棍/Dark Iron Staff
             {15015,new Desc{ "+20% 动作倍率", "+20% ActionRate"}},//飞龙宝杖/Golden Loong Staff//15015 145
-            {15101,new Desc{ "+15% 动作倍率", "+15% ActionRate"}},//三尖两刃枪/Tri-Point Double-Edged Spear//15015 145
+            {15101,new Desc{ "+15% 动作倍率;飞剑造成x0.25 per Hit伤害", "+15% ActionRate;Deal x0.25 Damage per Hit"}},//三尖两刃枪/Tri-Point Double-Edged Spear//15015 145
+            {15017,new Desc{ "每次命中附加一段x0.1或x0.3或x1.0的伤害，其中50%为雷属性", "An addition x0.1/x0.3/x1.0 Damage per hit.50% is Thunder Damage."}},//天龙棍
         };
         //天赋
         public static DescDict TalentDisplayDesc = new DescDict
