@@ -22,7 +22,21 @@ namespace EffectDetailDescription
             English = 1,
             Max = 2,
         }
+        //2.4 4.8. 7.5 9.6 13.2
         public static string PlaceHolder = "__PlaceHolder__";
+        //枪只有四段
+        public static Desc LightAttackDesc = new Desc{ "轻棍1~5段动作值: {AR:1080101}/{AR:1080201}/{AR:1080301}+{AR:1080302}/{AR:1080401}*4+{AR:1080402}/{AR:1080501}\n轻棍1~5段(枪):{AR:1070101}/{AR:1070201}+{AR:1070202}/{AR:1070301}*5/{AR:1070401}\n跳跃轻棍:{AR:1060101}",
+                                                                "Light Attack ActionRate:  {AR:1080101}/{AR:1080201}/{AR:1080301}+{AR:1080302}/{AR:1080401}*4+{AR:1080402}/{AR:1080501}\nLight Attack(Spear):{AR:1070101}/{AR:1070201}+{AR:1070202}/{AR:1070301}*5/{AR:1070401}\nLight Attack(Jump):{AR:1060101}"};
+        public static Desc HeavyAttackDesc = new Desc { "Lv0~4劈棍重击动作值:{AR:1021001}/{AR:1021101}/{AR:1021201}/{AR:1021301}/{AR:1021401};\n" +
+                                                        "立棍:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401};" +
+                                                        "\n戳棍:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401};\n" +
+                                                        "跳跃重击:{AR:1061001}/{AR:1061101}/{AR:1061201}/{AR:1061301}/{AR:1061401};\n" +
+                                                        "Lv5重击:x2*2+12\n",
+                                                        "Lv0~4 Smash heavy attack Action Rate:{AR:1021001}/{AR:1021101}/{AR:1021201}/{AR:1021301}/{AR:1021401};\n" +
+                                                        "Pillar:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401};" +
+                                                        "\nThrust:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401};\n" +
+                                                        "Jump:{AR:1061001}/{AR:1061101}/{AR:1061201}/{AR:1061301}/{AR:1061401};\n" +
+                                                        "Lv5:2*2+12\n" };
         //ItemId->effectdesc
         public static DescDict ItemEqDesc = new DescDict
         {
@@ -121,7 +135,7 @@ namespace EffectDetailDescription
             {2204,new Desc{ }},//温里散/Body-Warming Powder
             {2205,new Desc{ }},//度瘴散/Antimiasma Powder
             {2206,new Desc{ }},//神霄散/Shock-Quelling Powder
-            {2207,new Desc{ "120秒", "+60 in 130s"}},//轻身散/Body-Fleeting Powder
+            {2207,new Desc{ "120秒", "120s"}},//轻身散/Body-Fleeting Powder
             {2208,new Desc{ }},//清凉散/Body-Cooling Powder
             {2213,new Desc{ "75秒", "75s"}},//登仙散/Ascension Powder
             //{,new Desc{ "120秒", "130s"}},//九转还魂丹/Tonifying Decoction
@@ -286,7 +300,7 @@ namespace EffectDetailDescription
             {17003,new Desc{ "+2%", "+2%"}},//鳖宝头骨/Skull of Turtle Treasure
             {17004,new Desc{ }},//山珍蓑衣/Ginseng Cape
             //蜢虫头907005 97005、97015 185、186
-            {17005,new Desc{ "+15%/20% 动作倍率", "+15%/20% ActionRate"}},//长须头面/Locust Antennae Mask
+            {17005,new Desc{ "+15%/20% 动作值", "+15%/20% ActionRate"}},//长须头面/Locust Antennae Mask
             //Talent 2702
             {17006,new Desc{ }},//白脸子/Grey Wolf Mask
             {17008,new Desc{ "阳:+20%伤害减免。阴:20%暴击-30%伤害减免", "Yang:+20% DamageReduction. Yin:+20% Crit,-30% DamageReduction"}},//阴阳法衣/Yin-Yang Daoist Robe
@@ -314,9 +328,10 @@ namespace EffectDetailDescription
             //{,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍/Chitin Staff
             {15018,new Desc{ "每段棍势:+5HP并造成x1.0伤害", "+5 HP and deal x1.0 Damage for each focus level"}},//昆棍·通天/Adept Spine-Shooting Fuban Staff
             {15016,new Desc{ "每点防御+0.15攻击", "+0.15ATK per DEF"}},//混铁棍/Dark Iron Staff
-            {15015,new Desc{ "+20% 动作倍率", "+20% ActionRate"}},//飞龙宝杖/Golden Loong Staff//15015 145
-            {15101,new Desc{ "+15% 动作倍率;飞剑造成x0.25 per Hit伤害", "+15% ActionRate;Deal x0.25 Damage per Hit"}},//三尖两刃枪/Tri-Point Double-Edged Spear//15015 145
+            {15015,new Desc{ "+20% 动作值", "+20% ActionRate"}},//飞龙宝杖/Golden Loong Staff//15015 145
+            {15101,new Desc{ "Lv0~4重击动作值+20%/20%/20%/20%/10%;搅阵/进尺动作值+15%;飞剑造成{AR:1099916} per Hit伤害", "Lv0~4 Heavy Attack ActionRate:+20%/20%/20%/20%/10%;Deal {AR:1099916} Damage per Hit"}},//三尖两刃枪/Tri-Point Double-Edged Spear//15015 145
             {15017,new Desc{ "每次命中附加一段x0.1或x0.3或x1.0的伤害，其中50%为雷属性", "An addition x0.1/x0.3/x1.0 Damage per hit.50% is Thunder Damage."}},//天龙棍
+            {15102,new Desc{ "Lv0~4重击动作值+20%/20%/20%/20%/10%;搅阵/进尺动作值+15%;", "Lv0~4 Heavy Attack ActionRate:+20%/20%/20%/20%/10%;Whirling/Forceful Thrust ActionRate:+15%"}},//楮白枪
         };
         //天赋
         public static DescDict TalentDisplayDesc = new DescDict
@@ -330,22 +345,23 @@ namespace EffectDetailDescription
             {100106,new Desc{ "-2.5/lv,基础消耗 20","-2.5/lv,BaseCost 20"}},//猿捷
             {100108,new Desc{ "+10/lv,基础 40","+10/lv,Base 40"}},//走险
             {100109,new Desc{ "15%,持续2秒","15% in 2s"}},//绝念
-            {100110,new Desc{ "x1.0伤害","x1.0 Damage"}},//梦幻泡影
+            {100110,new Desc{ "动作值:{AR:1031102}", "ActionRate:{AR:1031102}"}},//梦幻泡影
             //{,new Desc{ "",}},//任翻腾//第一段翻滚由SkillDesc 10301变为10305
 
             //武艺
-            {100201,new Desc{ "+100/lv,基础800/900/1000;\n轻棍1~5段动作值: x0.9/1.25/1*2/0.5*4+1/3\n轻棍1~5段(枪):x1.25/0.5/0.75/0.5*5/2.75\n跳跃轻棍:x1.0",
-                "+100/lv,Base 800/900/1000;\nLight Attack 1~5 Action Rate: x0.9/1.25/1*2/0.5*4+1/3\nLight Attack(Spear):x1.25/0.5/0.75/0.5*5/2.75\nLight Attack(Jump):x1.0"}},//直取/Switft Engage//Passive 13/14 SkillCtrlDesc 10701,10798-10801
+            {100201,new Desc{ "+100/lv,基础800/900/1000;","+100/lv,Base 800/900/1000;"} + LightAttackDesc},//直取/Switft Engage//Passive 13/14 SkillCtrlDesc 10701,10798-10801
             {100202,new Desc{ "18->23 per Hit",}},//接力
-            {100203,new Desc{ "动作倍率x0.9->x2.0","ActionRate:x0.9->x2.0"}},//冲霄
-            {100204,new Desc{ "x1.25 伤害","x1.25 Damage"}},//捣蒜打
+            {100203,new Desc{ "动作值{AR:1080101}->{AR:1080001}", "ActionRate:{AR:1080101}->{AR:1080001}"}},//冲霄
+            {100204,new Desc{ "动作值:{AR:1080505}","ActionRate:{AR:1080505}"}},//捣蒜打
             //10508 46/47 SkillEffectDamageExpand
             //{,new Desc{ "Lv1-2:+100/150", "Lv1-2:+100/150"}},//断筋/TODO
             {100205,new Desc{ "30%",}},//筋节
+            {100206,new Desc{ "动作值:{AR:1080501}->{AR:1075501};不影响枪", "ActionRate:{AR:1080501}->{AR:1075501};Not affect spear"}},//气息不绝
             //10506 PassiveSkillDesc 16写的是Mul 50%,实测约+18%，回复量会浮动，约7.5~8，点完变成9上下
-            {100207,new Desc{ "棍花动作值:x0.1;棍花移步:x0.15", "ActionRate:x0.1;Moving:x0.15"}},//棍花移步
+            {100207,new Desc{ "棍花动作值:{AR:1081701};棍花移步:{AR:1082301}", "ActionRate:{AR:1081701};Moving:{AR:1082301}"}},//棍花移步
+            {100208,new Desc{ "动作值:{AR:1085201}", "ActionRate:{AR:1085201}"}},//方圆径寸
             {100209,new Desc{ "约+18%", "about +18%"}},//化吉/Silver Lining
-            {100210,new Desc{ "-30%, 基础26/秒(移步48/秒)","-30%, BaseCost 26/s(48/s when moving)"}},//应手
+            {100210,new Desc{ "-30%, 基础26/秒，棍花移步基础48/秒","-30%. BaseCost 26/s(48/s when moving)"}},//应手
             {100211,new Desc{ "4->6 per Hit, 不影响原地棍花(3 per Hit)","4->6 per Hit. Not affect Staff Spin(3 per Hit)"}},//得心
 
             //体段修行
@@ -361,12 +377,10 @@ namespace EffectDetailDescription
             {100309,new Desc{ "+3/lv",}},//四灾忍耐
             {100310,new Desc{ "+4%/lv",}},//威能凶猛
             //棍法
-            {100501,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThrust: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//二段棍势
-            {100503,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThrust: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//三段棍势
-            {100505,new Desc{ "Lv0~4劈棍重击动作值:x2.5/5.5/8.75/11/14.5;\n立棍:x1.75/3.75/5.75/7.25/11;\n戳棍:x2/4/6.25/8/12;\n跳跃重击:x1.5/3/4.5/6.25/8.5;\nLv5重击:2*2+12\n轻棍1~5段动作值: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\n轻棍1~5段(枪):x1.375/0.55/0.825/0.55*5/2.8875", "Lv0~4 Smash heavy attack Action Rate:x2.5/5.5/8.75/11/14.5;\nPillar: x1.75/3.75/5.75/7.25/11;\nThrust: x2/4/6.25/8/12;\nJump: x1.5/3/4.5/6.25/8.5;\nLv5:2*2+12\nLight Attack 1~5 Action Rate: x0.99/1.375/1.1*2/0.55*4+1.1/3.15\nLight Attack(Spear):x1.375/0.55/0.825/0.55*5/2.8875"}},//四段棍势
-            {100701,new Desc{ "Lv0~4重击动作值:x1.75/3.75/5.75/7.25/11", "Lv0~4 heavy attack Action Rate:x1.75/3.75/5.75/7.25/11"}},//立棍
-            {100801,new Desc{ "Lv0~4重击动作值:x2/4/6.25/8/12", "Lv0~4 heavy attack Action Rate:x2/4/6.25/8/12"}},//戳棍
+            {100501,HeavyAttackDesc+LightAttackDesc},//二段棍势
             {100502,new Desc{ "回复+2%/3%/4%(Lv1/Lv2/Lv3) 最大生命","Heal +2%/3%/4%(Lv1/Lv2/Lv3) MaxHP"}},//壮怀
+            {100503,HeavyAttackDesc+LightAttackDesc},//三段棍势
+            {100505,HeavyAttackDesc+LightAttackDesc},//四段棍势
             //55/65/90/115/115 n
             //43/50/67.5/85 Lv3
             //29/32.5/41.2/50 Lv3+r
@@ -376,31 +390,34 @@ namespace EffectDetailDescription
             //3级天赋劈棍43/50/67.5/85，立棍28/50/53/70，戳棍35.5/42.5/60/77.5
             //不影响跳劈,不影响蓄力起手(三种风格起手消耗10/10/15)
             //基础重击消耗是40/50/75/100,每种风格在其上附加固定气力消耗，附加的气力消耗不受天赋和根器影响， 劈棍15/15/15/15/15，立棍附加0/15/0/0/0,戳棍附加7.5/7.5/7.5/7.5
-            {100504,new Desc{ "-10%/lv基础气力消耗，和身轻体快(根器)乘算，不影响劈/立/戳附加的气力消耗，不影响蓄力起手式和跳跃重击; 0-4级重棍基础消耗：40/50/75/90/90, 劈棍:附加+15消耗,立棍:仅Lv1附加15消耗,戳棍:附加+7.5消耗", 
+            {100504,new Desc{ "-10%/lv基础气力消耗,0-4级重棍基础消耗:40/50/75/90/90;和身轻体快(根器)乘算，不影响劈/立/戳的额外气力消耗，不影响蓄力和跳跃重击,劈棍:额外+15消耗,立棍:仅Lv1额外15消耗,戳棍:额外+7.5消耗", 
                             "-10%/lv heavy-attack Base Stamina Cost.Multi with Nimble Body(Relic) effect.Not affect addition cost of Smash/Pillar/Thrust.Not affect charge/jump-heavy-attack. Base cost of 0~4 focus-level:40/50/75/100/100. Smash:additional +15 Cost.Pillar:(Lv1 only) additional +15 Cost.Thrust:additional +7.5 Cost."}},//熟谙
             //10506 PassiveSkillDesc 39-41
-            {100506,new Desc{ "+4%/lv 动作倍率", "+4%/lv ActionRate"}},//通变/Versatility
+            {100506,new Desc{ "+4%/lv 动作值", "+4%/lv ActionRate"}},//通变/Versatility
             {100507,new Desc{ "+5%/lv,基础55点棍势/秒","+5%/lv,Base 55 Focus/s"}},//精壮
             {100508,new Desc{ "Lv1~2:额外造成目标当前生命值1%/1.5%的真实伤害;此伤害无视防御和减伤,与消耗棍势数量无关","Lv1~2: Deal extra true damage which equals to 1%/1.5% of target current HP.Ignore damage reduction&Defense.Not related to consumed Focus."}},//精壮
+            {100509,new Desc{ "识破:{AR:1070501}->{AR:1070601};斩棍:{AR:1070701}->{AR:1070801};江海翻:{AR:1072402}->{AR:1072502};进尺:{AR:1071401}->{AR:1071501}", "Counterflow: {AR:1070501}->{AR:1070601};Skyfall:{AR:1070701}->{AR:1070801};Churning Gale:{AR:1072402}->{AR:1072502};Forceful Thrust:{AR:1071401}->{AR:1071501}"}},
             {100602,new Desc{ "Lv1:+20%/Lv2:+30%",}},//克刚
             //10603 51/52 SkillEffectFloat
-            {100603,new Desc{ "Lv1-2:+5%/8% 动作倍率", "Lv1-2:+5%/8% ActionRate"}},//压溃/Smashing Force
-            {100607,new Desc{ "动作值:x1.75", "ActionRate:x1.75"}},//识破
-            {100609,new Desc{ "动作值:x4", "ActionRate:x4"}},//斩棍势
+            {100603,new Desc{ "Lv1-2:+5%/8% 动作值", "Lv1-2:+5%/8% ActionRate"}},//压溃/Smashing Force
+            {100607,new Desc{ "动作值:{AR:1070501}", "ActionRate:{AR:1070501}"}},//识破
+            {100609,new Desc{ "动作值:{AR:1070701}", "ActionRate:{AR:1070701}"}},//斩棍势
             {100610,new Desc{ "+100",}},//抖擞
             {100611,new Desc{ "根据棍势+5%/10%/15%/20% 攻击", "+5%/10%/15%/20% ATK by focus level"}},//乘胜追击/Vantage Point
             //10702 53/54
+            {100701,new Desc{ "Lv0~4重击动作值:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401}", "Lv0~4 heavy attack Action Rate:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401}"}},//立棍
             {100702,new Desc{ "-20%/lv", "-20%/lv"}},//铁树/Steel Pillar
-            {100705,new Desc{ "动作值:x1","ActionRate:x1"}},//风云转
+            {100705,new Desc{ "动作值:{AR:1072102}","ActionRate:{AR:1072102}"}},//风云转
             {100706,new Desc{ "20%",}},//拂痒
-            {100707,new Desc{ "动作值:x3","ActionRate:x3"}},//江海翻
+            {100707,new Desc{ "动作值:{AR:1072402}", "ActionRate:{AR:1072402}"}},//江海翻
             {100708,new Desc{ "获得等于0.35*棍势值的攻击力百分比加成;例:4段棍势(480)时获得168%攻击力加成","Gain (0.35*Focus)% Atk.(Eg,gain +168% atk when 480 Focus)"}},//天地倾，对AtkMul施加id为5参数为-15的FixFunction修正，see RunByBuffApply GetFixFunctionDesc;Fix function 5 为根据Pevalue的35计算
 
+            {100801,new Desc{ "Lv0~4重击动作值:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401}", "Lv0~4 heavy attack Action Rate:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401}"}},//戳棍
             {100802,new Desc{ "Lv1-2:回复30/50", "Lv1-2:Recover 30/50"}},//借力/Borrowed Strength//Passive 13/14 SkillCtrlDesc 10701,10798-10801
-            {100803,new Desc{ "动作值:x0.6","ActionRate:x0.6"}},//退寸进尺
+            {100803,new Desc{ "动作值:{AR:1071102}","ActionRate:{AR:1071102}"}},//搅阵
             {100804,new Desc{ "9秒内+1% 每层","+1% per stack in 9s"}},//骋势
-            {100807,new Desc{ "动作值:x3.5","ActionRate:x3.5"}},//退寸进尺
-            //When I complained modding Wukong is so hard a month ago,someone told me "any game can be made mod friendly".That's damn right.
+            {100807,new Desc{ "动作值:{AR:1071401}", "ActionRate:{AR:1071401}"}},//退寸进尺
+            {100810,new Desc{ "15s"}},//此消彼长 buff 1047 setsimplestate 40
             //1048~1050
 
             //奇术
@@ -431,8 +448,9 @@ namespace EffectDetailDescription
             {101005,new Desc{ "Lv1:+3%/Lv2:+4% 每层","Lv1:+3%/Lv2:+4% per stack"}},//洞察
             //Talent 11006 Passive 74/75
             {101006,new Desc{ "+15%/lv", "+15%/lv"}},//捣虚/Ruse
+            {101007,new Desc{ "动作值:x1", "ActionRate:x1"}},//舍身 1055,是个buff?
             
-            {101104,new Desc{ "x0.9 -> x2.0",}},//先发
+            {101104,new Desc{ "{AR:1080101}/{AR:1070101} -> {AR:1050201}", }},//先发
             {101105,new Desc{ "15s->13s",}},//频频//11105 85 -2s
             {101106,new Desc{ "+15%,持续15秒","+15% in 15s"}},//巩固
             {101102,new Desc{ "+75",}},//知机
@@ -499,7 +517,7 @@ namespace EffectDetailDescription
             {200502,new Desc{ "+60", "+60"}},//福寿长臻/Everlasting Vitality
             {200503,new Desc{ "+15", "+15"}},//灾愆不侵/Divine Safeguard
 
-            {200601,new Desc{ "1~4段+10%动作倍率，5段+5%动作倍率，不影响跳跃轻击", "1~5 Light Attack:+10/10/10/10/5 ActionRate.Not affect Jump light attack."}},//万相归真/Elegance in Simplicity
+            {200601,new Desc{ "1~4段+10%动作值，5段+5%动作值，不影响跳跃轻击", "1~5 Light Attack:+10/10/10/10/5 ActionRate.Not affect Jump light attack."}},//万相归真/Elegance in Simplicity
             {200603,new Desc{ "30秒内+30%伤害加成", "+30% Damage in 30s"}},//不生不灭/Unbegotten, Undying
         };
         //套装效果
@@ -520,7 +538,7 @@ namespace EffectDetailDescription
             {900511,new Desc{ "每个天赋+24防御", "+24 DEF per Relic Talent"}},//心灵福至/Fortune's Favor
             //Talent 2063
             {900611,new Desc{ "20%减伤", "20% Damage Reduction"}},//走石飞砂/Raging Sandstorm
-            {900711,new Desc{ "+20% 动作倍率", "+20% ActionRate"}},//离火入魔/Outrage
+            {900711,new Desc{ "+20% 动作值", "+20% ActionRate"}},//离火入魔/Outrage
             {705,new Desc{ "+25%伤害 -30%伤害减免", "+25% Damage.-30% DamageReduction"}},//离火入魔/Outrage
             {900811,new Desc{ "+10赋雷攻击", "+10 Thunder ATK"}},//龙血玄黄/Thunder Veins
             {900821,new Desc{ "+10赋雷攻击", "+10 Thunder ATK"}},//龙血玄黄/Thunder Veins
@@ -594,7 +612,7 @@ namespace EffectDetailDescription
             {8065,new Desc{ "", ""}}, //"骨悚然"
             {8066,new Desc{ "", ""}}, //"狸侍长"
             {8067,new Desc{ "", ""}}, //"疾蝠"
-            {8068,new Desc{ "[-6%]/[8%]/[10%]气力消耗,[+10%]/[12%]/[15%] 跳跃轻击动作倍率", "[-6%]/[8%]/[10%] Stamina Cost,[+10%]/[12%]/[15%] ActionRate"}}, //"石双双" --33681/33581 [247]/[267]/[287]
+            {8068,new Desc{ "[-6%]/[8%]/[10%]气力消耗,[+10%]/[12%]/[15%] 跳跃轻击动作值", "[-6%]/[8%]/[10%] Stamina Cost,[+10%]/[12%]/[15%] ActionRate"}}, //"石双双" --33681/33581 [247]/[267]/[287]
             //--26/[24.5]/[24]/[23.5]
             {8069,new Desc{ "减少每秒消耗[-1.5]/[2]/[2.5]，基础消耗26/s(移步48/s)", "[-1.5]/[2]/[2.5] cost per second(Base Cost:26/s.Base Cost When moving:48/s)"}}, //"鼠弩手"
             {8070,new Desc{ "", ""}}, //"地狼"
@@ -813,6 +831,7 @@ namespace EffectDetailDescription
         public readonly static Desc GreaterFormat = new Desc() { "<Target>目标</Target>{0}高于{1}时{2}", "{2} when<Target> target</Target> {0} over {1}" };
         public readonly static Desc LesserFormat = new Desc() { "<Target>目标</Target>{0}不高于{1}时{2}", "{2} when<Target> target</Target> {0} under {1}" };
         public readonly static Desc FullFormat = new Desc() { "<Target>目标</Target>满{0}时{1}", "{1} when<Target> target</Target> full {0}" };
+
         public readonly static ConstDescDict SpeedNameDictConst = new ConstDescDict() {
             {0b1,new Desc{ "徐行","Walk" } },
             {0b10,new Desc{ "奔跑","Run" } },

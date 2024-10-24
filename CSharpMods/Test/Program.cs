@@ -33,6 +33,7 @@ using static b1.BGW_UIEventCollection;
 using B1UI.GSUI;
 using GSE.GSUI;
 using b1.UI;
+using b1.Localization;
 #nullable enable
 namespace Test
 {
@@ -189,8 +190,12 @@ namespace Test
             Log("MyMod::Init called.Start Timer");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
             Utils.RegisterKeyBind(Key.O, delegate {
+                //GSLocalization.SetCurrentCulture("en-US");
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.AtkBase, 10.0f);
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.VigorEnergy, 200.0f);
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.StaminaRecoverBase, 0.0f);
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.Stamina, 480.0f);
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.Pelevel, 0.0f);
                 return;
                 {
                     var t = typeof(GameDBRuntime);

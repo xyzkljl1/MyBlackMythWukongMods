@@ -184,7 +184,7 @@ namespace EffectDetailDescription
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.6.1";
+        public string Version => "1.7";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
         public static Boolean inited = false;//InitDescProtobufAndLanugage called
@@ -461,8 +461,16 @@ namespace EffectDetailDescription
                     }
                 Log($"Generate {ct} Vigor action rate");
             }
-
-
+            //动作值
+            {
+                int ct = 2;
+                foreach(var descList in new List<DescDict> { Data.TalentDisplayDesc,Data.EquipDesc})
+                    foreach(var mydesc in descList.Keys)
+                        ct+=descList[mydesc].ReplaceActionRate()?1:0;
+                Data.LightAttackDesc.ReplaceActionRate();
+                Data.HeavyAttackDesc.ReplaceActionRate();
+                Log($"Generate {ct} Talent/Equip action rate");
+            }
 
             //补充Desc,因为不同等级id不同,共用描述，在Data里只写1级的id，其它等级在此处补上
             foreach (var desc in Data.EquipDesc.Copy())
@@ -520,8 +528,9 @@ namespace EffectDetailDescription
             }
             Log($"Start Init Desc");
             {
-                string ingameLng = GSLocalization.GetCurrentCulture();
-                if (ingameLng == "zh-Hans" || ingameLng == "zh-Hant")
+                string ingameLng = GSLocalization.GetCurrentCulture().ToLower();
+                //steam版是zh-Hans/zh-Hant,wegame版是zh-Hans-CN/?，坑爹
+                if (GSLocalization.IsZHCulture())
                     MyExten.currentLanguage = Data.LanguageIndex.SimpleCN;
                 else if (ingameLng == "en")
                     MyExten.currentLanguage = Data.LanguageIndex.English;

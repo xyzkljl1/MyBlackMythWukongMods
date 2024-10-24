@@ -268,6 +268,45 @@ namespace EffectDetailDescription
                 return buffDescList;
             return new List<FUStBuffDesc?>();
         }
+        public static bool ReplaceActionRate(this Desc desc)
+        {
+            var regex = new Regex("{AR:(\\d+)}");
+            bool changed=false;
+            for (int i = 0; i < desc.Count; i++)
+            {
+                var str = desc[i];
+                var match = regex.Match(str);
+                while (match.Success)
+                {
+                    int id = Int32.Parse(match.Groups[1].Value);
+                    var skillDesc = BGW_GameDB.GetOriginalSkillEffectDesc(id);
+                    if (skillDesc is null)
+                    {
+                        Error($"Can't Get SkillDesc of {id}");
+                        break;
+                    }
+                    if (skillDesc.EffectType != EBuffAndSkillEffectType.SkillDamage
+                        || skillDesc.EffectParamsFloat.Count < 3)
+                    {
+                        Error($"Can't Get ActionRate from SkillDesc {id}");
+                        break;
+                    }
+                    var ar = (int)skillDesc.EffectParamsFloat[2];
+                    var fixDamage = (int)skillDesc.EffectParamsFloat[1];
+                    var arStr = $"x{DescTr.F2Str(ar / 100.0f, div100: true, noSign: true)}";
+                    if (fixDamage != 0)
+                        arStr += $"{DescTr.F2Str(fixDamage, false)}";
+                    str = str.Replace(match.Groups[0].ToString(), arStr);
+                    match = regex.Match(str);
+                }
+                if (desc[i] != str)
+                {
+                    desc[i] = str;
+                    changed = true;
+                }
+            }
+            return changed;
+        }
         public static List<FUStSkillEffectDesc?> GetUniqueSkillEffectList(this List<TalentSDesc> talentDescList)
         {
             List<FUStSkillEffectDesc?> skilleffectDescList = new List<FUStSkillEffectDesc?>();
