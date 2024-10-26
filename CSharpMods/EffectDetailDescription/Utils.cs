@@ -45,35 +45,5 @@ namespace EffectDetailDescription
             return BUS_EventCollectionCS.Get(GetControlledPawn());
         }
 
-        public static T LoadAsset<T>(string asset) where T : UObject
-        {
-            return b1.BGW.BGW_PreloadAssetMgr.Get(GetWorld()).TryGetCachedResourceObj<T>(asset, b1.BGW.ELoadResourceType.SyncLoadAndCache, b1.BGW.EAssetPriority.Default, null, -1, -1);
-        }
-
-        public static UClass LoadClass(string asset)
-        {
-            return LoadAsset<UClass>(asset);
-        }
-
-        public static AActor? SpawnActor(string classAsset)
-        {
-            var controlledPawn = GetControlledPawn();
-            FVector actorLocation = controlledPawn.GetActorLocation();
-            FVector b = controlledPawn.GetActorForwardVector() * 1000.0f;
-            FVector start = actorLocation + b;
-            FRotator frotator = UMathLibrary.FindLookAtRotation(start, actorLocation);
-            UClass uClass = LoadClass($"PrefabricatorAsset'{classAsset}'");
-            if (uClass == null)
-            {
-                return null;
-            }
-            return BGUFunctionLibraryCS.BGUSpawnActor(controlledPawn.World, uClass, start, frotator);
-        }
-
-        public static AActor GetActorOfClass(string classAsset)
-        {
-            return UGameplayStatics.GetActorOfClass(GetWorld(), LoadAsset<UClass>(classAsset));
-        }
-
     }
 }

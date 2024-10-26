@@ -91,7 +91,7 @@ namespace Test
             var FixDamage = DamageDescParam.GetFieldOrProperty2<float>("BaseDamage")!.Value/100;
             var BaseDamage = Attacker_AttrMemData.Attr_Atk * ActionRate / 10000 + FixDamage;
             //Log($"Base Damage = {BaseDamage} = (FinalAttack {Attacker_AttrMemData.Attr_Atk} * ActionRate {ActionRate / 100}% + FixDamage {FixDamage}) ");
-            Log($"Lv {BGW_GameDB.GetElementDmgRatio(DamageDescParam.GetFieldOrProperty2<int>("ElementDmgLevel")!.Value)} AR {ActionRate} FixDamage {FixDamage} -> {FinalDamageValue}");
+            Log($"ATK {Attacker_AttrMemData.Attr_Atk} Lv {BGW_GameDB.GetElementDmgRatio(DamageDescParam.GetFieldOrProperty2<int>("ElementDmgLevel")!.Value)} AR {ActionRate} FixDamage {FixDamage} -> {FinalDamageValue}");
             Log($"Id {SkillDamageConfig.DmgReasonEffectID}");
 
             var def = VictimAttrCon.GetFloatValue(EBGUAttrFloat.Def);
@@ -164,8 +164,9 @@ namespace Test
         public string Version => "1.0";
         private readonly Harmony harmony;
         public bool enable=false;
+        public static AActor pawn;
 
-        public System.Timers.Timer initDescTimer= new System.Timers.Timer(1000);
+        public System.Timers.Timer initDescTimer= new System.Timers.Timer(100);
 
         public static void Log(string i) { MyExten.Log(i); }
         void Error(string i) { MyExten.Error(i); }
@@ -181,7 +182,26 @@ namespace Test
         }
         static public void OnAddBuff(int BuffID, AActor Caster, AActor RootCaster, float Duration, EBuffSourceType BuffSourceType, bool bRecursed , FBattleAttrSnapShot BattleAttrSnapShot)
         {
-            //Log($"AddBuff {BuffID} += {Duration} ");
+            if (BuffID != 127 && BuffID != 128)
+            {
+                //Log($"AddBuff {BuffID} += {Duration} ");
+            }
+        }
+
+        static public void OnRemoveBUff(int BuffID,
+            EBuffEffectTriggerType RemoveTriggerType,
+            int Layer,
+            bool WithTriggerRemmoveEffect)
+        {
+            //if(BuffID!= 127&&BuffID!=128)
+                //Log($"RemoveBuff {BuffID} --");
+        }
+        static public void OnRemoveBUffI(int BuffID,
+            EBuffEffectTriggerType RemoveTriggerType,
+            bool WithTriggerRemmoveEffect = true)
+        {
+            //if(BuffID!= 127&&BuffID!=128)
+                //Log($"RemoveBuffI {BuffID} --");
         }
 
         public void Init()
@@ -189,7 +209,10 @@ namespace Test
 
             Log("MyMod::Init called.Start Timer");
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
-            Utils.RegisterKeyBind(Key.O, delegate {
+            Utils.RegisterKeyBind(Key.O, delegate
+            {
+                enable = !enable;
+                return;
                 //GSLocalization.SetCurrentCulture("en-US");
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.AtkBase, 10.0f);
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.VigorEnergy, 200.0f);
@@ -221,21 +244,27 @@ namespace Test
                     //Log($"Buff {desc.BuffEffects.Count}");
                 }
             });
+            pawn=MyExten.GetControlledPawn();
 
             initDescTimer.Start();
-            //注意必须在GameThread执行，ToFTextFillPre/GetLocaliztionalFText等函数在Timer.Elapsed线程无法得到正确翻译，在RegisterKeyBind或Init或TryRunOnGameThread线程则可以
-            /*initDescTimer.Elapsed +=   (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate {
+            initDescTimer.Elapsed +=   (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate {
                 if(enable)
                 {
-                    Log($"{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.CurEnergy)}" +
-                        $"/{BGUFunctionLibraryCS.BGUGetFloatAttr(MyExten.GetControlledPawn(), EBGUAttrFloat.TransEnergyMax)}");
+                    Log($"{BGUFunctionLibraryCS.BGUHasUnitSimpleState(pawn, EBGUSimpleState.CommonDamageImmue)}" +
+                        $"/272:{BGUFunctionLibraryCS.BGUHasBuffByID(pawn,272)}"+
+                        $"/288:{BGUFunctionLibraryCS.BGUHasBuffByID(pawn,288)}"+
+                        $"/293:{BGUFunctionLibraryCS.BGUHasBuffByID(pawn,293)}"+
+                        $"/114:{BGUFunctionLibraryCS.BGUHasBuffByID(pawn,114)}"+
+                        $"/10110:{BGUFunctionLibraryCS.BGUHasBuffByID(pawn,10110)}"
+                        );
                 }
             });
-            */
             // hook
             harmony.PatchAll();
             MyExten.GetBUS_GSEventCollection().Evt_IncreaseAttrFloat += OnIncreaseAttr;
             MyExten.GetBUS_GSEventCollection().Evt_BuffAdd += OnAddBuff;
+            MyExten.GetBUS_GSEventCollection().Evt_BuffRemove += OnRemoveBUff;
+            MyExten.GetBUS_GSEventCollection().Evt_BuffRemoveImmediately += OnRemoveBUffI;
         }
         public void DeInit() 
         {
@@ -244,6 +273,8 @@ namespace Test
             harmony.UnpatchAll();
             MyExten.GetBUS_GSEventCollection().Evt_IncreaseAttrFloat -= OnIncreaseAttr;
             MyExten.GetBUS_GSEventCollection().Evt_BuffAdd -= OnAddBuff;
+            MyExten.GetBUS_GSEventCollection().Evt_BuffRemove -= OnRemoveBUff;
+            MyExten.GetBUS_GSEventCollection().Evt_BuffRemoveImmediately -= OnRemoveBUffI;
 
         }
         //unused

@@ -26,13 +26,13 @@ namespace EffectDetailDescription
         public static string PlaceHolder = "__PlaceHolder__";
         //枪只有四段
         public static Desc LightAttackDesc = new Desc{ "轻棍1~5段动作值: {AR:1080101}/{AR:1080201}/{AR:1080301}+{AR:1080302}/{AR:1080401}*4+{AR:1080402}/{AR:1080501}\n轻棍1~5段(枪):{AR:1070101}/{AR:1070201}+{AR:1070202}/{AR:1070301}*5/{AR:1070401}\n跳跃轻棍:{AR:1060101}",
-                                                                "Light Attack ActionRate:  {AR:1080101}/{AR:1080201}/{AR:1080301}+{AR:1080302}/{AR:1080401}*4+{AR:1080402}/{AR:1080501}\nLight Attack(Spear):{AR:1070101}/{AR:1070201}+{AR:1070202}/{AR:1070301}*5/{AR:1070401}\nLight Attack(Jump):{AR:1060101}"};
+                                                                "Light Attack MotionValue:  {AR:1080101}/{AR:1080201}/{AR:1080301}+{AR:1080302}/{AR:1080401}*4+{AR:1080402}/{AR:1080501}\nLight Attack(Spear):{AR:1070101}/{AR:1070201}+{AR:1070202}/{AR:1070301}*5/{AR:1070401}\nLight Attack(Jump):{AR:1060101}"};
         public static Desc HeavyAttackDesc = new Desc { "Lv0~4劈棍重击动作值:{AR:1021001}/{AR:1021101}/{AR:1021201}/{AR:1021301}/{AR:1021401};\n" +
                                                         "立棍:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401};" +
                                                         "\n戳棍:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401};\n" +
                                                         "跳跃重击:{AR:1061001}/{AR:1061101}/{AR:1061201}/{AR:1061301}/{AR:1061401};\n" +
                                                         "Lv5重击:x2*2+12\n",
-                                                        "Lv0~4 Smash heavy attack Action Rate:{AR:1021001}/{AR:1021101}/{AR:1021201}/{AR:1021301}/{AR:1021401};\n" +
+                                                        "Lv0~4 Smash heavy attack Motion Value:{AR:1021001}/{AR:1021101}/{AR:1021201}/{AR:1021301}/{AR:1021401};\n" +
                                                         "Pillar:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401};" +
                                                         "\nThrust:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401};\n" +
                                                         "Jump:{AR:1061001}/{AR:1061101}/{AR:1061201}/{AR:1061301}/{AR:1061401};\n" +
@@ -41,8 +41,8 @@ namespace EffectDetailDescription
         public static DescDict ItemEqDesc = new DescDict
         {
             //法宝主动 VITreasureDetail::OnEquipIdChange
-            {19001,new Desc{ "40秒内+600火抗，每秒获得5棍势", "+600 FireResist,+5 Focus/s in 40s"}},
-            {19002,new Desc{ "20秒内+50%伤害减免", "+50% DamageReduction in 20s"}},
+            {19001,new Desc{ "40秒内+600火抗，每秒获得5棍势", "+600 FireResist,+5 Focus/s for 40s"}},
+            {19002,new Desc{ "20秒内+50%伤害减免", "+50% DamageReduction for 20s"}},
         };
         //精魂id->(skill id->hit数的map)
         //-1=*N
@@ -135,19 +135,19 @@ namespace EffectDetailDescription
             {2204,new Desc{ }},//温里散/Body-Warming Powder
             {2205,new Desc{ }},//度瘴散/Antimiasma Powder
             {2206,new Desc{ }},//神霄散/Shock-Quelling Powder
-            {2207,new Desc{ "120秒", "120s"}},//轻身散/Body-Fleeting Powder
+            {2207,new Desc{ "120秒", "120s.Only affects sprinting/jumping/rolling."}},//轻身散/Body-Fleeting Powder
             {2208,new Desc{ }},//清凉散/Body-Cooling Powder
             {2213,new Desc{ "75秒", "75s"}},//登仙散/Ascension Powder
             //{,new Desc{ "120秒", "130s"}},//九转还魂丹/Tonifying Decoction
 
 
-            {18007,new Desc{ "15秒内+15抗性", "+15 in 15s"}},//湘妃葫芦/Xiang River Goddess Gourd
+            {18007,new Desc{ "15秒内+15抗性", "+15 for 15s"}},//湘妃葫芦/Xiang River Goddess Gourd
             {18011,new Desc{ "每30秒回满葫芦", "Refill each 30s"}},//青田葫芦
-            {18012,new Desc{ "20秒内+15攻击", "+15 ATK in 20s"}},//五鬼葫芦/Plaguebane Gourd
-            {18014,new Desc{ "20秒内+20攻击", "+20 ATK in 20s"}},//妙仙葫芦/Immortal Blessing Gourd
+            {18012,new Desc{ "20秒内+15攻击", "+15 ATK for 20s"}},//五鬼葫芦/Plaguebane Gourd
+            {18014,new Desc{ "20秒内+20攻击", "+20 ATK for 20s"}},//妙仙葫芦/Immortal Blessing Gourd
             //2804 DmgAdditionBase 30
-            {18015,new Desc{ "30秒内+30%伤害加成", "+30% Damage in 30s"}},//乾坤彩葫芦/Multi-Glazed Gourd
-            {18017,new Desc{ "15秒内+30气力", "+30 Stamina in 15s"}},//燃葫芦/Firey Gourd
+            {18015,new Desc{ "30秒内+30%伤害加成", "+30% Damage for 30s"}},//乾坤彩葫芦/Multi-Glazed Gourd
+            {18017,new Desc{ "15秒内+30气力", "+30 Stamina for 15s"}},//燃葫芦/Firey Gourd
 
             {2001,new Desc{ "实际回复28%+15", "Actually 28%+15"}},//椰子酒/Coconut Wine
             {2002,new Desc{ "实际回复32%+25", "Actually 32%+25"}},//椰子酒·三年陈/3-Year-Old Coconut Wine
@@ -156,22 +156,22 @@ namespace EffectDetailDescription
             {2005,new Desc{ "实际回复42%+46", "Actually 42%+46"}},//椰子酒·十八年陈/18-Year-Old Coconut Wine
             {2006,new Desc{ "实际回复45%+51", "Actually 45%+51"}},//椰子酒·三十年陈/30-Year-Old Coconut Wine
             {2007,new Desc{ "实际回复48%+55", "Actually 48%+55"}},//猴儿酿/Monkey Brew
-            {2021,new Desc{ "实际回复确实是55%", "Indeed 55%"}},//玉液/Jade Dew
+            {2021,new Desc{ "实际回复也是55%", "Indeed 55%"}},//玉液/Jade Dew
 
-            {2009,new Desc{ "15秒内+30%移动速度", "+30% in 15s"}},//蓝桥风月/Bluebridge Romance--Buff-Talent 2816 写的是15%/15%/15% 实测 约+30%/+30%/约+30% ,why???
+            {2009,new Desc{ "15秒内+30%移动速度", "+30% for 15s"}},//蓝桥风月/Bluebridge Romance--Buff-Talent 2816 写的是15%/15%/15% 实测 约+30%/+30%/约+30% ,why???
             {2011,new Desc{ "低于20%血量时恢复量24%->60%", "24%->60% under 20% HP"}},//无忧醑/Worryfree Brew
-            {2012,new Desc{ "6秒内+12%攻击", "+12 ATK in 6s"}},//龙膏/Loong Balm
+            {2012,new Desc{ "6秒内+12%攻击", "+12 ATK for 6s"}},//龙膏/Loong Balm
             {2019,new Desc{ "+20", "+20"}},//琼浆/Jade Essence
             //BuffDesc-Item 92023
             {2022,new Desc{ "+75.0", "+75.0"}},//松醪/Pinebrew
             {2023,new Desc{ "+15.0元气;+20法宝能量", "+15.0 Qi;+20.0 Treasure Energy"}},//九霞清醑/Sunset of the Nine Skies
     
             {2303,new Desc{ }},//龟泪/Turtle Tear
-            {2304,new Desc{ "10秒内+2秒持续", "+2s Duration in 10s"}},//困龙须/Stranded Loong's Whisker--92304 Passive 192
-            {2305,new Desc{ "10秒内+25%持续时间", "25% Duration in 10s"}},//灵台药苗/Moutain Lingtai Seedlings --92305 Passive 193
+            {2304,new Desc{ "10秒内+2秒持续", "+2s Duration for 10s"}},//困龙须/Stranded Loong's Whisker--92304 Passive 192
+            {2305,new Desc{ "10秒内+25%持续时间", "25% Duration for 10s"}},//灵台药苗/Moutain Lingtai Seedlings --92305 Passive 193
             //Talent 2100 AtkMul 20% 时间10秒，是10秒内施放隐身还是10秒内打出破隐?
-            {2306,new Desc{ "10秒内？+20%攻击", "+20% ATK in 10s?"}},//十二重楼胶/Breath of Fire
-            {2307,new Desc{ "5秒内共回复6%上限(1%*6)", "total 6% MaxHP(1%*6) in 5s"}},//瑶池莲子/Celestial Lotus Seeds
+            {2306,new Desc{ "10秒内？+20%攻击", "+20% ATK for 10s?"}},//十二重楼胶/Breath of Fire
+            {2307,new Desc{ "5秒内共回复6%生命上限(1%*6)", "heal total 6% MaxHP(1%*6) in next 5s"}},//瑶池莲子/Celestial Lotus Seeds
             {2308,new Desc{ }},//不老藤/Undying Vine
             {2309,new Desc{ }},//虎舍利/Tiger Relic--92306
             {2310,new Desc{ }},//梭罗琼芽/Laurel Buds
@@ -180,14 +180,14 @@ namespace EffectDetailDescription
             {2314,new Desc{ "低于20%血量时额外回复+12%生命上限", "+20% MaxHP when under 20% HP"}},//紫纹缃核/Purple-Veined Peach Pit
             {2315,new Desc{ "15%？", "15%？"}},//蜂山石髓/Bee Mountain Stone
             {2316,new Desc{ }},//铁弹/Iron Pellet
-            {2317,new Desc{ "15秒内踉跄并增加50%气力消耗;定身法-2秒，安神法-5秒，聚形散气-3秒，铜头铁臂-2秒，毫毛-8秒", "Stagger and +50% Stamina Consume in 15s;Immobilize -2s,Ring of Fire -5s,Cloud Step -3s,Rock Solid-2s,A Pluck of Many -8s"}},//瞌睡虫蜕/Slumbering Beetle Husk
+            {2317,new Desc{ "15秒内踉跄并增加50%气力消耗;定身法-2秒，安神法-5秒，聚形散气-3秒，铜头铁臂-2秒，毫毛-8秒", "Stagger and +50% Stamina Consume for 15s;Immobilize -2s,Ring of Fire -5s,Cloud Step -3s,Rock Solid-2s,A Pluck of Many -8s"}},//瞌睡虫蜕/Slumbering Beetle Husk
             {2318,new Desc{ "10秒", "10s"}},//铜丸/Copper Pill
-            {2319,new Desc{ "15秒内+5秒持续", "+5s Duration in 15s"}},//血杞子/Goji Shoots --92319? Passive 198
-            {2320,new Desc{ "15秒内+0.066秒无敌，0-3段翻滚基础时间0.4/0.433/0.466/0.5秒", "+0.066s in 15s; 0-3 level roll base immue time:0.4/0.433/0.466/0.5"}},//清虚道果/Fruit of Dao--92320 Passive 199 10105-10109
+            {2319,new Desc{ "15秒内+5秒持续", "+5s Duration for 15s"}},//血杞子/Goji Shoots --92319? Passive 198
+            {2320,new Desc{ "15秒内+0.066秒无敌，0-3段翻滚基础时间0.4/0.433/0.466/0.5秒", "+0.066s immue duration for 15s; 0-3 level roll base immue duration:0.4/0.433/0.466/0.5"}},//清虚道果/Fruit of Dao--92320 Passive 199 10105-10109
             {2321,new Desc{ }},//火焰丹头/Flame Mediator
             {2322,new Desc{ }},//双冠血/Double-Combed Rooster Blood
             {2323,new Desc{ }},//胆中珠/Gall Gem
-            {2324,new Desc{ "11秒内共回复12%生命上限(1%*12)", "total 12% MaxHP(1%*12) in 11s"}},//蕙性兰/Graceful Orchid，11秒持续间隔1秒
+            {2324,new Desc{ "11秒内共回复12%生命上限(1%*12)", "total 12% MaxHP(1%*12) in next 11s"}},//蕙性兰/Graceful Orchid，11秒持续间隔1秒
             {2325,new Desc{ }},//嫩玉藕/Tender Jade Lotus
             {2326,new Desc{ }},//铁骨银参/Steel Ginseng
             //Item 92317 92327 92328
@@ -197,7 +197,7 @@ namespace EffectDetailDescription
             {8011,new Desc{ "", ""}}, //"广谋"
             {8013,new Desc{ "", ""}}, //"幽魂"
             {8014,new Desc{ "", ""}}, //"鼠司空"
-            {8015,new Desc{ "满级时，60秒内+35%攻击;", "LvMax:+35%ATK in 60s;"}}, //"百目真人"
+            {8015,new Desc{ "满级时，60秒内+35%攻击;", "LvMax:+35%ATK for 60s;"}}, //"百目真人"
             {8017,new Desc{ "", ""}}, //"虎伥"
             {8022,new Desc{ "", ""}}, //无量蝠
             {8024,new Desc{ "", ""}}, //"不净"
@@ -270,14 +270,14 @@ namespace EffectDetailDescription
             {16013,new Desc{ }},//金色鲤/Golden Carp
             {16014,new Desc{ "+1%,有日金乌时+3%", "+1%, +3% if have Gold Sun"}},//月玉兔/Jade Moon Rabbit
             {16015,new Desc{ }},//三清令/Tablet of the Three Supreme
-            {16016,new Desc{ "180秒内+60生命上限,+40法力/气力上限", "+60 MaxHP,+40 MaxMP/MaxSt in 180s"}},//定颜珠/Preservation Orb ，有三个buff，每个分别增加一种属性的上限并回复等量值，自动生成的太长了，
+            {16016,new Desc{ "180秒内+60生命上限,+40法力/气力上限", "+60 MaxHP,+40 MaxMP/MaxSt for 180s"}},//定颜珠/Preservation Orb ，有三个buff，每个分别增加一种属性的上限并回复等量值，自动生成的太长了，
             {16017,new Desc{ "+1%,有月玉兔时+3%", "+1%, +3% if have Jade Moon"}},//日金乌/Gold Sun Crow
             {16018,new Desc{ }},//错金银带钩/Cuo Jin-Yin Belt Hook
             {16019,new Desc{ }},//金钮/Gold Button
             {16020,new Desc{ }},//阳燧珠/Flame Orb
             {16021,new Desc{ }},//水火篮/Daoist's Basket of Fire and Water
             {16022,new Desc{ }},//辟水珠/Waterward Orb
-            {16023,new Desc{ "1-4段棍势上限由100/210/330/480变为90/200/320/470", "Lv.1-4 Max focus point:100/210/330/480 -> 90/200/320/470"}},//琥珀念珠/Amber Prayer Beads，有多个passiv
+            {16023,new Desc{ "1-5段棍势上限由100/210/330/480/880变为90/200/320/470/870", "Lv.1-5 Max Focus:100/210/330/480/880 -> 90/200/320/470/870"}},//琥珀念珠/Amber Prayer Beads，有多个passiv
             {16024,new Desc{}},//仙箓/Celestial Registry Tablet
             {16025,new Desc{}},//虎筋绦子/Tiger Tendon Belt
             //16026仙胞石片
@@ -285,27 +285,27 @@ namespace EffectDetailDescription
             {16028,new Desc{ }},//博山炉/Boshan Censer
             {16029,new Desc{ }},//不求人/Back Scratcher
             {16030,new Desc{ "", ""}},//吉祥灯/Auspicious Lantern
-            {16031,new Desc{ "+32防御,每次造成10%天命人攻击力的伤害", "+32 DEF.Deal x0.1 player attack Damage per Hit"}},//金棕衣/Gold Spikeplate
+            {16031,new Desc{ "+32防御,每次受击时玩家对敌人造成动作值为x0.1的伤害", "+32 DEF.Deal x0.1 Damage(based on player's ATK) per Hit"}},//金棕衣/Gold Spikeplate
             {16032,new Desc{ }},//兽与佛/Beast Buddha
             {16033,new Desc{ }},//铜佛坠/Bronze Buddha Pendant
             {16034,new Desc{ }},//雷火印/Thunderflame Seal
-            {16035,new Desc{ "约0.1/s", "about 0.1/s"}},//君子牌/Virtuous Bamboo Engraving
+            {16035,new Desc{ "0.1/s", "0.1/s"}},//君子牌/Virtuous Bamboo Engraving
             {16036,new Desc{ }},//卵中骨/Spine in the Sack
             {16037,new Desc{ }},//白贝腰链/White Seashell Waist Chain
 
             //装备独门妙用
             //散件
 	        {17001,new Desc{ "高于1%血量时每秒-3HP,额外回复+15%生命上限", "-3HP/s when over 1% HP.+15% MaxHP Recover"}},//地灵伞盖/Earth Spirit Cap
-            {17002,new Desc{ "饮酒后15秒内+10攻击,20秒后-20攻击", "+10 ATK in 15s;-20 ATK after 20s"}},//长嘴脸/Snout Mask
+            {17002,new Desc{ "饮酒后15秒内+10攻击,20秒后-20攻击", "+10 ATK for 15s;-20 ATK after 20s"}},//长嘴脸/Snout Mask
             {17003,new Desc{ "+2%", "+2%"}},//鳖宝头骨/Skull of Turtle Treasure
             {17004,new Desc{ }},//山珍蓑衣/Ginseng Cape
             //蜢虫头907005 97005、97015 185、186
-            {17005,new Desc{ "+15%/20% 动作值", "+15%/20% ActionRate"}},//长须头面/Locust Antennae Mask
+            {17005,new Desc{ "+15%/20% 动作值", "+15%/20% MotionValue"}},//长须头面/Locust Antennae Mask
             //Talent 2702
             {17006,new Desc{ }},//白脸子/Grey Wolf Mask
             {17008,new Desc{ "阳:+20%伤害减免。阴:20%暴击-30%伤害减免", "Yang:+20% DamageReduction. Yin:+20% Crit,-30% DamageReduction"}},//阴阳法衣/Yin-Yang Daoist Robe
             //Talent 2713/2714
-            {17010,new Desc{ "300秒内+40生命/法力上限", "+40 MaxHP/MP in 300s"}},//南海念珠/Guanyin's Prayer Beads ,类似定颜珠，自动生成的太长了
+            {17010,new Desc{ "300秒内+40生命/法力上限", "+40 MaxHP/MP for 300s"}},//南海念珠/Guanyin's Prayer Beads ,类似定颜珠，自动生成的太长了
             {17011,new Desc{ }},//金刚护臂/Vajra Armguard
             {10701,new Desc{ }},//厌火夜叉面/Yaksha Mask of Outrage
             {11601,new Desc{ "+10棍势，强硬时+30", "+10 Focus.+30 when Tenacity"}},//大力王面/Bull King's Mask
@@ -313,8 +313,8 @@ namespace EffectDetailDescription
             {11001,new Desc{ "+100棍势", "+100"}},//金身怒目面/Golden Mask of Fury，2111buff触发施加2112，2112没有效果，2113的激活条件是具有2112
             //没有11902，从11912开始
             {11912,new Desc{ "+15", "+15"}},//昆蚑毒敌甲/Venomous Sting Insect Armor
-            {11803,new Desc{ "3秒内+15%攻击", "+15% ATK in 3s"}},//玄铁硬手/Iron-Tough Gauntlets 把IronBodyBuff覆盖为2171
-            {10603,new Desc{ "每消耗一段棍势8秒内+6%暴击", "+6% in 8s for each focus level"}},//赭黄臂甲/Ochre Armguard
+            {11803,new Desc{ "3秒内+15%攻击", "+15% ATK for 3s"}},//玄铁硬手/Iron-Tough Gauntlets 把IronBodyBuff覆盖为2171
+            {10603,new Desc{ "每消耗一段棍势8秒内+6%暴击", "+6% for 8s for each focus level"}},//赭黄臂甲/Ochre Armguard
             {11304,new Desc{ "10秒", "10s"}},//不净泥足/Non-Pure Greaves
             {11204,new Desc{ "+10", "+10"}},//藏风护腿/Galeguard Greaves
             //Talent 2142
@@ -322,16 +322,16 @@ namespace EffectDetailDescription
             //Talent 2098
             {10904,new Desc{ "+15%攻击", "+15%ATK"}},//乌金行缠/Ebongold Gaiters //升满级的10934关联到buff2099/2097不知道有什么效果；2091~2099全是，太复杂了
 
-            {15012,new Desc{ "5秒内获得共127.5棍势(2.5+25*5)", "Gain 127.5(2.5+25*5) Focus in 5s"}},//狼牙棒/Spikeshaft Staff
+            {15012,new Desc{ "5秒内获得共127.5棍势(2.5+25*5)", "Gain 127.5(2.5+25*5) Focus for 5s"}},//狼牙棒/Spikeshaft Staff
             {15007,new Desc{ "每段棍势+5HP(中毒敌人+40)", "+5 HP(40 for Poisoned enemy) for each focus level"}},//昆棍·百眼/Visionary Centipede Staff
             {15013,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍·蛛仙/Spider Celestial Staff
             //{,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍/Chitin Staff
             {15018,new Desc{ "每段棍势:+5HP并造成x1.0伤害", "+5 HP and deal x1.0 Damage for each focus level"}},//昆棍·通天/Adept Spine-Shooting Fuban Staff
             {15016,new Desc{ "每点防御+0.15攻击", "+0.15ATK per DEF"}},//混铁棍/Dark Iron Staff
-            {15015,new Desc{ "+20% 动作值", "+20% ActionRate"}},//飞龙宝杖/Golden Loong Staff//15015 145
-            {15101,new Desc{ "Lv0~4重击动作值+20%/20%/20%/20%/10%;搅阵/进尺动作值+15%;飞剑造成{AR:1099916} per Hit伤害", "Lv0~4 Heavy Attack ActionRate:+20%/20%/20%/20%/10%;Deal {AR:1099916} Damage per Hit"}},//三尖两刃枪/Tri-Point Double-Edged Spear//15015 145
+            {15015,new Desc{ "+20% 动作值", "+20% MotionValue"}},//飞龙宝杖/Golden Loong Staff//15015 145
+            {15101,new Desc{ "Lv0~4重击动作值+20%/20%/20%/20%/10%;搅阵/进尺动作值+15%;飞剑造成{AR:1099916} per Hit伤害", "Lv0~4 Heavy Attack MotionValue:+20%/20%/20%/20%/10%;Deal {AR:1099916} Damage per Hit"}},//三尖两刃枪/Tri-Point Double-Edged Spear//15015 145
             {15017,new Desc{ "每次命中附加一段x0.1或x0.3或x1.0的伤害，其中50%为雷属性", "An addition x0.1/x0.3/x1.0 Damage per hit.50% is Thunder Damage."}},//天龙棍
-            {15102,new Desc{ "Lv0~4重击动作值+20%/20%/20%/20%/10%;搅阵/进尺动作值+15%;", "Lv0~4 Heavy Attack ActionRate:+20%/20%/20%/20%/10%;Whirling/Forceful Thrust ActionRate:+15%"}},//楮白枪
+            {15102,new Desc{ "Lv0~4重击动作值+20%/20%/20%/20%/10%;搅阵/进尺动作值+15%;", "Lv0~4 Heavy Attack MotionValue:+20%/20%/20%/20%/10%;Whirling/Forceful Thrust MotionValue:+15%"}},//楮白枪
         };
         //天赋
         public static DescDict TalentDisplayDesc = new DescDict
@@ -344,22 +344,22 @@ namespace EffectDetailDescription
             {100105,new Desc{ "+15%/lv",}},//调息
             {100106,new Desc{ "-2.5/lv,基础消耗 20","-2.5/lv,BaseCost 20"}},//猿捷
             {100108,new Desc{ "+10/lv,基础 40","+10/lv,Base 40"}},//走险
-            {100109,new Desc{ "15%,持续2秒","15% in 2s"}},//绝念
-            {100110,new Desc{ "动作值:{AR:1031102}", "ActionRate:{AR:1031102}"}},//梦幻泡影
+            {100109,new Desc{ "15%,持续2秒","15% for 2s"}},//绝念
+            {100110,new Desc{ "动作值:{AR:1031102}", "MotionValue:{AR:1031102}"}},//梦幻泡影
             //{,new Desc{ "",}},//任翻腾//第一段翻滚由SkillDesc 10301变为10305
 
             //武艺
             {100201,new Desc{ "+100/lv,基础800/900/1000;","+100/lv,Base 800/900/1000;"} + LightAttackDesc},//直取/Switft Engage//Passive 13/14 SkillCtrlDesc 10701,10798-10801
             {100202,new Desc{ "18->23 per Hit",}},//接力
-            {100203,new Desc{ "动作值{AR:1080101}->{AR:1080001}", "ActionRate:{AR:1080101}->{AR:1080001}"}},//冲霄
-            {100204,new Desc{ "动作值:{AR:1080505}","ActionRate:{AR:1080505}"}},//捣蒜打
+            {100203,new Desc{ "动作值{AR:1080101}->{AR:1080001}", "MotionValue:{AR:1080101}->{AR:1080001}"}},//冲霄
+            {100204,new Desc{ "动作值:{AR:1080505}","MotionValue:{AR:1080505}"}},//捣蒜打
             //10508 46/47 SkillEffectDamageExpand
             //{,new Desc{ "Lv1-2:+100/150", "Lv1-2:+100/150"}},//断筋/TODO
             {100205,new Desc{ "30%",}},//筋节
-            {100206,new Desc{ "动作值:{AR:1080501}->{AR:1075501};不影响枪", "ActionRate:{AR:1080501}->{AR:1075501};Not affect spear"}},//气息不绝
+            {100206,new Desc{ "动作值:{AR:1080501}->{AR:1075501};不影响枪", "MotionValue:{AR:1080501}->{AR:1075501};Not affect spear"}},//气息不绝
             //10506 PassiveSkillDesc 16写的是Mul 50%,实测约+18%，回复量会浮动，约7.5~8，点完变成9上下
-            {100207,new Desc{ "棍花动作值:{AR:1081701};棍花移步:{AR:1082301}", "ActionRate:{AR:1081701};Moving:{AR:1082301}"}},//棍花移步
-            {100208,new Desc{ "动作值:{AR:1085201}", "ActionRate:{AR:1085201}"}},//方圆径寸
+            {100207,new Desc{ "棍花动作值:{AR:1081701};棍花移步:{AR:1082301}", "MotionValue:{AR:1081701};Moving:{AR:1082301}"}},//棍花移步
+            {100208,new Desc{ "动作值:{AR:1085201}", "MotionValue:{AR:1085201}"}},//方圆径寸
             {100209,new Desc{ "约+18%", "about +18%"}},//化吉/Silver Lining
             {100210,new Desc{ "-30%, 基础26/秒，棍花移步基础48/秒","-30%. BaseCost 26/s(48/s when moving)"}},//应手
             {100211,new Desc{ "4->6 per Hit, 不影响原地棍花(3 per Hit)","4->6 per Hit. Not affect Staff Spin(3 per Hit)"}},//得心
@@ -393,30 +393,31 @@ namespace EffectDetailDescription
             {100504,new Desc{ "-10%/lv基础气力消耗,0-4级重棍基础消耗:40/50/75/90/90;和身轻体快(根器)乘算，不影响劈/立/戳的额外气力消耗，不影响蓄力和跳跃重击,劈棍:额外+15消耗,立棍:仅Lv1额外15消耗,戳棍:额外+7.5消耗", 
                             "-10%/lv heavy-attack Base Stamina Cost.Multi with Nimble Body(Relic) effect.Not affect addition cost of Smash/Pillar/Thrust.Not affect charge/jump-heavy-attack. Base cost of 0~4 focus-level:40/50/75/100/100. Smash:additional +15 Cost.Pillar:(Lv1 only) additional +15 Cost.Thrust:additional +7.5 Cost."}},//熟谙
             //10506 PassiveSkillDesc 39-41
-            {100506,new Desc{ "+4%/lv 动作值", "+4%/lv ActionRate"}},//通变/Versatility
+            {100506,new Desc{ "+4%/lv 动作值", "+4%/lv MotionValue"}},//通变/Versatility
             {100507,new Desc{ "+5%/lv,基础55点棍势/秒","+5%/lv,Base 55 Focus/s"}},//精壮
             {100508,new Desc{ "Lv1~2:额外造成目标当前生命值1%/1.5%的真实伤害;此伤害无视防御和减伤,与消耗棍势数量无关","Lv1~2: Deal extra true damage which equals to 1%/1.5% of target current HP.Ignore damage reduction&Defense.Not related to consumed Focus."}},//精壮
-            {100509,new Desc{ "识破:{AR:1070501}->{AR:1070601};斩棍:{AR:1070701}->{AR:1070801};江海翻:{AR:1072402}->{AR:1072502};进尺:{AR:1071401}->{AR:1071501}", "Counterflow: {AR:1070501}->{AR:1070601};Skyfall:{AR:1070701}->{AR:1070801};Churning Gale:{AR:1072402}->{AR:1072502};Forceful Thrust:{AR:1071401}->{AR:1071501}"}},
+            {100509,new Desc{ "识破:{AR:1070501}->{AR:1070601};斩棍:{AR:1070701}->{AR:1070801};江海翻:{AR:1072402}->{AR:1072502};进尺:{AR:1071401}->{AR:1071501}", "Resolute Strike: {AR:1070501}->{AR:1070601};Skyfall Strike:{AR:1070701}->{AR:1070801};Churning Gale:{AR:1072402}->{AR:1072502};Forceful Thrust:{AR:1071401}->{AR:1071501}"}},
             {100602,new Desc{ "Lv1:+20%/Lv2:+30%",}},//克刚
             //10603 51/52 SkillEffectFloat
-            {100603,new Desc{ "Lv1-2:+5%/8% 动作值", "Lv1-2:+5%/8% ActionRate"}},//压溃/Smashing Force
-            {100607,new Desc{ "动作值:{AR:1070501}", "ActionRate:{AR:1070501}"}},//识破
-            {100609,new Desc{ "动作值:{AR:1070701}", "ActionRate:{AR:1070701}"}},//斩棍势
+            {100603,new Desc{ "Lv1-2:+5%/8% 动作值", "Lv1-2:+5%/8% MotionValue"}},//压溃/Smashing Force
+            {100607,new Desc{ "动作值:{AR:1070501},无敌时间0.5s,GP判定窗口0.4s", "MotionValue:{AR:1070501}.Immue Duration 0.5s.GP-Success Window 0.4s"}},//识破
+            {100609,new Desc{ "动作值:{AR:1070701}", "MotionValue:{AR:1070701}"}},//斩棍势
             {100610,new Desc{ "+100",}},//抖擞
-            {100611,new Desc{ "根据棍势+5%/10%/15%/20% 攻击", "+5%/10%/15%/20% ATK by focus level"}},//乘胜追击/Vantage Point
+            {100611,new Desc{ "每段棍势+5%攻击", "+5% ATK per Focus Level"}},//乘胜追击/Vantage Point
             //10702 53/54
-            {100701,new Desc{ "Lv0~4重击动作值:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401}", "Lv0~4 heavy attack Action Rate:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401}"}},//立棍
+            {100701,new Desc{ "Lv0~4重击动作值:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401}", "Lv0~4 heavy attack Motion Value:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401}"}},//立棍
             {100702,new Desc{ "-20%/lv", "-20%/lv"}},//铁树/Steel Pillar
-            {100705,new Desc{ "动作值:{AR:1072102}","ActionRate:{AR:1072102}"}},//风云转
+            {100705,new Desc{ "动作值:{AR:1072102}","MotionValue:{AR:1072102}"}},//风云转
             {100706,new Desc{ "20%",}},//拂痒
-            {100707,new Desc{ "动作值:{AR:1072402}", "ActionRate:{AR:1072402}"}},//江海翻
+            {100707,new Desc{ "动作值:{AR:1072402},无敌时间0.3s", "MotionValue:{AR:1072402}.Immue Duration 0.3s"}},//江海翻
             {100708,new Desc{ "获得等于0.35*棍势值的攻击力百分比加成;例:4段棍势(480)时获得168%攻击力加成","Gain (0.35*Focus)% Atk.(Eg,gain +168% atk when 480 Focus)"}},//天地倾，对AtkMul施加id为5参数为-15的FixFunction修正，see RunByBuffApply GetFixFunctionDesc;Fix function 5 为根据Pevalue的35计算
 
-            {100801,new Desc{ "Lv0~4重击动作值:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401}", "Lv0~4 heavy attack Action Rate:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401}"}},//戳棍
+            {100801,new Desc{ "Lv0~4重击动作值:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401}", "Lv0~4 heavy attack Motion Value:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401}"}},//戳棍
             {100802,new Desc{ "Lv1-2:回复30/50", "Lv1-2:Recover 30/50"}},//借力/Borrowed Strength//Passive 13/14 SkillCtrlDesc 10701,10798-10801
-            {100803,new Desc{ "动作值:{AR:1071102}","ActionRate:{AR:1071102}"}},//搅阵
-            {100804,new Desc{ "9秒内+1% 每层","+1% per stack in 9s"}},//骋势
-            {100807,new Desc{ "动作值:{AR:1071401}", "ActionRate:{AR:1071401}"}},//退寸进尺
+            {100803,new Desc{ "动作值:{AR:1071102}","MotionValue:{AR:1071102}"}},//搅阵
+            {100804,new Desc{ "9秒内+1% 每层","+1% per stack for 9s"}},//骋势
+            {100807,new Desc{ "退寸无敌时间0.5s,进尺动作值:{AR:1071401}", "Tactical Retreat Immue Duration 0.5s.Forceful Thrust MotionValue:{AR:1071401}"}},//退寸进尺
+            {100809,new Desc{ "退寸获得0.366秒GP判定窗口，GP成功时获得等同识破成功的效果,包含0.5s基础无敌时间", "Grants Tactical Retreat a 0.366s GP-Success-Window.Trigger all See Through effects when GP successfully,including 0.5s Immue."}},//赌胜，enable buff 293,使得戳棍gp成功触发288、1007、2026、96025、1046(此消彼长)、295，其中288 enable 272(劈棍gp成功获得0.5s无敌)
             {100810,new Desc{ "15s"}},//此消彼长 buff 1047 setsimplestate 40
             //1048~1050
 
@@ -430,7 +431,7 @@ namespace EffectDetailDescription
             {100905,new Desc{ "每层-2%敌人定身抗性,基础8秒","-2% Enemy Immobilize Resist per stack, Base 8s"}},//凝滞//10905 Passive 64/65 Buff 1064 写的是DingshenDefAdditionBase +2,但是Passive里只改了叠加上限没改数值，怀疑是百分比加成，每层+2%
             {101301,new Desc{ "+2/4/5秒，基础20.5秒","+2/4/5s，Base 20.5s"}},//圆明
             {101302,new Desc{ "20/s->23/s",}},//烈烈
-            {101303,new Desc{ "Lv1:+10/Lv2:+15 每跳","Lv1:+10/Lv2:+15 per Tick"}},//弥坚
+            {101303,new Desc{ "Lv1:+10/Lv2:+15 每秒","Lv1:+10/Lv2:+15 per sec"}},//弥坚
             {101304,new Desc{ "60MP->90MP, 离开后持续5秒","60MP->90MP. 5s Duration after leaving."}},//无挂无碍
             {101305,new Desc{ "+30% -> 40+30%",}},//昂扬
             {101306,new Desc{ "+20%",}},//归根
@@ -448,11 +449,11 @@ namespace EffectDetailDescription
             {101005,new Desc{ "Lv1:+3%/Lv2:+4% 每层","Lv1:+3%/Lv2:+4% per stack"}},//洞察
             //Talent 11006 Passive 74/75
             {101006,new Desc{ "+15%/lv", "+15%/lv"}},//捣虚/Ruse
-            {101007,new Desc{ "动作值:x1", "ActionRate:x1"}},//舍身 1055,是个buff?
+            {101007,new Desc{ "动作值:x1", "MotionValue:x1"}},//舍身 1055,是个buff?
             
             {101104,new Desc{ "{AR:1080101}/{AR:1070101} -> {AR:1050201}", }},//先发
             {101105,new Desc{ "15s->13s",}},//频频//11105 85 -2s
-            {101106,new Desc{ "+15%,持续15秒","+15% in 15s"}},//巩固
+            {101106,new Desc{ "+15%,持续15秒","+15% for 15s"}},//巩固
             {101102,new Desc{ "+75",}},//知机
             {101103,new Desc{ "Lv1-2:+10MP/15MP;-0.2/0.3秒,基础1秒", "Lv1-2:+10MP/15MP;-0.2s/0.3s,Base 1s"}},//厉无咎/Bold Venture //101103 Passive 77-84
 
@@ -484,11 +485,10 @@ namespace EffectDetailDescription
             {301103,new Desc{ "-10%",}},//剪尾
             {301104,new Desc{ "Lv1->6:+4/6/8/10/12/14",}},//爆躁
             {301105,new Desc{ "Lv1->6:+4/6/8/10/12/14",}},//霏霏
-            {301106,new Desc{ "60秒内+1 攻击力/每层", "+1 per stack in 60s"}},//红眼/Red Eyes
+            {301106,new Desc{ "60秒内+1 攻击力/每层", "+1 ATK for 60s per stack"}},//红眼/Red Eyes
             {301107,new Desc{ "Lv1->6:+4/6/8/10/12/14",}},//恶秽
             {301109,new Desc{ "Lv1->6:+4/6/8/10/12/14",}},//奔霄
-            //TalentSDesc 301108 PassiveSkillDesc 236 BuffDesc-lz
-            {301108,new Desc{ "+0.5秒->0.8秒", "+0.5s->0.8s"}},//一闪/Lightning Flash
+            {301108,new Desc{ "+0.5秒->0.8秒", "+0.5s->0.8s"}},//一闪/Lightning Flash Passive 31108; Add buff 272 duration 300
             {301110,new Desc{ "+12",}},//不坏身
 
             //根器
@@ -497,16 +497,21 @@ namespace EffectDetailDescription
             {200102,new Desc{ "-12.5秒", "-12.5s"}},//眼乖手疾/Eagle Eye
             {200103,new Desc{ "+15%", "+15%"}},//慧眼圆睁/Keen Insight
 
-            {200201,new Desc{ "+0.066秒,基础0.4(劈棍)/0.366(戳棍)/0.3(不明)/0.5(不明)秒", "+0.066s,Base 0.4(Smash)/0.366(Pillar)/0.3(Unknown)/0.5(Unknown) second"}},//耳听八方/All Ears//20201 Passive 121 287,293,114,10110
+            //20201 Passive 20201 Add buff 287(识破判定),293(退寸判定),114(识破和退寸无敌),10110(风云转无敌) duration 66
+            //287,0.4s是个判定buff，成功施加288(慢放并触发19998被动，即增加1070501识破动作值1，但实测不增加动作值)、1007(天赋-GP成功接连招标记)、2026(狼牙棒)、96025(虎筋绦子)
+            //293,0.366s也是判定buff，成功施加288、1007、2026、96025、1046(此消彼长)、295(戳棍gp，用途不明),需要有天赋100809赌胜，即赌胜实际效果是让退寸也能如同识破一样触发各种gp类无敌和buff
+            //114,0.5s和10110,0.3s是setsimplestate 116 17 57 59 99的无敌buff,116= EBGUSimpleState.CommonDamageImmue
+            //272,0.5s同样是setsimplestate 116 17 57 59 99的无敌buff，识破/退寸后固定获得，但是需要有buff 288才会生效，即劈棍、戳棍GP成功获得0.5s无敌；288时间为1s，所以不改288时此无敌效果不会超过1s
+            {200201,new Desc{ "+0.066秒无敌时间和GP窗口,基础无敌时间:0.5(识破)/0.3(风云转)/0.5(赌胜退寸)秒,基础GP窗口:0.4(识破)/0.366(赌胜退寸)秒", "+0.066s Immune Duration and GP-Success Window.Base Immue Duration: 0.5(Resolute)/0.3(Sweeping Gale)/0.5(Tactical Retreat) sec. Base GP-Success Window: 0.4(Resolute)/0.366(Tactical Retreat) sec"}},//耳听八方/All Ears
             {200202,new Desc{ "-0.1秒，基础1秒", "-0.1s,Base 1s"}},//如撞金钟/Sound as A Bell // Ｐａｓｓｉｖｅ 122-125 Buff-lz 228 buff-talent 1069
-            {200203,new Desc{ "5秒内+10%攻击", "+10% ATK in 5s"}},//耳畔风响/Whistling Wind
+            {200203,new Desc{ "5秒内+10%攻击", "+10% ATK for 5s"}},//耳畔风响/Whistling Wind
 
-            {200301,new Desc{ "15秒内+10%伤害加成", "+10% Damage in 15s"}},//气味相投/Lingering Aroma //buff 2107
+            {200301,new Desc{ "15秒内+10%伤害加成", "+10% Damage for 15s"}},//气味相投/Lingering Aroma //buff 2107
             //{,new Desc{ "+12", "+12"}},//阳燧珠/In One Breath -
             {200303,new Desc{ "+0.066秒,0-3段翻滚基础无敌时间0.4/0.433/0.466/0.5秒", "+0.066s,0-3 level roll base time 0.4/0.433/0.466/0.5s"}},//屏气敛息/Hold Breath//-20303 Passive  127 buff-lz  10105-10109
 
             {200404,new Desc{ "+10%丹药持续时间", "+10% Duration"}},//舌尝思/Envious Tongue
-            {200401,new Desc{ "5秒内+15%", "+15% in 5s"}},//丹满力足/Refreshing Taste
+            {200401,new Desc{ "5秒内+15%", "+15% for 5s"}},//丹满力足/Refreshing Taste
             //{,new Desc{ "+12", "+12"}},//阳燧珠/Spread the Word
             {200403,new Desc{ "每个增加+4%生命上限的回复量", "+4% MaxHP recover each"}},//遍尝百草/Tongue of A Connoisseur
 
@@ -517,8 +522,8 @@ namespace EffectDetailDescription
             {200502,new Desc{ "+60", "+60"}},//福寿长臻/Everlasting Vitality
             {200503,new Desc{ "+15", "+15"}},//灾愆不侵/Divine Safeguard
 
-            {200601,new Desc{ "1~4段+10%动作值，5段+5%动作值，不影响跳跃轻击", "1~5 Light Attack:+10/10/10/10/5 ActionRate.Not affect Jump light attack."}},//万相归真/Elegance in Simplicity
-            {200603,new Desc{ "30秒内+30%伤害加成", "+30% Damage in 30s"}},//不生不灭/Unbegotten, Undying
+            {200601,new Desc{ "1~4段+10%动作值，5段+5%动作值，不影响跳跃轻击", "1~5 Light Attack:+10/10/10/10/5 MotionValue.Not affect Jump light attack."}},//万相归真/Elegance in Simplicity
+            {200603,new Desc{ "30秒内+30%伤害加成", "+30% Damage for 30s"}},//不生不灭/Unbegotten, Undying
         };
         //套装效果
         public static DescDict SuitInfoDesc = new DescDict
@@ -532,17 +537,17 @@ namespace EffectDetailDescription
             //650->702，+满级百足734.5
             //Talent 2041 - 2044 写的是0 / 8 / 10,实测是0 / 8 %/ 约10 %
             {900411,new Desc{ "+8%/10%奔跑/冲刺速度", "+8%/10% Run/Sprint speed."}},//日行千里/Swift Pilgrim
-            {900412,new Desc{ "每层+10%攻击,持续2秒", "+10% ATK per stack in 2s"}},//日行千里/Swift Pilgrim
+            {900412,new Desc{ "每层+10%攻击,持续2秒", "+10% ATK per stack for 2s"}},//日行千里/Swift Pilgrim
             {900421,new Desc{ "每秒+12棍势", "+12 Focus/s"}},//日行千里/Swift Pilgrim
 
             {900511,new Desc{ "每个天赋+24防御", "+24 DEF per Relic Talent"}},//心灵福至/Fortune's Favor
             //Talent 2063
             {900611,new Desc{ "20%减伤", "20% Damage Reduction"}},//走石飞砂/Raging Sandstorm
-            {900711,new Desc{ "+20% 动作值", "+20% ActionRate"}},//离火入魔/Outrage
+            {900711,new Desc{ "+20% 动作值", "+20% MotionValue"}},//离火入魔/Outrage
             {705,new Desc{ "+25%伤害 -30%伤害减免", "+25% Damage.-30% DamageReduction"}},//离火入魔/Outrage
             {900811,new Desc{ "+10赋雷攻击", "+10 Thunder ATK"}},//龙血玄黄/Thunder Veins
             {900821,new Desc{ "+10赋雷攻击", "+10 Thunder ATK"}},//龙血玄黄/Thunder Veins
-            {901011,new Desc{ "20秒内+15%攻击", "+15% ATK in 20s"}},//借假修真/Gilded Radiance
+            {901011,new Desc{ "20秒内+15%攻击", "+15% ATK for 20s"}},//借假修真/Gilded Radiance
             {901012,new Desc{ "暴击+3元气,\n击杀+5元气", "+3/+5 Qi when Crit/Kill"}},//借假修真/Gilded Radiance
             //96005 / 96006 实测每次减少0.75~1秒冷却不定？？非传奇和传奇没有区别？？
             {901211,new Desc{ "+15棍势", "+15 Focus"}},//举步生风/Gale Guardian
@@ -552,18 +557,19 @@ namespace EffectDetailDescription
             
             //90711 Passive 167
             //Talent 2135 - 0.005，实测变身还原 + 1.5每秒 ；2137 - 0.00375, 实测约1.12每秒，结合 - 0.005推测应为1.125 / s
-            {901311,new Desc{ "+20%伤害减免，结束变身时获得12秒黑泥，化身还原后获得6秒黑泥", "+20% DamageReduction.Gain Mud in 12s upon quiting tranformation;Gain Mud in 6s upon quiting vigor."}},//泥塑金装/From Mud to Lotus
-            {901312,new Desc{ "翻滚回复约0.3神力,结束变身后12秒内+1.5/s神力回复，化身还原后4秒(not 6)内+1.125/s神力回复", "About +0.3 Might upon roll. +1.5/s Might Recover for 12s upon quiting tranformation.+1.125/s Might Recover in 4s(not 6s) upon quiting vigor."}},//泥塑金装/From Mud to Lotus
+            {901311,new Desc{ "+20%伤害减免，结束变身时获得12秒黑泥，化身还原后获得6秒黑泥", "+20% DamageReduction.Gain Mud for 12s upon quiting tranformation;Gain Mud for 6s upon quiting vigor."}},//泥塑金装/From Mud to Lotus
+            {901312,new Desc{ "翻滚回复约0.3神力,结束变身后12秒内+1.5/s神力回复，化身还原后4秒(not 6)内+1.125/s神力回复", "About +0.3 Might upon roll. +1.5/s Might Recover for 12s upon quiting tranformation.+1.125/s Might Recover for 4s(not 6s) upon quiting vigor."}},//泥塑金装/From Mud to Lotus
             {901411,new Desc{ "x0.8毒伤(和抗性效果乘算)", "x0.8 Poison Damage(Multi with Poison Resist effect)"}},//花下死/Poison Ward
             {901412,new Desc{ "+20%攻击", "+20% ATK"}},//花下死/Poison Ward
             //独角仙套 91912 Passive 185
             {901511,new Desc{ "+10%灵蕴", "+10% Will"}},//锱铢必较/Every Bit Counts
-            {901611,new Desc{ "5秒内+10%防御", "+10% DEF in 5s"}},//百折不挠/Unyielding Resolve
+            {901611,new Desc{ "5秒内+10%防御", "+10% DEF for 5s"}},//百折不挠/Unyielding Resolve
+            {901612,new Desc{ "", "Grants Tenacity over half HP"}},//百折不挠/Unyielding Resolve
             {901811,new Desc{ "+50棍势", "+50 Focus"}},//铜心铁胆/Iron Will
             {901812,new Desc{ "-5秒冷却", "-5s CD"}},//铜心铁胆/Iron Will
             {901911,new Desc{ "+100棍势", "+100 focus"}},//毒魔狠怪/Fuban Strength
             {901912,new Desc{ "+20%持续时间", "+20% Duration"}},//毒魔狠怪/Fuban Strength
-            {902011,new Desc{ "10秒内+8%暴击", "+8% Crit in 10s"}},//试比天高/Heaven's Equal
+            {902011,new Desc{ "10秒内+8%暴击", "+8% Crit for 10s"}},//试比天高/Heaven's Equal
             {902012,new Desc{ "-1秒冷却 per Hit", "-1s CD per Hit"}},//试比天高/Heaven's Equal
 
 
@@ -612,7 +618,7 @@ namespace EffectDetailDescription
             {8065,new Desc{ "", ""}}, //"骨悚然"
             {8066,new Desc{ "", ""}}, //"狸侍长"
             {8067,new Desc{ "", ""}}, //"疾蝠"
-            {8068,new Desc{ "[-6%]/[8%]/[10%]气力消耗,[+10%]/[12%]/[15%] 跳跃轻击动作值", "[-6%]/[8%]/[10%] Stamina Cost,[+10%]/[12%]/[15%] ActionRate"}}, //"石双双" --33681/33581 [247]/[267]/[287]
+            {8068,new Desc{ "[-6%]/[8%]/[10%]气力消耗,[+10%]/[12%]/[15%] 跳跃轻击动作值", "[-6%]/[8%]/[10%] Stamina Cost,[+10%]/[12%]/[15%] MotionValue"}}, //"石双双" --33681/33581 [247]/[267]/[287]
             //--26/[24.5]/[24]/[23.5]
             {8069,new Desc{ "减少每秒消耗[-1.5]/[2]/[2.5]，基础消耗26/s(移步48/s)", "[-1.5]/[2]/[2.5] cost per second(Base Cost:26/s.Base Cost When moving:48/s)"}}, //"鼠弩手"
             {8070,new Desc{ "", ""}}, //"地狼"
@@ -826,8 +832,8 @@ namespace EffectDetailDescription
         public readonly static Desc DefaultDesc = new Desc() { "{0}", "{0}" };
         public readonly static Desc EmptyDesc = new Desc() { "", "" };
         public readonly static Desc ThenConnection = new Desc() { ",再", ".Then " };
-        public readonly static Desc ActionRateFormat = new Desc() { "造成<HitCount>{2}次</HitCount>x{0}{1}伤害", "Deal x{0}{1} Damage<HitCount> {2} times</HitCount>" };
-        public readonly static Desc DurationFormat = new Desc() { "<Duration>{1}秒内</Duration>{0}", "{0}<Duration> in {1}s</Duration>" };
+        public readonly static Desc MotionValueFormat = new Desc() { "造成<HitCount>{2}次</HitCount>x{0}{1}伤害", "Deal x{0}{1} Damage<HitCount> {2} times</HitCount>" };
+        public readonly static Desc DurationFormat = new Desc() { "<Duration>{1}秒内</Duration>{0}", "{0}<Duration> for {1}s</Duration>" };
         public readonly static Desc GreaterFormat = new Desc() { "<Target>目标</Target>{0}高于{1}时{2}", "{2} when<Target> target</Target> {0} over {1}" };
         public readonly static Desc LesserFormat = new Desc() { "<Target>目标</Target>{0}不高于{1}时{2}", "{2} when<Target> target</Target> {0} under {1}" };
         public readonly static Desc FullFormat = new Desc() { "<Target>目标</Target>满{0}时{1}", "{1} when<Target> target</Target> full {0}" };

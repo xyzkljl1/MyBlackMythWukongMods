@@ -35,15 +35,22 @@ namespace EffectDetailDescription
         }
         public string GetTr(bool useBracket = true)
         {
-            return GetTr((int)MyExten.currentLanguage, useBracket);
+            return GetTr((int)MyExten.CurrentLanguage, useBracket);
         }
         //从List获取第i条翻译项，如果没有第i条则尝试返回English项目，如果English也没有返回最后一个，如果List为空返回空。
         public string GetTr(int i, bool useBracket = true)
         {
+            var tmp = GetTrImp(i);
+            if (tmp != ""&& useBracket) 
+                return $"({tmp})";
+            return tmp;
+        }
+        public string GetTrImp(int i)
+        {
             if (Count == 0) return "";
-            if (Count > i) return useBracket ? $"({this[i]})" : this[i];
-            if (Count > (int)Data.LanguageIndex.English) return useBracket ? $"({this[(int)Data.LanguageIndex.English]})" : this[(int)Data.LanguageIndex.English];
-            return useBracket ? $"({this.Last()})" : this.Last();
+            if (Count > i) return this[i];
+            if (Count > (int)Data.LanguageIndex.English) return this[(int)Data.LanguageIndex.English];
+            return this.Last();
         }
         public static Desc operator +(Desc l, Desc r)
         {
@@ -392,13 +399,13 @@ namespace EffectDetailDescription
                 //目前并不能完美处理Passive/buff,只有简单情况使用自动生成
                 if (talentDescList.All(ele => ele.PassiveSkillIDs != "" && ele.AddBuffIDs == ""))
                 {
-                    var PassiveIDsList = talentDescList.Select(ele => ele.PassiveSkillIDs.Split(',').ToList())
+                    var passiveIDsList = talentDescList.Select(ele => ele.PassiveSkillIDs.Split(',').ToList())
                                         .ForEach(ele => ele.Sort()).ToList();
                     //                                    if (PassiveList.Count == 1 && descList[mydesc.Key].IsTrEmpty())
-                    if (PassiveIDsList.Count>0 && PassiveIDsList.All(ele=>ele.Count == 1))
-                        for (int i = 0; i < PassiveIDsList.First().Count; i++)
+                    if (passiveIDsList.Count>0 && passiveIDsList.All(ele=>ele.Count == 1))
+                        for (int i = 0; i < passiveIDsList.First().Count; i++)
                         {
-                            var passiveDictList = PassiveIDsList.Select(ele => BGW_GameDB.GetPassiveSkillDescDic(int.Parse(ele[i])));
+                            var passiveDictList = passiveIDsList.Select(ele => BGW_GameDB.GetPassiveSkillDescDic(int.Parse(ele[i])));
                             if (passiveDictList.All(ele=>ele.Count == 1))//多于一个的暂不处理
                             {
                                 List<FUStPassiveSkillDesc> fistPassiveSkillDescList = passiveDictList.Select(ele => ele.First().Value).ToList();
@@ -458,7 +465,7 @@ namespace EffectDetailDescription
             var ElementRatio = BGW_GameDB.GetElementDmgRatio(ElementDmgLevel);
             //desc.EffectParamsInt[5]影响伤害计算时使用哪个抗性，EffectParamsInt[2]用途暂不明确
             var ElemAtkType = ((desc.EffectParamsInt.Count > 5) ? ((EAbnormalStateType)desc.EffectParamsInt[5]) : EAbnormalStateType.None);
-            ret += Data.ActionRateFormat;
+            ret += Data.MotionValueFormat;
             ret.FormatWith(F2Str(ActionRate/100.0f,div100:true,noSign:true));
             if (FixDamage != 0)
                 ret.FormatWith(F2Str(FixDamage, false));

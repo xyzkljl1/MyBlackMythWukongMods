@@ -35,9 +35,9 @@ namespace EffectDetailDescription
 {
     public static class MyExten
     {
-        public static UWorld? world;
+        private static UWorld? _world;
         public static string Name => "EffectDetailDescription";
-        public static Data.LanguageIndex currentLanguage = Data.LanguageIndex.SimpleCN;
+        public static Data.LanguageIndex CurrentLanguage = Data.LanguageIndex.SimpleCN;
         public static void Log(string msg)
         {
             Console.WriteLine($"[{Name}]: {msg}");
@@ -46,48 +46,53 @@ namespace EffectDetailDescription
         {
             Console.WriteLine($"[{Name}] Error! : {msg}");
         }
+        public static void DebugLog(string msg)
+        {
+            Console.WriteLine($"[{Name}]Debug: {msg}");
+        }
 
-        public static FieldType? GetField<FieldType>(this object obj, String field_name) where FieldType : class
+
+        public static TFieldType? GetField<TFieldType>(this object obj, String fieldName) where TFieldType : class
         {
             var t = obj.GetType();
-            var field = t.GetField(field_name, BindingFlags.NonPublic | BindingFlags.Instance);
+            var field = t.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
             if (field is null)
-                field = t.GetField(field_name, BindingFlags.Public | BindingFlags.Instance);
+                field = t.GetField(fieldName, BindingFlags.Public | BindingFlags.Instance);
             if (field is null)
-                field = t.GetField(field_name, BindingFlags.NonPublic | BindingFlags.Static);
+                field = t.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static);
             if (field is null)
-                field = t.GetField(field_name, BindingFlags.Public | BindingFlags.Static);
+                field = t.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
             if (field is null)
             {
-                Console.WriteLine($"{Name} Fatal Error: Can't Find {field_name}");
-                return default(FieldType);
+                Console.WriteLine($"{Name} Fatal Error: Can't Find {fieldName}");
+                return default(TFieldType);
             }
-            return field.GetValue(obj) as FieldType;
+            return field.GetValue(obj) as TFieldType;
         }
-        public static object? CallPrivateFunc(this object obj, String method_name, object[] paras)
+        public static object? CallPrivateFunc(this object obj, String methodName, object[] paras)
         {
             var t = obj.GetType();
-            var methodInfo = t.GetMethod(method_name, BindingFlags.NonPublic | BindingFlags.Instance);
+            var methodInfo = t.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
             if (methodInfo is null)
             {
-                Console.WriteLine($"{Name} Fatal Error: Can't Find {method_name}");
+                Console.WriteLine($"{Name} Fatal Error: Can't Find {methodName}");
                 return null;
             }
             //return null;
             return methodInfo.Invoke(obj, paras);
         }
-        public static object? CallPrivateGenericFunc(this object obj, String method_name, Type[] para_type4search, Type[] generic_types, object[] paras)
+        public static object? CallPrivateGenericFunc(this object obj, String methodName, Type[] paraType4Search, Type[] genericTypes, object[] paras)
         {
             var t = obj.GetType();
             foreach (var methodInfo in t.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
-                if (methodInfo.IsGenericMethod && methodInfo.Name == method_name)
+                if (methodInfo.IsGenericMethod && methodInfo.Name == methodName)
                 {
                     var para_types = methodInfo.GetParameters();
-                    if (para_types.Length == para_type4search.Length)
+                    if (para_types.Length == paraType4Search.Length)
                     {
                         bool isMatch = true;
-                        for (int i = 0; i < para_type4search.Length; i++)//根据参数类型搜索
-                            if (para_types[i].ParameterType.Name != para_type4search[i].Name)
+                        for (int i = 0; i < paraType4Search.Length; i++)//根据参数类型搜索
+                            if (para_types[i].ParameterType.Name != paraType4Search[i].Name)
                             {
                                 isMatch = false;
                                 //Console.WriteLine($"Not Match:{para_types[i].ParameterType.Name}/{para_type4search[i].Name}");
@@ -96,16 +101,16 @@ namespace EffectDetailDescription
                         if (isMatch)
                         {
                             //Console.WriteLine($"Find: {method_name}");
-                            var insMethodInfo = methodInfo.MakeGenericMethod(generic_types);//传入泛型参数获得泛型方法实例
+                            var insMethodInfo = methodInfo.MakeGenericMethod(genericTypes);//传入泛型参数获得泛型方法实例
                             if (insMethodInfo is null)
-                                Console.WriteLine($"{Name} Fatal Error: Can't get instance of generic: {method_name}");
+                                Console.WriteLine($"{Name} Fatal Error: Can't get instance of generic: {methodName}");
                             else
                                 return insMethodInfo.Invoke(obj, paras);
                         }
                     }
 
                 }
-            Console.WriteLine($"{Name} Fatal Error: Can't Find {method_name}");
+            Console.WriteLine($"{Name} Fatal Error: Can't Find {methodName}");
             return null;
         }
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
@@ -124,16 +129,16 @@ namespace EffectDetailDescription
         }
         public static UWorld? GetWorld()
         {
-            if (world == null)
+            if (_world == null)
             {
                 UObjectRef uobjectRef = GCHelper.FindRef(FGlobals.GWorld);
-                world = uobjectRef?.Managed as UWorld;
+                _world = uobjectRef?.Managed as UWorld;
             }
-            return world;
+            return _world;
         }
     }
     [HarmonyPatch(typeof(VITreasureDetail), "OnEquipIdChange")]
-    class Patch_Fabao_Cost
+    class PatchFabaoCost
     {
         static void Postfix(VITreasureDetail __instance, ChangeReason Reason, int OldValue, int NewValue)
         {
@@ -149,7 +154,7 @@ namespace EffectDetailDescription
         }
     }
     [HarmonyPatch(typeof(VIRZDDetail), "OnChangeItemId")]
-    class Patch_VigorCost
+    class PatchVigorCost
     {
         static void Postfix(VIRZDDetail __instance, ChangeReason Reason, int OldValue, int NewValue)
         {
@@ -164,14 +169,14 @@ namespace EffectDetailDescription
         }
     }
     [HarmonyPatch(typeof(BGUPlayerCharacterCS), nameof(BGUPlayerCharacterCS.AfterInitAllComp))]
-    class Patch_Init
+    class PatchInit
     {
         static void Postfix(BGUPlayerCharacterCS __instance)
         {
             try
             {
                 MyMod.PreFillDict();
-                MyMod.InitDescProtobufAndLanugage();
+                MyMod.InitDescProtobufAndLanguage();
             }
             catch (Exception e) 
             {
@@ -184,7 +189,7 @@ namespace EffectDetailDescription
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.7";
+        public string Version => "1.7.1";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
         public static Boolean inited = false;//InitDescProtobufAndLanugage called
@@ -206,7 +211,7 @@ namespace EffectDetailDescription
         static public void DebugLog(string msg)
         {
 #if DEBUG
-            Console.WriteLine($"[{Name}]: {msg}");
+            MyExten.DebugLog(msg);
 #endif
         }
 
@@ -224,10 +229,11 @@ namespace EffectDetailDescription
             if (MyExten.GetWorld() != null && GSLocalization.IsInit)
             {
                 PreFillDict();//对Data.XXXDict的预处理
-                InitDescProtobufAndLanugage();
+                InitDescProtobufAndLanguage();
             }
             else
                 Log("Not Ready.Delay Pre Init");
+
 
             //注意必须在GameThread执行，ToFTextFillPre/GetLocaliztionalFText等函数在Timer.Elapsed线程无法得到正确翻译，在RegisterKeyBind或Init或TryRunOnGameThread线程则可以
             //不要随便用RunOnGameThread!!!!调用累计超过12672次后会导致游戏卡住，只在必要时调用
@@ -237,8 +243,8 @@ namespace EffectDetailDescription
             harmony.PatchAll();
         }
 
-
-        static public void PreFillDict()
+        
+        public static void PreFillDict()
         {
             if (preInited)
             {
@@ -285,7 +291,7 @@ namespace EffectDetailDescription
                         if (desc.EquipPosition == EquipPosition.Accessory || desc.EquipPosition == EquipPosition.Fabao)
                         {
                             //只考虑仅一个效果的情况，直接赋值不拼接
-                            if (desc.AttrEffectId > 0 && desc.SuitId == 0 && desc.EquipEffectId == 0)
+                            if (desc is { AttrEffectId: > 0, SuitId: 0, EquipEffectId: 0 })
                             {
                                 //EquipDesc武器护甲的attrEffect就是面板，葫芦的是酒数量上限，只有珍玩需要写在描述里
                                 //法宝的attreffect也在EquipDesc，但是描述在别处
@@ -340,9 +346,9 @@ namespace EffectDetailDescription
                             if (consumeEffect.EffectType == ConsumeEffectType.Buff && consumeEffect.EffectId > 0)
                             {
                                 FUStBuffDesc? buff = BGW_GameDB.GetOriginalBuffDesc(consumeEffect.EffectId);
-                                if (buff.ID == 21065 || buff.ID == 21165 || buff.ID == 21465 || buff.ID == 21665)//精魂被动吃丹药回血，条件也是always，特殊处理
+                                if (buff is null) continue;
+                                if (buff.ID is 21065 or 21165 or 21465 or 21665)//精魂被动吃丹药回血，条件也是always，特殊处理
                                     continue;
-                                if (buff == null) continue;
                                 if (buff.BuffActiveCondition.ConditionType == EGSBuffAndSkillEffectActiveCondition.HasTalent)
                                     continue;
                                 //if (descList[mydesc.Key].IsTrNull())
@@ -369,7 +375,7 @@ namespace EffectDetailDescription
                         var desc2 = GameDBRuntime.GetSoulSkillDesc(mydesc.Key + 300);
                         var desc3 = GameDBRuntime.GetSoulSkillDesc(mydesc.Key + 500);
                         if (desc == null || desc2 == null || desc3 == null) continue;
-                        bool changed = false;
+                        var changed = false;
                         //蜻蜓精等是AttrEffectId和EffectTalentId都有的
                         if (desc.AttrEffectId > 0)
                         {
@@ -409,14 +415,14 @@ namespace EffectDetailDescription
                 var descList = Data.ItemDesc;
                 var generalFormat = descList[-1];
                 foreach (var mydesc in descList.Copy())
-                    if (mydesc.Key >= 8000&&mydesc.Key<9000)
+                    if (mydesc.Key is >= 8000 and < 9000)
                     {
-                        var souskillDescList = new List<SoulSkillDesc?>
+                        var soulSkillDescList = new List<SoulSkillDesc?>
                                 { GameDBRuntime.GetSoulSkillDesc(mydesc.Key),
                                     GameDBRuntime.GetSoulSkillDesc(mydesc.Key+300),
                                     GameDBRuntime.GetSoulSkillDesc(mydesc.Key+500) };
-                        if (souskillDescList.Any(ele=>ele==null)) continue;
-                        var buffDescList = souskillDescList.Select(ele => ele!.BuffId > 0 ? GameDBRuntime.GetFUStBuffDesc(ele.BuffId) : null).ToList();
+                        if (soulSkillDescList.Any(ele=>ele==null)) continue;
+                        var buffDescList = soulSkillDescList.Select(ele => ele!.BuffId > 0 ? GameDBRuntime.GetFUStBuffDesc(ele.BuffId) : null).ToList();
                         //目前看来只有一种0/20810/20820,由于1级是0不太好处理,替换成一个自建临时buff
                         if (buffDescList[0] is null&& buffDescList[1] != null && buffDescList[2] != null 
                             && buffDescList[1]!.ID == 20810 && buffDescList[2]!.ID==20820)
@@ -439,11 +445,11 @@ namespace EffectDetailDescription
                 var descList = Data.ItemDesc;
                 var generalFormat = descList[-2];
                 foreach (var mydesc in descList.Copy())
-                    if (mydesc.Key >= 8000 && mydesc.Key < 9000)
+                    if (mydesc.Key is >= 8000 and < 9000)
                     {
                         //只考虑满级，SpiritActiveSkillId里用的是1级的精魂id，技能id写的是满级的
                         if (!Data.SpiritActiveSkillId.ContainsKey(mydesc.Key)) continue;
-                        Desc tmp = Desc.Empty;
+                        var tmp = Desc.Empty;
                         foreach(var pair in Data.SpiritActiveSkillId[mydesc.Key])
                         {
                             var skillDesc =BGW_GameDB.GetOriginalSkillEffectDesc(pair.Key);
@@ -463,7 +469,7 @@ namespace EffectDetailDescription
             }
             //动作值
             {
-                int ct = 2;
+                int ct = 2;//lightAttack和HeavyAttack
                 foreach(var descList in new List<DescDict> { Data.TalentDisplayDesc,Data.EquipDesc})
                     foreach(var mydesc in descList.Keys)
                         ct+=descList[mydesc].ReplaceActionRate()?1:0;
@@ -474,13 +480,12 @@ namespace EffectDetailDescription
 
             //补充Desc,因为不同等级id不同,共用描述，在Data里只写1级的id，其它等级在此处补上
             foreach (var desc in Data.EquipDesc.Copy())
-                if (desc.Key >= 10000 && desc.Key < 13000)//护甲，17000+的是无法升级的单件，是连续排列的
+                if (desc.Key is >10000 and <13000)//护甲，17000+的是无法升级的单件，是连续排列的
                     for (int i = 10; i <= 40; i += 10)
                         Data.EquipDesc.Add(desc.Key + i, desc.Value);
             foreach (var desc in Data.SpiritDesc.Copy())
-                if (desc.Key >= 8000 && desc.Key < 9000)//精魂被动描述
+                if (desc.Key is >= 8000 and < 9000)//精魂被动描述
                 {
-                    var base_str = desc.Value;
                     var levelStrList = desc.Value.Remove2in3Bracket();
                     Data.SpiritDesc[desc.Key] = levelStrList[0];
                     Data.SpiritDesc.Add(desc.Key + 100, levelStrList[0]);
@@ -490,9 +495,8 @@ namespace EffectDetailDescription
                     Data.SpiritDesc.Add(desc.Key + 500, levelStrList[2]);
                 }
             foreach (var desc in Data.ItemDesc.Copy())
-                if (desc.Key >= 8000 && desc.Key < 9000)//精魂主动描述
+                if (desc.Key is >= 8000 and < 9000)//精魂主动描述
                 {
-                    var base_str = desc.Value;
                     var levelStrList = desc.Value.Remove2in3Bracket();
                     Data.ItemDesc[desc.Key] = levelStrList[0];
                     Data.ItemDesc.Add(desc.Key + 100, levelStrList[0]);
@@ -501,17 +505,6 @@ namespace EffectDetailDescription
                     Data.ItemDesc.Add(desc.Key + 400, levelStrList[1]);
                     Data.ItemDesc.Add(desc.Key + 500, levelStrList[2]);
                 }
-            /*
-            foreach (var desc in Data.ItemDesc.Copy())
-                if (desc.Key >= 8000 && desc.Key < 9000)//精魂主动描述
-                {
-                    var base_str = desc.Value;
-                    Data.ItemDesc.Add(desc.Key + 100, base_str);
-                    Data.ItemDesc.Add(desc.Key + 200, base_str);
-                    Data.ItemDesc.Add(desc.Key + 300, base_str);
-                    Data.ItemDesc.Add(desc.Key + 400, base_str);
-                    Data.ItemDesc.Add(desc.Key + 500, base_str);
-                }*/
             DebugLog("Fill Dict Done");
         }
         public void DeInit()
@@ -519,7 +512,7 @@ namespace EffectDetailDescription
             Log($"DeInit");
             harmony.UnpatchAll();
         }
-        static public void InitDescProtobufAndLanugage()
+        public static void InitDescProtobufAndLanguage()
         {
             if (inited)
             {
@@ -531,13 +524,13 @@ namespace EffectDetailDescription
                 string ingameLng = GSLocalization.GetCurrentCulture().ToLower();
                 //steam版是zh-Hans/zh-Hant,wegame版是zh-Hans-CN/?，坑爹
                 if (GSLocalization.IsZHCulture())
-                    MyExten.currentLanguage = Data.LanguageIndex.SimpleCN;
+                    MyExten.CurrentLanguage = Data.LanguageIndex.SimpleCN;
                 else if (ingameLng == "en")
-                    MyExten.currentLanguage = Data.LanguageIndex.English;
+                    MyExten.CurrentLanguage = Data.LanguageIndex.English;
                 else//default
-                    MyExten.currentLanguage = Data.LanguageIndex.English;
+                    MyExten.CurrentLanguage = Data.LanguageIndex.English;
             }
-            Log($"Use Language :{MyExten.currentLanguage.ToString()}");
+            Log($"Use Language :{MyExten.CurrentLanguage.ToString()}");
             foreach (var pair in Data.ItemEqDesc)
             {
                 var id = pair.Key;
