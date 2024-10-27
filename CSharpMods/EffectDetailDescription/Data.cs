@@ -407,9 +407,9 @@ namespace EffectDetailDescription
             //10702 53/54
             {100701,new Desc{ "Lv0~4重击动作值:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401}", "Lv0~4 heavy attack Motion Value:{AR:1086001}/{AR:1086101}/{AR:1086201}/{AR:1086301}/{AR:1086401}"}},//立棍
             {100702,new Desc{ "-20%/lv", "-20%/lv"}},//铁树/Steel Pillar
-            {100705,new Desc{ "动作值:{AR:1072102}","MotionValue:{AR:1072102}"}},//风云转
+            {100705,new Desc{ "动作值:{AR:1072102},无敌时间0.3s","MotionValue:{AR:1072102}.Immue Duration 0.3s"}},//风云转
             {100706,new Desc{ "20%",}},//拂痒
-            {100707,new Desc{ "动作值:{AR:1072402},无敌时间0.3s", "MotionValue:{AR:1072402}.Immue Duration 0.3s"}},//江海翻
+            {100707,new Desc{ "动作值:{AR:1072402}", "MotionValue:{AR:1072402}"}},//江海翻
             {100708,new Desc{ "获得等于0.35*棍势值的攻击力百分比加成;例:4段棍势(480)时获得168%攻击力加成","Gain (0.35*Focus)% Atk.(Eg,gain +168% atk when 480 Focus)"}},//天地倾，对AtkMul施加id为5参数为-15的FixFunction修正，see RunByBuffApply GetFixFunctionDesc;Fix function 5 为根据Pevalue的35计算
 
             {100801,new Desc{ "Lv0~4重击动作值:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401}", "Lv0~4 heavy attack Motion Value:{AR:1088001}/{AR:1088101}/{AR:1088201}/{AR:1088301}/{AR:1088401}"}},//戳棍
@@ -498,7 +498,7 @@ namespace EffectDetailDescription
             {200103,new Desc{ "+15%", "+15%"}},//慧眼圆睁/Keen Insight
 
             //20201 Passive 20201 Add buff 287(识破判定),293(退寸判定),114(识破和退寸无敌),10110(风云转无敌) duration 66
-            //287,0.4s是个判定buff，成功施加288(慢放并触发19998被动，即增加1070501识破动作值1，但实测不增加动作值)、1007(天赋-GP成功接连招标记)、2026(狼牙棒)、96025(虎筋绦子)
+            //287,0.4s是个判定buff，成功施加288(慢放并触发19998被动，即令1070501的EffectParamsInt[1]++(21->22)，实测不增加动作值)、1007(天赋-GP成功接连招标记)、2026(狼牙棒)、96025(虎筋绦子)
             //293,0.366s也是判定buff，成功施加288、1007、2026、96025、1046(此消彼长)、295(戳棍gp，用途不明),需要有天赋100809赌胜，即赌胜实际效果是让退寸也能如同识破一样触发各种gp类无敌和buff
             //114,0.5s和10110,0.3s是setsimplestate 116 17 57 59 99的无敌buff,116= EBGUSimpleState.CommonDamageImmue
             //272,0.5s同样是setsimplestate 116 17 57 59 99的无敌buff，识破/退寸后固定获得，但是需要有buff 288才会生效，即劈棍、戳棍GP成功获得0.5s无敌；288时间为1s，所以不改288时此无敌效果不会超过1s
@@ -564,7 +564,7 @@ namespace EffectDetailDescription
             //独角仙套 91912 Passive 185
             {901511,new Desc{ "+10%灵蕴", "+10% Will"}},//锱铢必较/Every Bit Counts
             {901611,new Desc{ "5秒内+10%防御", "+10% DEF for 5s"}},//百折不挠/Unyielding Resolve
-            {901612,new Desc{ "", "Grants Tenacity over half HP"}},//百折不挠/Unyielding Resolve
+            {901612,new Desc{ "", "Grants Tenacity OVER half HP"}},//百折不挠/Unyielding Resolve
             {901811,new Desc{ "+50棍势", "+50 Focus"}},//铜心铁胆/Iron Will
             {901812,new Desc{ "-5秒冷却", "-5s CD"}},//铜心铁胆/Iron Will
             {901911,new Desc{ "+100棍势", "+100 focus"}},//毒魔狠怪/Fuban Strength

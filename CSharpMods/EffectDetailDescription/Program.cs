@@ -466,6 +466,15 @@ namespace EffectDetailDescription
                         ct++;
                     }
                 Log($"Generate {ct} Vigor action rate");
+                /*
+                foreach (var mydesc in descList.Copy())
+                    if (mydesc.Key is >= 8000 and < 9000)
+                    {
+                        var itemDesc = GameDBRuntime.GetItemDesc(mydesc.Key);
+                        var name=itemDesc.Name.ToFTextRemoveRich();
+                        Log($"{name}: {mydesc.Value.GetTr()}");
+                    }
+                */
             }
             //动作值
             {
