@@ -44,7 +44,8 @@ namespace Test
         static void Postfix(AActor Caster, AActor Target, int BuffID, EBuffSourceType BuffSourceType, float BuffDurationTimer)
         {
             MyExten.Log($"Add Buff {BuffID}");
-        }
+        }        [HarmonyPatch(typeof(BUS_GSEventCollection),nameof(BUS_GSEventCollection.Evt_FTB_IncreaseAttrFloat_Invoke))]
+
     }
     [HarmonyPatch(typeof(BUS_TalentComp), "OnActivateTalent")]
     class Patch_Init2
@@ -72,7 +73,29 @@ namespace Test
             Log($"On Crit {a} {b} {c} {d}");
         }
     }*/
-    [HarmonyPatch(typeof(BUS_BeAttackedComp), "DoDmg_B1_V2")]
+    [HarmonyPatch]
+    class Patch_xxxx
+    {
+        [HarmonyPatch(typeof(BUS_GSEventCollection), nameof(BUS_GSEventCollection.Evt_FTB_IncreaseAttrFloat_Invoke))]
+        [HarmonyPostfix]
+        public static void OnIncreaseAttr3(EBGUAttrFloat AttrID, float IncreaseValue)
+        {
+            MyExten.Log($"3 {AttrID.ToString()} += {IncreaseValue} ");
+        }
+        [HarmonyPatch(typeof(b1.EventDelDefine.GSDel_IncreaseAttrFloat), "Invoke")]
+        [HarmonyPostfix]
+        public static void OnIncreaseAttr4(EBGUAttrFloat AttrID, float IncreaseValue)
+        {
+            if(AttrID== EBGUAttrFloat.CurEnergy || AttrID== EBGUAttrFloat.Stamina|| AttrID==EBGUAttrFloat.Pevalue)
+                return;
+            if(AttrID.ToString().Contains("AbnormalAcc"))
+                return;
+            if(AttrID == EBGUAttrFloat.BurnAbnormalAcc && IncreaseValue<0)
+                return;
+            MyExten.Log($"4 {AttrID.ToString()} += {IncreaseValue} ");
+        }
+    }
+    [HarmonyPatch(typeof(BUS_BeAttackedComp),"DoDmg_B1_V2")]
     class Patch
     {
         static public void Log(string i) { MyExten.Log(i); }
@@ -83,7 +106,7 @@ namespace Test
                 //return;
             Log("=================================");
             //Log($"Final NormalDamage/PartDamage/ElementDamage: {FinalDamageValue} /{FinalDmgForPart}/{FinalElementDmgValue}");
-            Log($"Attacker {Attacker.GetFullName()}");
+            Log($"Attacker {Attacker.GetFullName()} Dmg {FinalDamageValue} {FinalElementDmgValue}");
             //FSkillDamageConfig
             var VictimAttrCon = __instance.GetFieldOrProperty<IBUC_AttrContainer>("VictimAttrCon")!;
 
@@ -178,7 +201,13 @@ namespace Test
         }
         static public void OnIncreaseAttr(EBGUAttrFloat AttrID, float IncreaseValue)
         {
-            //Log($" {AttrID.ToString()} += {IncreaseValue} ");
+            if(AttrID== EBGUAttrFloat.CurEnergy || AttrID== EBGUAttrFloat.Stamina|| AttrID==EBGUAttrFloat.Pevalue)
+                return;
+            if(AttrID.ToString().EndsWith("AbnormalAccMaxMul"))
+                return;
+            if(AttrID == EBGUAttrFloat.BurnAbnormalAcc && IncreaseValue<0)
+                return;
+            Log($"5 {AttrID.ToString()} += {IncreaseValue} ");
         }
         static public void OnAddBuff(int BuffID, AActor Caster, AActor RootCaster, float Duration, EBuffSourceType BuffSourceType, bool bRecursed , FBattleAttrSnapShot BattleAttrSnapShot)
         {
@@ -204,6 +233,7 @@ namespace Test
                 //Log($"RemoveBuffI {BuffID} --");
         }
 
+
         public void Init()
         {
 
@@ -211,11 +241,14 @@ namespace Test
             //Utils.RegisterKeyBind(Key.ENTER, () => Console.WriteLine("Enter pressed"));
             Utils.RegisterKeyBind(Key.O, delegate
             {
-                enable = !enable;
+                //enable = !enable;
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.Pevalue, 400.0f);
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.CurEnergy, 200.0f);
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.AtkBase, 10.0f);
+                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.VigorEnergy, 200.0f);
                 return;
                 //GSLocalization.SetCurrentCulture("en-US");
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.AtkBase, 10.0f);
-                BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.VigorEnergy, 200.0f);
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.StaminaRecoverBase, 0.0f);
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.Stamina, 480.0f);
                 BGUFunctionLibraryCS.BGUSetAttrValue(MyExten.GetControlledPawn(), EBGUAttrFloat.Pelevel, 0.0f);

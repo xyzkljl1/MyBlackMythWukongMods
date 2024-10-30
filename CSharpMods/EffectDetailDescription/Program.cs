@@ -189,7 +189,7 @@ namespace EffectDetailDescription
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.7.1";
+        public string Version => "1.8";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
         public static Boolean inited = false;//InitDescProtobufAndLanugage called
@@ -329,7 +329,7 @@ namespace EffectDetailDescription
             //泡酒物
             {
                 int ct = 0;
-                var descList = Data.ItemDesc;
+                var descList = Data.ItemEffectDesc;
                 foreach (var mydesc in descList.Copy())
                 {
                     var desc = GameDBRuntime.GetConsumeDesc(mydesc.Key);
@@ -412,7 +412,7 @@ namespace EffectDetailDescription
             //精魂变身期间buff
             {
                 int ct = 0;
-                var descList = Data.ItemDesc;
+                var descList = Data.ItemEffectDesc;
                 var generalFormat = descList[-1];
                 foreach (var mydesc in descList.Copy())
                     if (mydesc.Key is >= 8000 and < 9000)
@@ -442,7 +442,7 @@ namespace EffectDetailDescription
             //精魂动作值
             {
                 int ct = 0;
-                var descList = Data.ItemDesc;
+                var descList = Data.ItemEffectDesc;
                 var generalFormat = descList[-2];
                 foreach (var mydesc in descList.Copy())
                     if (mydesc.Key is >= 8000 and < 9000)
@@ -479,14 +479,27 @@ namespace EffectDetailDescription
             //动作值
             {
                 int ct = 2;//lightAttack和HeavyAttack
-                foreach(var descList in new List<DescDict> { Data.TalentDisplayDesc,Data.EquipDesc})
+                foreach(var descList in new List<DescDict> { Data.TalentDisplayDesc,Data.EquipDesc,Data.ItemBriefDesc,Data.ItemEffectDesc})
                     foreach(var mydesc in descList.Keys)
                         ct+=descList[mydesc].ReplaceActionRate()?1:0;
                 Data.LightAttackDesc.ReplaceActionRate();
                 Data.HeavyAttackDesc.ReplaceActionRate();
                 Log($"Generate {ct} Talent/Equip action rate");
             }
+            //动作值 ComboDesc形式
+            {
+                int ct = 0;
+                foreach(var descList in new List<DescDict> { Data.ItemBriefDesc})
+                foreach (var id in descList.Keys.Copy())
+                    if (Data.TransformationItemBriefComboDesc.TryGetValue(id, out var comboDescList))
+                        foreach (var comboDesc in comboDescList)
+                        {
+                            descList[id].ConcatWith(comboDesc.ToDesc(),"\n");
+                            ct++;
+                        }
+                Log($"Generate {ct} Transformation action rate");
 
+            }
             //补充Desc,因为不同等级id不同,共用描述，在Data里只写1级的id，其它等级在此处补上
             foreach (var desc in Data.EquipDesc.Copy())
                 if (desc.Key is >10000 and <13000)//护甲，17000+的是无法升级的单件，是连续排列的
@@ -503,16 +516,16 @@ namespace EffectDetailDescription
                     Data.SpiritDesc.Add(desc.Key + 400, levelStrList[1]);
                     Data.SpiritDesc.Add(desc.Key + 500, levelStrList[2]);
                 }
-            foreach (var desc in Data.ItemDesc.Copy())
+            foreach (var desc in Data.ItemEffectDesc.Copy())
                 if (desc.Key is >= 8000 and < 9000)//精魂主动描述
                 {
                     var levelStrList = desc.Value.Remove2in3Bracket();
-                    Data.ItemDesc[desc.Key] = levelStrList[0];
-                    Data.ItemDesc.Add(desc.Key + 100, levelStrList[0]);
-                    Data.ItemDesc.Add(desc.Key + 200, levelStrList[0]);
-                    Data.ItemDesc.Add(desc.Key + 300, levelStrList[1]);
-                    Data.ItemDesc.Add(desc.Key + 400, levelStrList[1]);
-                    Data.ItemDesc.Add(desc.Key + 500, levelStrList[2]);
+                    Data.ItemEffectDesc[desc.Key] = levelStrList[0];
+                    Data.ItemEffectDesc.Add(desc.Key + 100, levelStrList[0]);
+                    Data.ItemEffectDesc.Add(desc.Key + 200, levelStrList[0]);
+                    Data.ItemEffectDesc.Add(desc.Key + 300, levelStrList[1]);
+                    Data.ItemEffectDesc.Add(desc.Key + 400, levelStrList[1]);
+                    Data.ItemEffectDesc.Add(desc.Key + 500, levelStrList[2]);
                 }
             DebugLog("Fill Dict Done");
         }
@@ -550,7 +563,7 @@ namespace EffectDetailDescription
                         $"ItemDesc.{id}.EffectDesc".ToFTextFillPre("SlotItemDetail_Desc") + pair.Value.GetTr();
                 //originalItemDesc.EffectDesc.ToFTextFillPre("SlotItemDetail_Desc") + pair.Value.GetTr();
             }
-            foreach (var pair in Data.ItemDesc)
+            foreach (var pair in Data.ItemEffectDesc)
             {
                 var id = pair.Key;
                 var desc = GameDBRuntime.GetItemDesc(id);
@@ -559,6 +572,16 @@ namespace EffectDetailDescription
                     desc.EffectDesc =
                         $"ItemDesc.{id}.EffectDesc".ToFTextFillPre("ItemDetail_Desc") + pair.Value.GetTr();
             }
+            foreach (var pair in Data.ItemBriefDesc)
+            {
+                var id = pair.Key;
+                var desc = GameDBRuntime.GetItemDesc(id);
+                //VIItemDetail.OnItemIdChange
+                if (desc != null)
+                    desc.BriefDesc =
+                        $"ItemDesc.{id}.BriefDesc".ToFTextRemoveRich() + pair.Value.GetTr();
+            }
+
             foreach (var pair in Data.EquipDesc)
             {
                 var id = pair.Key;

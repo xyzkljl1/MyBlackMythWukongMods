@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using b1.Localization;
 using static Mono.Security.X509.X520;
 #nullable enable
 namespace EffectDetailDescription
@@ -21,145 +22,6 @@ namespace EffectDetailDescription
         TryAdd = 2,
         Ignore=3
     };
-    public class Desc:List<string>
-    {
-        public static Desc Default { get { return Data.DefaultDesc.Copy(); } }
-        public static Desc Empty { get { return Data.EmptyDesc.Copy(); } }
-        public bool IsTrNull()
-        {
-            return GetTr(false) == "";
-        }
-        public bool HasPercent()
-        {
-            return GetTr().Contains("%");
-        }
-        public string GetTr(bool useBracket = true)
-        {
-            return GetTr((int)MyExten.CurrentLanguage, useBracket);
-        }
-        //从List获取第i条翻译项，如果没有第i条则尝试返回English项目，如果English也没有返回最后一个，如果List为空返回空。
-        public string GetTr(int i, bool useBracket = true)
-        {
-            var tmp = GetTrImp(i);
-            if (tmp != ""&& useBracket) 
-                return $"({tmp})";
-            return tmp;
-        }
-        public string GetTrImp(int i)
-        {
-            if (Count == 0) return "";
-            if (Count > i) return this[i];
-            if (Count > (int)Data.LanguageIndex.English) return this[(int)Data.LanguageIndex.English];
-            return this.Last();
-        }
-        public static Desc operator +(Desc l, Desc r)
-        {
-            var ret = l.Copy();
-            for (int i = 0; i < l.Count && i < r.Count; ++i)
-                ret[i] += r[i];
-            return ret;
-        }
-        public static Desc operator +(Desc l, string r)
-        {
-            var ret = l.Copy();
-            for (int i = 0; i < l.Count; ++i)
-                ret[i] += r;
-            return ret;
-        }
-        public static Desc operator +(string l, Desc r)
-        {
-            var ret = r.Copy();
-            for (int i = 0; i < r.Count; ++i)
-                ret[i] = l+ret[i];
-            return ret;
-        }
-        //注意！！！！！
-        //以下函数虽然返回this，但是是原地修改this
-        public Desc FormatWith(object para)
-        {
-            for (int i = 0; i < Count; ++i)
-                this[i] = DescTr.MoveFormat(this[i], para);
-            return this;
-        }
-        public Desc FormatWith(Desc para)
-        {
-            return FormatWithList<string>(para);
-        }
-        public Desc FormatWithList<T>(List<T> para)
-        {
-            for (int i = 0; i < Count && i < para.Count; ++i)
-                this[i] = DescTr.MoveFormat(this[i], para[i]!);
-            return this;
-        }
-        public Desc FormattedBy(Desc formatList)
-        {
-            for (int i = 0; i < Count; ++i)
-            {
-                var format = formatList.GetTr(i, false);
-                this[i] = DescTr.MoveFormat(format, this[i]);
-            }
-            return this;
-        }
-        public Desc FormattedBy(DescDict dict, int key)
-        {
-            if (dict.ContainsKey(key))
-                FormattedBy(dict[key]);
-           return this;
-        }
-
-        public bool HasTag(string tag)
-        {
-            if(this.Count== 0) return false;
-            return this.First().Contains($"<{tag}>");
-        }
-        //移除指定<tag></tag>
-        public void RemoveTag(string tag,bool removeContent=true)
-        {
-            if(removeContent)
-                for (int i = 0; i < Count; ++i)
-                    this[i] = Regex.Replace(this[i], $"<{tag}>.*?</{tag}>", "");
-            else
-                for (int i = 0; i < Count; ++i)
-                {
-                    this[i] = Regex.Replace(this[i], $"<[/]*{tag}>", "");
-                    this[i]=this[i].Replace($"<{tag}>", "").Replace($"</{tag}>", "");
-                }
-        }
-        public void RemoveAllTag(bool removeContent = true)
-        {
-            if (removeContent)
-                for (int i = 0; i < Count; ++i)
-                    this[i] = Regex.Replace(this[i], "<.*?>.*?</.*?>", "");
-            else
-                for (int i = 0; i < Count; ++i)
-                    this[i] = Regex.Replace(this[i], "<.*?>", "");
-        }
-        //将palceholder替换回{0}
-        public void ReversePlaceHolder()
-        {
-            for (int i = 0; i < Count; ++i)
-                this[i] = this[i].Replace(Data.PlaceHolder, "{0}");
-        }
-        //使用该分隔符拼接
-        public Desc ConcatWith(Desc r, string connectionStr = ",")
-        {
-            for (int i = 0; i < Count && i < r.Count; ++i)
-                if (this[i] == "")
-                    this[i] += r[i];
-                else if (r[i] != "")
-                    this[i] += connectionStr + r[i];
-            return this;
-        }
-        public Desc ConcatWith(Desc r, Desc connectionStr)
-        {
-            for (int i = 0; i < Count && i < r.Count; ++i)
-                if (this[i] == "")
-                    this[i] += r[i];
-                else if (r[i] != "")
-                    this[i] += connectionStr[i] + r[i];
-            return this;
-        }
-    }
     public static class DescTr
     {
         public static void Log(string msg) {MyExten.Log(msg);}
@@ -195,7 +57,7 @@ namespace EffectDetailDescription
         {
             if (usePlaceHolder)
                 return Data.PlaceHolder;
-            if (value.Count() < 1) return "";
+            if (!value.Any()) return "";
             if (value.Count() == 1)
                 return $"{F2Str(value.First(), isPercent)}";
             string ret = "";
@@ -277,7 +139,13 @@ namespace EffectDetailDescription
         }
         public static bool ReplaceActionRate(this Desc desc)
         {
-            var regex = new Regex("{AR:(\\d+)}");
+            var ret=desc.ReplaceActionRateImpl("{AR:(\\d+)}",true);
+            ret|=desc.ReplaceActionRateImpl("{AREle:(\\d+)}",false);
+            return ret;
+        }
+        public static bool ReplaceActionRateImpl(this Desc desc,string _regex,bool isAR)
+        {
+            var regex = new Regex(_regex);
             bool changed=false;
             for (int i = 0; i < desc.Count; i++)
             {
@@ -287,23 +155,8 @@ namespace EffectDetailDescription
                 {
                     int id = Int32.Parse(match.Groups[1].Value);
                     var skillDesc = BGW_GameDB.GetOriginalSkillEffectDesc(id);
-                    if (skillDesc is null)
-                    {
-                        Error($"Can't Get SkillDesc of {id}");
-                        break;
-                    }
-                    if (skillDesc.EffectType != EBuffAndSkillEffectType.SkillDamage
-                        || skillDesc.EffectParamsFloat.Count < 3)
-                    {
-                        Error($"Can't Get ActionRate from SkillDesc {id}");
-                        break;
-                    }
-                    var ar = (int)skillDesc.EffectParamsFloat[2];
-                    var fixDamage = (int)skillDesc.EffectParamsFloat[1];
-                    var arStr = $"x{DescTr.F2Str(ar / 100.0f, div100: true, noSign: true)}";
-                    if (fixDamage != 0)
-                        arStr += $"{DescTr.F2Str(fixDamage, false)}";
-                    str = str.Replace(match.Groups[0].ToString(), arStr);
+                    var arDesc = isAR ? skillDesc.GetARDesc().GetTr(i,false) : skillDesc.GetAREleShortDesc().GetTr(i,true);
+                    str = str.Replace(match.Groups[0].ToString(), arDesc);
                     match = regex.Match(str);
                 }
                 if (desc[i] != str)
@@ -313,6 +166,66 @@ namespace EffectDetailDescription
                 }
             }
             return changed;
+        }
+        public static Desc GetARDesc(this FUStSkillEffectDesc skillDesc,int hitCount=1)
+        {
+            if (skillDesc.EffectType != EBuffAndSkillEffectType.SkillDamage
+                || skillDesc.EffectParamsFloat.Count < 3)
+                return Desc.None;
+            var ar = (int)skillDesc.EffectParamsFloat[2];
+            var fixDamage = (int)skillDesc.EffectParamsFloat[1];
+            var arStr = $"x{DescTr.F2Str(ar / 100.0f, div100: true, noSign: true)}";
+            if (fixDamage != 0)
+                arStr += $"{DescTr.F2Str(fixDamage, false)}";
+            if (hitCount == -1)
+                arStr += "*N";
+            else if (hitCount > 1)
+                arStr += $"*{hitCount}";
+            return [arStr];
+        }        
+        public static Desc GetARDesc(this FUStBuffDesc buffDesc,int hitCount=1)
+        {
+            //假定只有一个伤害效果
+            foreach (var buffEffect in buffDesc.BuffEffects)
+                if(buffEffect.EffectType== EBuffAndSkillEffectType.SkillDamage)
+                {
+                    var ar = (int)buffEffect.EffectParamsFloat[2];
+                    var fixDamage = (int)buffEffect.EffectParamsFloat[1];
+                    var arStr = $"x{DescTr.F2Str(ar / 100.0f, div100: true, noSign: true)}";
+                    if (fixDamage != 0)
+                        arStr += $"{DescTr.F2Str(fixDamage, false)}";
+                    if (hitCount == -1)
+                        arStr += "*N";
+                    else if (hitCount > 1)
+                        arStr += $"*{hitCount}";
+                    return [arStr];
+                }
+            return Desc.Empty;
+        }
+        public static Desc GetAREleShortDesc(this FUStSkillEffectDesc skillDesc)
+        {
+            if (skillDesc.EffectType != EBuffAndSkillEffectType.SkillDamage
+                || skillDesc.EffectParamsFloat.Count < 6)
+                return Desc.None;
+            var elementRatio = BGW_GameDB.GetElementDmgRatio(skillDesc.EffectParamsInt[4]);
+            var elemAtkType =(EAbnormalStateType)skillDesc.EffectParamsInt[5];
+            if(!Data.EAbnormalStateTypeDescShort.ContainsKey((int)elemAtkType))
+                return Desc.None;
+            return Data.EAbnormalStateTypeDescShort[(int)elemAtkType].FormatWith(F2Str(elementRatio * 100.0f, div100: false, noSign: true));
+        }        
+        public static Desc GetAREleShortDesc(this FUStBuffDesc buffDesc)
+        {
+            foreach (var buffEffect in buffDesc.BuffEffects)
+                if (buffEffect.EffectType == EBuffAndSkillEffectType.SkillDamage)
+                {
+                    var elementRatio = BGW_GameDB.GetElementDmgRatio(buffEffect.EffectParams[7]);
+                    var elemAtkType = (EAbnormalStateType)buffEffect.EffectParams[4];
+                    if (!Data.EAbnormalStateTypeDescShort.ContainsKey((int)elemAtkType))
+                        return Desc.None;
+                    return Data.EAbnormalStateTypeDescShort[(int)elemAtkType]
+                        .FormatWith(F2Str(elementRatio * 100.0f, div100: false, noSign: true));
+                }
+            return Desc.Empty;
         }
         public static List<FUStSkillEffectDesc?> GetUniqueSkillEffectList(this List<TalentSDesc> talentDescList)
         {
@@ -906,21 +819,5 @@ namespace EffectDetailDescription
             return ret;
         }
     }
-    public class DescDict : Dictionary<int, Desc>
-    {
-        new virtual public Desc this[int index] //屏蔽基类[],改成虚函数
-        {
-            get { return base[index]; }
-            set { base[index] = value; }
-        }
 
-    }
-    public class ConstDescDict : DescDict
-    {
-        override public Desc this[int index] 
-        {
-            get { return base[index].Copy(); }
-            set { throw new NotImplementedException(); }
-        }
-    }
 }
