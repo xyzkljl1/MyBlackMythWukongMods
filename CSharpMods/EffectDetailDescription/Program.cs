@@ -189,7 +189,7 @@ namespace EffectDetailDescription
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.8";
+        public string Version => "1.8.1";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
         public static Boolean inited = false;//InitDescProtobufAndLanugage called
@@ -226,7 +226,8 @@ namespace EffectDetailDescription
             //});
 
             //如果此时游戏已经初始化完成(以GSLocalization.IsInit为准)则立刻进行预处理，否则在InitDescProtobufAndLanugage前进行
-            if (MyExten.GetWorld() != null && GSLocalization.IsInit)
+            if (MyExten.GetWorld() != null && UGSE_EngineFuncLib.GetFirstLocalPlayerController(MyExten.GetWorld())!=null
+                &&UGSE_EngineFuncLib.GetFirstLocalPlayerController(MyExten.GetWorld()).GetControlledPawn()!=null)
             {
                 PreFillDict();//对Data.XXXDict的预处理
                 InitDescProtobufAndLanguage();
@@ -498,7 +499,6 @@ namespace EffectDetailDescription
                             ct++;
                         }
                 Log($"Generate {ct} Transformation action rate");
-
             }
             //补充Desc,因为不同等级id不同,共用描述，在Data里只写1级的id，其它等级在此处补上
             foreach (var desc in Data.EquipDesc.Copy())

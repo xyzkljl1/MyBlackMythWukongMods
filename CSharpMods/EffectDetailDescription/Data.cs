@@ -860,7 +860,7 @@ public static class Data
         },//熟谙
         //10506 PassiveSkillDesc 39-41
         {100506, ["+4%/lv 动作值", "+4%/lv MotionValue"] },//通变/Versatility
-        {100507, ["+5%/lv,基础55点棍势/秒", "+5%/lv,Base 55 Focus/s"] },//精壮
+        {100507, ["+5%/lv,基础每秒55(劈)/35(立)/40(戳)点棍势", "+5%/lv,Base 55(Smash)/35(Pillar)/40(Thrust) Focus per sec"] },//精壮
         {100508,
             [
                 "Lv1~2:额外造成目标当前生命值1%/1.5%的真实伤害;此伤害无视防御和减伤,与消耗棍势数量无关",

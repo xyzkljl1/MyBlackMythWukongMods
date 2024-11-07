@@ -643,7 +643,7 @@ namespace EffectDetailDescription
                             //subID作用是？
                             //动作倍率
                             if (commonEffectType == EBuffAndSkillEffectType.SkillDamage && desc.SubID == 2)
-                                format = new Desc { $"{{0}}动作倍率(影响{skillEffectList.Count}种动作)", $"{{0}} SkillEffect of {skillEffectList.Count} Actions" };
+                                format = new Desc { $"{{0}}动作值(影响{skillEffectList.Count}种动作)", $"{{0}} SkillEffect of {skillEffectList.Count} Actions" };
                             //动作获得/消耗属性
                             else if(commonEffectType==EBuffAndSkillEffectType.CostAttr && desc.SubID==0)
                             {
