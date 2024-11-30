@@ -100,7 +100,7 @@ public static class Data
         
         {8061, [new KeyValuePair<int, int>(1016101, -1)] }, //"狼刺客"
         {8062, [new KeyValuePair<int, int>(1016201, 1), new KeyValuePair<int, int>(1016263, 1)] }, //"疯虎"
-        {8063, [new KeyValuePair<int, int>(1016302, 2)] }, //"沙二郎"
+        {8063, [new KeyValuePair<int, int>(1016301, 1),new KeyValuePair<int, int>(1016302, 2)] }, //"沙二郎"
         {8064, [new KeyValuePair<int, int>(1016401, 1), new KeyValuePair<int, int>(1016402, 1)] }, //"鼠禁卫"
         {8065, [
                 new KeyValuePair<int, int>(1016502, 1), new KeyValuePair<int, int>(1016501, 7),
@@ -156,6 +156,7 @@ public static class Data
         {-1, ["变身期间根据等级{0};", "{0} by Lv when active."] },
         //消耗品,注意1118等是配方，2118等是丹药
         //鼻根器+10%持续2
+        {2215, ["300秒","300s"] },//九转还魂丹
         {2218, [] },//朝元膏/Essence Decoction
         {2221, [] },//益气膏/Tonifying Decoction
         {2224, [] },//倍力丸/Amplification Pellets
@@ -672,28 +673,28 @@ public static class Data
     public static DescDict ItemBriefDesc = new DescDict
     {
         //变身,briefDesc+Desc
-        {5001,["神力恢复速度0.833/s,变身期间-28冰抗,+45火抗,-4%伤害加成,+20%减伤,基础生命上限变为1.2倍",
-            "0.833/s Might Recover;-28 IceResist,+45 FireResist,-4% DamageBonus,+20% DamageReduction,Base MaxHP x1.2",
+        {5001,["神力上限150,恢复速度0.833/s,变身期间-28冰抗,+45火抗,-4%伤害加成,+20%减伤,基础生命上限变为1.2倍",
+            "150 Max Might.0.833/s Might Recover;-28 IceResist,+45 FireResist,-4% DamageBonus,+20% DamageReduction,Base MaxHP x1.2",
         ]},//狼
-        {5004,["神力恢复速度0.625/s,变身期间+999全抗,+50%减伤,基础生命上限变为1.5倍",
-            "0.625/s Might Recover;+999 AllResist,+50% DamageReduction,Base MaxHP x1.5",
+        {5004,["神力上限100,恢复速度0.625/s,变身期间+999全抗,+50%减伤,基础生命上限变为1.5倍",
+            "100 Max Might.0.625/s Might Recover;+999 AllResist,+50% DamageReduction,Base MaxHP x1.5",
         ]},//石
-        {5014,["神力恢复速度0.625/s;变身期间-28火抗,-5.71%伤害加成,+33.3%减伤,基础生命上限变为1.5倍",
-            "0.625/s Might Recover;-28 FireResist,-5.71% DamageBonus,+33.3% DamageReduction,Base MaxHP x1.5"]},//虎
-        {5006,["神力恢复速度0.833/s;变身期间+28冰抗,-999火抗,-7.69%伤害加成,+19.6%减伤,基础生命上限变为1.2倍",
-                "0.833/s Might Recover;+28 IceResist,-999 FireResist,-7.69% DamageBonus,+19.6% DamageReduction,Base MaxHP x1.2"]},//鼠
-        {5016,["神力恢复速度0.75/s;变身期间-28火抗,-9雷抗,+999冰抗,-13.3%伤害加成,+20%减伤,基础生命上限变为1.2倍",
-                "0.75/s Might Recover;-28 FireResist,-9 ThunderResist,+999 IceResist,-13.3% DamageBonus,+20% DamageReduction,Base MaxHP x1.2"] },//海上僧
-        {5017,["神力恢复速度0.833/s;变身期间-28火抗,-9雷抗,-4%伤害加成,+20%减伤,基础生命上限变为1.2倍",
-                "0.833/s Might Recover;-28 FireResist,-9 ThunderResist,-4% DamageBonus,+20% DamageReduction,Base MaxHP x1.2"]},//马猴
-        {5018,["神力恢复速度0.5/s;变身期间-9火抗,-9冰抗,+999毒抗,-8.57%伤害加成,+20%减伤,基础生命上限不变",
-                "0.5/s Might Recover;-9 FireResist,-9 IceResist,+999 PoisonResist, -8.57% DamageBonus,+20% DamageReduction,Base MaxHP x1.0"]},//虫
-        {5019,["神力恢复速度0.4167/s;变身期间+10冰抗,+10火抗,+999雷抗,-15.56%伤害加成,+20%减伤,基础生命上限变为1.2倍",
-                "0.4167/s Might Recover;+10 IceResist,+10 FireResist,+999 ThunderResist,-15.56% DamageBonus,+20% DamageReduction,Base MaxHP x1.2"]},//龙
-        {5008,["神力恢复速度0.625/s;变身期间+10冰抗,+45雷抗,-12.5%伤害加成,+19.6%减伤,基础生命上限变为1.2倍",
-                "0.625/s Might Recover;+10 IceResist,+45 ThunderResist,-12.5% DamageBonus,+19.6% DamageReduction,Base MaxHP x1.2"]},//马
-        {5024,["神力恢复速度0.5/s;变身期间+999毒抗,+999雷抗,-16%伤害加成,+20%减伤,基础生命上限变为1.5倍",
-            "0.5/s Might Recover;+999 PoisonResist,+999 IceResist,-16% DamageBonus,+20% DamageReduction,Base MaxHP x1.2"]},//石猴
+        {5014,["神力上限125,恢复速度0.625/s;变身期间-28火抗,-5.71%伤害加成,+33.3%减伤,基础生命上限变为1.5倍",
+            "125 Max Might.0.625/s Might Recover;-28 FireResist,-5.71% DamageBonus,+33.3% DamageReduction,Base MaxHP x1.5"]},//虎
+        {5006,["神力上限150,恢复速度0.833/s;变身期间+28冰抗,-999火抗,-7.69%伤害加成,+19.6%减伤,基础生命上限变为1.2倍",
+                "150 Max Might.0.833/s Might Recover;+28 IceResist,-999 FireResist,-7.69% DamageBonus,+19.6% DamageReduction,Base MaxHP x1.2"]},//鼠
+        {5016,["神力上限150,恢复速度0.75/s;变身期间-28火抗,-9雷抗,+999冰抗,-13.3%伤害加成,+20%减伤,基础生命上限变为1.2倍",
+                "150 Max Might.0.75/s Might Recover;-28 FireResist,-9 ThunderResist,+999 IceResist,-13.3% DamageBonus,+20% DamageReduction,Base MaxHP x1.2"] },//海上僧
+        {5017,["神力上限100,恢复速度0.833/s;变身期间-28火抗,-9雷抗,-4%伤害加成,+20%减伤,基础生命上限变为1.2倍",
+                "100 Max Might.0.833/s Might Recover;-28 FireResist,-9 ThunderResist,-4% DamageBonus,+20% DamageReduction,Base MaxHP x1.2"]},//马猴
+        {5018,["神力上限100,恢复速度0.5/s;变身期间-9火抗,-9冰抗,+999毒抗,-8.57%伤害加成,+20%减伤,基础生命上限不变",
+                "100 Max Might.0.5/s Might Recover;-9 FireResist,-9 IceResist,+999 PoisonResist, -8.57% DamageBonus,+20% DamageReduction,Base MaxHP x1.0"]},//虫
+        {5019,["神力上限100,恢复速度0.4167/s;变身期间+10冰抗,+10火抗,+999雷抗,-15.56%伤害加成,+20%减伤,基础生命上限变为1.2倍",
+                "100 Max Might.0.4167/s Might Recover;+10 IceResist,+10 FireResist,+999 ThunderResist,-15.56% DamageBonus,+20% DamageReduction,Base MaxHP x1.2"]},//龙
+        {5008,["神力上限125,恢复速度0.625/s;变身期间+10冰抗,+45雷抗,-12.5%伤害加成,+19.6%减伤,基础生命上限变为1.2倍",
+                "125 Max Might.0.625/s Might Recover;+10 IceResist,+45 ThunderResist,-12.5% DamageBonus,+19.6% DamageReduction,Base MaxHP x1.2"]},//马
+        {5024,["神力上限150,恢复速度0.5/s;变身期间+999毒抗,+999雷抗,-16%伤害加成,+20%减伤,基础生命上限变为1.5倍",
+            "150 Max Might.0.5/s Might Recover;+999 PoisonResist,+999 IceResist,-16% DamageBonus,+20% DamageReduction,Base MaxHP x1.2"]},//石猴
     };
     //\["(.*?)"\]=(".*?"),[ ]*\["(.*?)"\]=(".*?"),
     //{,new Desc{ $2, $4}},//$1/$3
@@ -854,7 +855,7 @@ public static class Data
         //不影响跳劈,不影响蓄力起手(三种风格起手消耗10/10/15)
         //基础重击消耗是40/50/75/100,每种风格在其上附加固定气力消耗，附加的气力消耗不受天赋和根器影响， 劈棍15/15/15/15/15，立棍附加0/15/0/0/0,戳棍附加7.5/7.5/7.5/7.5
         {100504, [
-                "-10%/lv基础气力消耗,0-4级重棍基础消耗:40/50/75/90/90;和身轻体快(根器)乘算，不影响劈/立/戳的额外气力消耗，不影响蓄力和跳跃重击,劈棍:额外+15消耗,立棍:仅Lv1额外15消耗,戳棍:额外+7.5消耗",
+                "-10%/lv基础气力消耗,0-4级重棍基础消耗:40/50/75/100/100;和身轻体快(根器)乘算，不影响劈/立/戳的额外气力消耗，不影响蓄力和跳跃重击,劈棍:额外+15消耗,立棍:仅Lv1额外15消耗,戳棍:额外+7.5消耗",
                 "-10%/lv heavy-attack Base Stamina Cost.Multi with Nimble Body(Relic) effect.Not affect addition cost of Smash/Pillar/Thrust.Not affect charge/jump-heavy-attack. Base cost of 0~4 focus-level:40/50/75/100/100. Smash:additional +15 Cost.Pillar:(Lv1 only) additional +15 Cost.Thrust:additional +7.5 Cost."
             ]
         },//熟谙
@@ -1040,12 +1041,12 @@ public static class Data
         {200403, ["每个增加+4%生命上限的回复量", "+4% MaxHP recover each"] },//遍尝百草/Tongue of A Connoisseur
 
         //劈棍原地重击消耗10+55/65/90/115/115，立棍10+40/65/75/100/100，戳棍47.5/57.5/82.5/107.5，跳劈(三种棍势一样)50/75/100/125/125,
-        //根器效果是气力消耗-50，基础重击消耗是40/50/75/90,每种风格在其上附加固定气力消耗，附加的气力消耗不受天赋和根器
+        //根器效果是气力消耗-50，基础重击消耗是40/50/75/100,每种风格在其上附加固定气力消耗，附加的气力消耗不受天赋和根器
         //实际劈棍附加15/15/15/15/15，立棍附加0/15/0/0/0,戳棍附加7.5/7.5/7.5/7.5
         {200501,
             [
-                "重击基础气力消耗减半，0~4级基础消耗40/50/75/90/100，和熟谙(天赋)乘算，不影响劈/立/戳附加的气力消耗，不影响重击起手式/蓄力/跳跃重击消耗",
-                "-50% heavy-attack Base Cost.Lv0~4 Base Cost:40/50/75/90/100.Multi with Instinct(talent) effect.Not affect the additional Stamina Cost of Smash/Pillar/Thrust.Not affect cost of charging or jump-heavy-attack."
+                "重击基础气力消耗减半，0~4级基础消耗40/50/75/100/100，和熟谙(天赋)乘算，不影响劈/立/戳附加的气力消耗，不影响重击起手式/蓄力/跳跃重击消耗",
+                "-50% heavy-attack Base Cost.Lv0~4 Base Cost:40/50/75/100/100.Multi with Instinct(talent) effect.Not affect the additional Stamina Cost of Smash/Pillar/Thrust.Not affect cost of charging or jump-heavy-attack."
             ]
         },//身轻体快/Nimble Body
         {200502, ["+60", "+60"] },//福寿长臻/Everlasting Vitality
@@ -1365,6 +1366,7 @@ public static class Data
         {(int)EBuffAndSkillEffectType.AddAttr, ["{0}", "{0}"] },
         {(int)EBuffAndSkillEffectType.RecoverAttr, ["回复{0}", "Recover {0}"] },
         {(int)EBuffAndSkillEffectType.ChangeMoveSpeed, ["{0}{1}速度", "{0}{1}Speed"] },
+        {(int)EBuffAndSkillEffectType.ActiveExtLifeSavingHair, ["{0}秒", "{0}s"] },
     };
     public static readonly ConstDescDict BuffEffectTriggerTypeDictConst = new ConstDescDict() {
         {(int)EBuffEffectTriggerType.BeAttacked, ["{0} per Hit", "{0} per Hit"] },
