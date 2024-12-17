@@ -29,10 +29,9 @@ namespace DashengMode
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.3";
+        public string Version => "1.4";
         // private readonly Harmony harmony;
         public EDaShengStage target=EDaShengStage.DaShengMode;
-        public int _tmpCt=0;
         //not used
         public System.Timers.Timer initDescTimer= new System.Timers.Timer(3000);
 
@@ -108,24 +107,8 @@ namespace DashengMode
 
             initDescTimer.Start();
             initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => CheckOnTick();
-            //initDescTimer.Interval = 1;
-            //initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => Log($"{_tmpCt++}");
-            //注意FThreading.RunOnGameThread和RunOnGameThreadAsync超过12672次后会导致游戏卡死！！！！！！！不要频繁使用！！！
-            //initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => Utils.TryRunOnGameThread(delegate { Console.WriteLine($"{ct}");ct++; });
             // hook
             // harmony.PatchAll();
-
-            {
-                var configDict = BGW_GameDB.GetAllGlobalConfigDesc();
-                //EnterDashengMode时读取设置或BUS_QiTianDaShengComp::NORMAL_DASHENG_DURATION
-                var tmpstr = B1GlobalFNames.NORMAL_DASHENG_DURATION.ToString();
-                foreach (var configpair in configDict)
-                    if (configpair.Value.ConfigInfo.AliasName == tmpstr)
-                    {
-                        configpair.Value.ConfigInfo.ConfigValue = "1000000";
-                        Log($"Change NORMAL_DASHENG_DURATION");
-                    }
-            }
         }
         public void DeInit() 
         {
@@ -148,6 +131,16 @@ namespace DashengMode
             if (dashengComp is null) return;
             var dashengData = dashengComp.GetFieldOrProperty<BUC_QiTianDaShengData>("QiTianDaShengData");
             if (dashengData is null) return;
+            
+            {
+                int NORMAL_DASHENG_CONFIG_ID = MyExten.GetFieldOrProperty<BUS_QiTianDaShengComp, int>("NORMAL_DASHENG_CONFIG_ID");
+                FUStTransQiTianDaShengConfigDesc daShengConfigDesc = BGW_GameDB.GetTransQiTianDaShengConfigDesc(NORMAL_DASHENG_CONFIG_ID, character);
+                if (daShengConfigDesc.Duration != 10000000)
+                {
+                    daShengConfigDesc.Duration = 1000000;
+                    Log($"Change NORMAL_DASHENG_DURATION");
+                }
+            }
 
             //如果需要切换到大圣/PreStage,需要设置equipIdList和TalentIDList
             if ((this.target == EDaShengStage.DaShengMode && dashengData.DaShengStage != this.target)
@@ -179,7 +172,6 @@ namespace DashengMode
                     dashengData.RelatedEquipIDList.Add(curWeapon);
                     Log($"Reset Tran Config to {curWeapon} {talentId}");
                 }
-                dashengComp.SetFieldOrProperty("NORMAL_DASHENG_DURATION", (Single)1000000.0);
             }
             else if (this.target == EDaShengStage.LittleMonkey && dashengData.DaShengStage != this.target)//如果需要还原到基础模式，则要清空TalentIDList
                 //如果不clear，由于之前设置的条件仍然满足，即使回到LittleMonkey也会自动进入PreStage(表现为多一段棍势)

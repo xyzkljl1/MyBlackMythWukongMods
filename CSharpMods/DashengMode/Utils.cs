@@ -49,6 +49,29 @@ namespace DashengMode
                 return default(FieldType);
             }
         }
+        public static TFieldType? GetFieldOrProperty<TClassType,TFieldType>(String field_name) where TClassType: class
+        {
+            var t = typeof(TClassType);
+            {
+                var field = t.GetField(field_name, BindingFlags.NonPublic | BindingFlags.Static);
+                if (field is null)
+                    field = t.GetField(field_name, BindingFlags.Public | BindingFlags.Static);
+                if (field is not null)
+                    return (TFieldType)field.GetValue(null);
+            }
+            {
+                var field = t.GetProperty(field_name, BindingFlags.NonPublic | BindingFlags.Static);
+                if (field is null)
+                    field = t.GetProperty(field_name, BindingFlags.Public | BindingFlags.Static);
+                if (field is not null)
+                    return (TFieldType)field.GetValue(null);
+            }
+
+            {
+                Console.WriteLine($"{Name} Fatal Error: Can't Find {field_name}");
+                return default(TFieldType);
+            }
+        }
         public static Type? GetFieldOrPropertyType(this object obj, String field_name)
         {
             var t = obj.GetType();
