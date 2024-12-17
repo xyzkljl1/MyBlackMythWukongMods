@@ -137,7 +137,7 @@ namespace DashengMode
                 FUStTransQiTianDaShengConfigDesc daShengConfigDesc = BGW_GameDB.GetTransQiTianDaShengConfigDesc(NORMAL_DASHENG_CONFIG_ID, character);
                 if (daShengConfigDesc.Duration != 10000000)
                 {
-                    daShengConfigDesc.Duration = 1000000;
+                    daShengConfigDesc.Duration = 10000000;
                     Log($"Change NORMAL_DASHENG_DURATION");
                 }
             }
