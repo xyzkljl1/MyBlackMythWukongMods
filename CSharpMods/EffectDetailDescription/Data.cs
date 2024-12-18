@@ -170,6 +170,7 @@ public static class Data
         {2251, [] },//加味参势丸/Enhanced Ginseng Pellets
         {2252, [] },//参势丸/Ginseng Pellets
         {2253, [] },//聚珍伏虎丸/Enhanced Tiger Subduing Pellets
+        {2254, ["75秒内+10%攻击","+10% ATK in 75s"] },//宝鳞丸
         
         {2204, [] },//温里散/Body-Warming Powder
         {2205, [] },//度瘴散/Antimiasma Powder
@@ -203,7 +204,8 @@ public static class Data
         {2019, ["+20", "+20"] },//琼浆/Jade Essence
         //BuffDesc-Item 92023
         {2022, ["+75.0", "+75.0"] },//松醪/Pinebrew
-        {2023, ["+15.0元气;+20法宝能量", "+15.0 Qi;+20.0 Treasure Energy"] },//九霞清醑/Sunset of the Nine Skies
+        {2023, ["+15.0元气;+20法宝能量", "+15.0 Vigor-Qi;+20.0 Vessel-Qi"] },//九霞清醑/Sunset of the Nine Skies
+        {2024, ["15秒内+35%耐力消耗,+6%重击动作值,+13%切手技动作值", "+35% Stamina Cost,+6% Heavy-Attack MotionValue,+13% Varied Combo MotionValue in 15s"] },//苦酒 92027 92027+92028
 
         {2303, [] },//龟泪/Turtle Tear
         {2304, ["10秒内+2秒持续", "+2s Duration for 10s"] },//困龙须/Stranded Loong's Whisker--92304 Passive 192
@@ -232,6 +234,8 @@ public static class Data
         {2326, [] },//铁骨银参/Steel Ginseng
         //Item 92317 92327 92328
         {2327, [] },//青山骨/Goat Skull
+        {2328, ["法力低于生命上限(不是法力上限)的一半时,+10法宝能量,+8精魄能量","+10 Vessel-Qi and +8 Vigor-Qi when MP is lower than 50% MaxHP(not MaxMP)"] },//九秋菊
+        {2329, [] },//肉角
 
         //精魂主动技能倍率
         {8011, ["", ""] }, //"广谋"
@@ -740,6 +744,9 @@ public static class Data
         {16035, ["0.1/s", "0.1/s"] },//君子牌/Virtuous Bamboo Engraving
         {16036, [] },//卵中骨/Spine in the Sack
         {16037, [] },//白贝腰链/White Seashell Waist Chain
+        {16038, [] },//石虎节
+        //{16039, [] },//满堂红
+        {16040, ["+100%持续时间(基础60s),+15%攻击","+100% Duration (Base 60s).+15%ATK"] },//神铁碎片
 
         //装备独门妙用
         //散件
@@ -769,6 +776,8 @@ public static class Data
         {11402, [] },//羽士戗金甲/Centipede Qiang-Jin Armor
         //Talent 2098
         {10904, ["+15%攻击", "+15%ATK"] },//乌金行缠/Ebongold Gaiters //升满级的10934关联到buff2099/2097不知道有什么效果；2091~2099全是，太复杂了
+        {12101, ["每段轻棍附加0.5动作值的伤害", "An additional damage of 0.5 MotionValue for each light attack"] },//三山冠
+        {12201, ["", ""] },//彩金狮子冠
 
         {15012, ["5秒内获得共127.5棍势(2.5+25*5)", "Gain 127.5(2.5+25*5) Focus for 5s"] },//狼牙棒/Spikeshaft Staff
         {15007, ["每段棍势+5HP(中毒敌人+40)", "+5 HP(40 for Poisoned enemy) for each focus level"] },//昆棍·百眼/Visionary Centipede Staff
@@ -989,7 +998,7 @@ public static class Data
         {301003, ["+2%/lv", "+2%/lv"] },//存神炼气
         {301004, ["+2/lv"] },//虚相凶猛
         {301005, ["+15/lv"] },//炼实返虚
-        {301006, ["+2%神力上限/lv,基础 40%", "Gain +2% Max Transformation Energy/lv,Base 40%"] },//截伪续真
+        {301006, ["+2%神力上限/lv,基础 40%", "Gain +2% Max Might/lv,Base 40%"] },//截伪续真
         
         //-28冰+45火抗
         {301101, ["Lv1-3:+10%/15%/20%攻击力", "Lv1-3:+10%/15%/20%ATK"] },//步月
@@ -1121,6 +1130,8 @@ public static class Data
         {900921, ["+20法力消耗;假身持续时间不变,但不会因破隐而消失", "+20 MP Cost"] },//乘风乱舞/Dance of the Black Wind
         //Talent 2181 青铜套内部叫黑铁
         {901712, ["-15秒冷却", "-15s CD"] },//炼魔荡怪/Evil Crasher
+        {902211,["-30%"]},//四时吉庆,92211
+        //{902311,[]},//烟花,意义不明
     };
     //精魂(RZD)被动 VIPassiveDesc.OnChangeItemId
     public static DescDict SpiritDesc = new DescDict
@@ -1221,8 +1232,8 @@ public static class Data
         {(int)EBGUAttrFloat.EnergyConsumeSpeed, ["{0}神力消耗速度", "{0} Might Consume Speed"] },
         {(int)EBGUAttrFloat.EnergyIncreaseSpeed, ["{0}神力回复", "{0} Might Recover"] },
         //{(int)EBGUAttrFloat.SpecialEnergyMax,new Desc{ "{0}","{0}" } },//用途不明
-        {(int)EBGUAttrFloat.FabaoEnergyMax, ["{0}法宝能量上限", "{0} Max Vessel Energy"] },
-        {(int)EBGUAttrFloat.VigorEnergyMax, ["{0}精魂能量上限", "{0} Max Vigor Energy"] },
+        {(int)EBGUAttrFloat.FabaoEnergyMax, ["{0}法宝能量上限", "{0} Max Vessel-Qi"] },
+        {(int)EBGUAttrFloat.VigorEnergyMax, ["{0}精魂能量上限", "{0} Max Vigor-Qi"] },
         //{(int)EBGUAttrFloat.BlockCollapseArmorMax,new Desc{ "{0}","{0}" } },
         //{(int)EBGUAttrFloat.FreezeAbnormalAccMax,new Desc{ "{0}","{0}" } },
         //{(int)EBGUAttrFloat.BurnAbnormalAccMax,new Desc{ "{0}","{0}" } },
@@ -1351,8 +1362,8 @@ public static class Data
         //{(int)EBGUAttrFloat.YinDef,new Desc{ "{0}","{0}" } },
         //{(int)EBGUAttrFloat.YangDef,new Desc{ "{0}","{0}" } },
         //{(int)EBGUAttrFloat.StaminaCostMultiper,new Desc{ "{0}","{0}" } },
-        {(int)EBGUAttrFloat.FabaoEnergy, ["{0}法宝能量", "{0} Vessel Energy"] },
-        {(int)EBGUAttrFloat.VigorEnergy, ["{0}精魂能量", "{0} Vigor Energy"] },
+        {(int)EBGUAttrFloat.FabaoEnergy, ["{0}法宝能量", "{0} Vessel-Qi"] },
+        {(int)EBGUAttrFloat.VigorEnergy, ["{0}精魂能量", "{0} Vigor-Qi"] },
         //{(int)EBGUAttrFloat.AttrFloatMax,new Desc{ "{0}","{0}" } },
         //{(int)EBGUAttrFloat.EnumMax,new Desc{ "{0}","{0}" } },
     };
@@ -1404,7 +1415,7 @@ public static class Data
         {(int)EAttrCostType.FabaoEnergy,
             [
                 "{0}法宝能量<Positive>获得</Positive><Negative>消耗</Negative>",
-                "{0} Fabao Energy <Positive>Gain</Positive><Negative>Cost</Negative>"
+                "{0} Vessel-Qi <Positive>Gain</Positive><Negative>Cost</Negative>"
             ]
         },
         {(int)EAttrCostType.TransEnergy,
