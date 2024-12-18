@@ -189,7 +189,7 @@ namespace EffectDetailDescription
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.9";
+        public string Version => "1.9.1";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
         public static Boolean inited = false;//InitDescProtobufAndLanugage called
