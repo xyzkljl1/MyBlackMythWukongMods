@@ -5,7 +5,7 @@ using BtlShare;
 using CSharpModBase;
 using CSharpModBase.Input;
 using ResB1;
-// using HarmonyLib;
+using HarmonyLib;
 using GSE.GSSdk;
 using System.Reflection;
 using System.Collections.Generic;
@@ -26,12 +26,20 @@ using OssB1;
 #nullable enable
 namespace DashengMode
 {
+    [HarmonyPatch(typeof(BUS_QiTianDaShengComp), "Reset2LittleMonkey")]
+    class PatchC
+    {
+        static bool Prefix(BUS_QiTianDaShengComp __instance)
+        {
+            return MyMod.target == EDaShengStage.LittleMonkey;
+        }
+    }    
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.4";
-        // private readonly Harmony harmony;
-        public EDaShengStage target=EDaShengStage.DaShengMode;
+        public string Version => "1.5";
+        private readonly Harmony harmony;
+        public static EDaShengStage target = EDaShengStage.DaShengMode;
         //not used
         public System.Timers.Timer initDescTimer= new System.Timers.Timer(3000);
 
@@ -40,8 +48,8 @@ namespace DashengMode
         void DebugLog(string i) { MyExten.DebugLog(i); }
         public MyMod()
         {
-            // harmony = new Harmony(Name);
-            // Harmony.DEBUG = true;
+             harmony = new Harmony(Name);
+             // Harmony.DEBUG = true;
         }
         public int FindMostStableTalentID(BindDictInt_Int list)
         {
@@ -108,15 +116,14 @@ namespace DashengMode
             initDescTimer.Start();
             initDescTimer.Elapsed += (Object source, ElapsedEventArgs e) => CheckOnTick();
             // hook
-            // harmony.PatchAll();
+            harmony.PatchAll();
         }
         public void DeInit() 
         {
             initDescTimer.Dispose();
             Log($"DeInit");
-            // harmony.UnpatchAll();
+            harmony.UnpatchAll();
         }
-        //unused
         private void CheckOnTick()
         {
             if (MyExten.GetPlayerController() is null) return;
@@ -143,8 +150,8 @@ namespace DashengMode
             }
 
             //如果需要切换到大圣/PreStage,需要设置equipIdList和TalentIDList
-            if ((this.target == EDaShengStage.DaShengMode && dashengData.DaShengStage != this.target)
-                ||(this.target == EDaShengStage.PreStage && dashengData.DaShengStage != this.target)) 
+            if ((target == EDaShengStage.DaShengMode && dashengData.DaShengStage != target)
+                ||(target == EDaShengStage.PreStage && dashengData.DaShengStage != target)) 
             {
                 var equipData = dashengComp.GetFieldOrProperty<IBUC_EquipData>("EquipData");
                 var roleData = dashengComp.GetFieldOrProperty<IBPC_RoleBaseData>("RoleBaseData");
@@ -173,22 +180,22 @@ namespace DashengMode
                     Log($"Reset Tran Config to {curWeapon} {talentId}");
                 }
             }
-            else if (this.target == EDaShengStage.LittleMonkey && dashengData.DaShengStage != this.target)//如果需要还原到基础模式，则要清空TalentIDList
+            else if (target == EDaShengStage.LittleMonkey && dashengData.DaShengStage != target)//如果需要还原到基础模式，则要清空TalentIDList
                 //如果不clear，由于之前设置的条件仍然满足，即使回到LittleMonkey也会自动进入PreStage(表现为多一段棍势)
                 dashengData.RelatedEquipIDList.Clear();
 
-            if (this.target == EDaShengStage.DaShengMode&& dashengData.DaShengStage != this.target)//进入大圣模式
+            if (target == EDaShengStage.DaShengMode&& dashengData.DaShengStage != target)//进入大圣模式
             {
                 //正常流程下是满足条件时先从LittleMonkey进入PreStage获得第五段棍势条，然后蓄力棍进入DashengMode，这里不管PreStage
                 Log($"Trans to Qitiandasheng from {dashengData.DaShengStage.ToString()}");
                 dashengComp.CallPrivateFunc("TrySwitch2DaShengMode", new object[] { dashengData.DaShengStage });
             }
-            else if (this.target == EDaShengStage.PreStage && dashengData.DaShengStage ==EDaShengStage.DaShengMode) //进入PreStage,如果之前是LittleMonkey会自动进入PreStage不需要主动操作
+            else if (target == EDaShengStage.PreStage && dashengData.DaShengStage ==EDaShengStage.DaShengMode) //进入PreStage,如果之前是LittleMonkey会自动进入PreStage不需要主动操作
             {
                 Log($"Trans to PreStage from {dashengData.DaShengStage.ToString()}");
                 dashengComp.CallPrivateFunc("TrySwitch2PreStage", new object[] { dashengData.DaShengStage });
             }
-            else if (this.target == EDaShengStage.LittleMonkey && dashengData.DaShengStage == EDaShengStage.DaShengMode)
+            else if (target == EDaShengStage.LittleMonkey && dashengData.DaShengStage == EDaShengStage.DaShengMode)
             {
                 Log($"Trans to LittleMonkey from {dashengData.DaShengStage.ToString()}");
                 dashengComp.CallPrivateFunc("Reset2LittleMonkey", new object[] { });

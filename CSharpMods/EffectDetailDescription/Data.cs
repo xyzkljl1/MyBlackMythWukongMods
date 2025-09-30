@@ -776,20 +776,21 @@ public static class Data
         {11402, [] },//羽士戗金甲/Centipede Qiang-Jin Armor
         //Talent 2098
         {10904, ["+15%攻击", "+15%ATK"] },//乌金行缠/Ebongold Gaiters //升满级的10934关联到buff2099/2097不知道有什么效果；2091~2099全是，太复杂了
-        {12101, ["每段轻棍附加0.5动作值的伤害", "An additional damage of 0.5 MotionValue for each light attack"] },//三山冠
+        {12101, ["1-4段轻棍附加1/1/2/1次x0.5的伤害，搅阵每两次命中附加一次x0.5的伤害", "Lv.1~4 Light attack deals 1/1/2/1 times x0.5 Damage.Whirling deals x0.5 Damage once per two hits."] },//三山冠
         {12201, ["", ""] },//彩金狮子冠
         {12204, ["约0.25秒无敌", "About 0.25s Immue"] },//彩金狮子足
 
         {15012, ["5秒内获得共127.5棍势(2.5+25*5)", "Gain 127.5(2.5+25*5) Focus for 5s"] },//狼牙棒/Spikeshaft Staff
         {15020, ["5秒内获得共127.5棍势(2.5+25*5)", "Gain 127.5(2.5+25*5) Focus for 5s"] },//磐锤，和狼牙棒用一个buf
         //昆棍系列基础回血buff 2005~2008每层回5，白眼buff 2018~2021每层回15
-        {15007, ["每段棍势+5HP(中毒敌人+20),有概率回复双倍血量", "+5 HP(20 for Poisoned enemy) for each focus level.Has a chance to recover double hp."] },//昆棍·百眼/Visionary Centipede Staff，
-        {15013, ["每段棍势+5HP,有概率回复双倍血量", "+5 HP for each focus level.Has a chance to recover double hp."] },//昆棍·蛛仙/Spider Celestial Staff
+        {15007, ["每段棍势+5HP(中毒敌人+20)", "+5 HP(20 for Poisoned enemy) for each focus level."] },//昆棍·百眼/Visionary Centipede Staff，
+        {15013, ["每段棍势+5HP", "+5 HP for each focus level."] },//昆棍·蛛仙/Spider Celestial Staff
         //{,new Desc{ "每段棍势+5HP", "+5 HP for each focus level"}},//昆棍/Chitin Staff
-        {15018, ["每段棍势+5HP并造成x1.0伤害,有概率回复双倍血量", "+5 HP and deal x1.0 Damage for each focus level.Has a chance to recover double hp."] },//昆棍·通天/Adept Spine-Shooting Fuban Staff
-        {15021, ["每段棍势+5HP(中毒敌人+32),有概率回复双倍血量", "+5 HP(32 for Poisoned enemy) for each focus level.Has a chance to recover double hp."] },//昆棍·不僵
+        {15018, ["每段棍势+5HP并造成x1.0伤害,", "+5 HP and deal x1.0 Damage for each focus level."] },//昆棍·通天/Adept Spine-Shooting Fuban Staff
+        {15021, ["重击每段棍势+10HP(中毒敌人+32),破棍势/风云转相当于2级重击,斩棍势/江海翻/进尺相当于3级重击", "+10 HP(32 for Poisoned enemy) for each heavy attack level.Varied Combo acts like Lv.2/3 heavy attack."] },//昆棍·不僵
         {15016, ["每点防御+0.15攻击", "+0.15ATK per DEF"] },//混铁棍/Dark Iron Staff
         {15015, ["+20% 动作值", "+20% MotionValue"] },//飞龙宝杖/Golden Loong Staff//15015 145
+        {15022, ["立/戳:+2.0 动作值,劈棍:额外造成一次x6.0伤害", "Pillar/Thrust:+2.0 Lv4 heavy attack Motion Value.Smash:Deal x6.0 Damage once upon casting Lv4 heavy attack."] },//兽棍神锋
         {15101,
             [
                 "Lv0~4重击动作值+20%/20%/20%/20%/10%;搅阵/进尺动作值+15%;飞剑造成{AR:1099916} per Hit伤害",
