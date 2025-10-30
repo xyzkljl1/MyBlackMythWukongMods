@@ -137,6 +137,22 @@ namespace EffectDetailDescription
             return _world;
         }
     }
+    // 有的文本在有的ui里是富文本，有的ui里不是，如泡酒物，在篝火的泡制界面是富文本，在装备界面不是。在非富文本语境时动态去除富文本修饰符
+    // 由于此mod是预先将翻译好的文本修改后再直接写入Desc，不会再被翻译匹配，所以需要手动去除富文本修饰符
+    [HarmonyPatch(typeof(GSLocalization), "GetLocaliztionalFText",  new Type[] { typeof(string), typeof(bool) })]
+    class PatchDynamicRichText2
+    {
+        static void Postfix(bool IsRich, ref FText __result)
+        {
+            // 因为修改后的文本不会被翻译，IsFromStringTable会为false
+            // isRich为true时(不是false)才移除！！
+            if (__result.IsFromStringTable() == false && IsRich)
+            {
+                //MyExten.Log($"——————————3  {IsRich} / /{__result} / {__result.IsFromStringTable()}");
+                __result = FText.FromString((new Regex("<[^<>]+>|</>")).Replace(__result.ToString(), ""));
+            }
+        }
+    }
     [HarmonyPatch(typeof(VITreasureDetail), "OnEquipIdChange")]
     class PatchFabaoCost
     {
@@ -189,7 +205,7 @@ namespace EffectDetailDescription
     public class MyMod : ICSharpMod
     {
         public string Name => MyExten.Name;
-        public string Version => "1.9.2";
+        public string Version => "1.9.4";
         private readonly Harmony harmony;
         //Ctrl F5重新加载mod时，类会重新加载，静态变量也会重置
         public static Boolean inited = false;//InitDescProtobufAndLanugage called
